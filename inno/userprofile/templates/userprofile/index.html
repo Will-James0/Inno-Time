@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor Accueil</title>
+     
+     <link rel="stylesheet" href="{% static 'userprofile/css/app.css' %}" >
+     
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
+</head>
+<body>
+   
+    
+    <div class="lignes">
+        <div class="l1"></div>
+        <div class="l2"></div>
+    </div>
+
+    <div class="container-first">
+        <h1><span>In</span><span>no</span><span> Time</span></h1>
+        <div class="container-btns">
+            <a href="{% url 'accounts:login_a' %}"><button class="btn-first b1">Login</button></a>
+        </div>
+    </div>
+    
+    <img src="{% static 'userprofile/ressources/biometrics.png' %}" class="logo">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+    <script src="{% static 'userprofile/js/app.js' %}"></script>
+</body>
+</html> 

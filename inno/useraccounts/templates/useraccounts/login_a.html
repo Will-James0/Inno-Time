@@ -1,0 +1,33 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'userprofile/css/index.css'%}">
+    <link rel="stylesheet" href="{%static 'userprofile/css/employe.css'%}">
+    <title>login</title>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">Inno Time</a>
+    </nav>
+  <div id="container">
+   
+
+    {% for messsage in messsages %}
+    <p> {{messsage}} </p>
+{% endfor %}
+
+<form method="post">
+    <h1>Connexion</h1>
+    {%  csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Se Connecter">
+</form>
+</div>
+</body>
+</html>
+

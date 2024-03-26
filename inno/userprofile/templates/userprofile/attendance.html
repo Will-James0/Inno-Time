@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>attendance</title>
+    <link rel="stylesheet" href="{%static 'userprofile/css/employe.css'%}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="{%url 'userprofile:acceuil'%}" class="logo">Inno Time</a>
+        <div class="nav-links">
+            <ul>
+                <li><a href="{%url 'userprofile:acceuil'%}">Accueil</a></li>
+                <li><a href="{%url 'userprofile:liste_e'%}">Employés</a></li>
+                <li><a href="{%url 'userprofile:attendance'%}">Présences</a></li>
+                <!-- <li><a href="{%url 'userprofile:historique'%}">Historique</a></li> -->
+                <li><a href="{%url 'userprofile:help'%}">Aide</a></li>
+            </ul>
+        </div>
+        <span class="material-symbols-outlined">
+            lists
+        </span>
+    </nav>
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{%url 'userprofile:attendance'%}">
+                <i class="fas fa-clock"></i>
+                <span class="nav-item">Présences</span>
+            </a></li>
+            <li>
+                <a href="{%url 'userprofile:historique'%}">
+                <i class="fas fa-history"></i>
+                <span class="nav-item">Historique</span>
+            </a></li>
+            <li class="historique">
+                <a href="{% url 'accounts:logout' %}">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-item">Déconnexion</span>
+            </a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <h1>Fiche de Présences</h1>
+        <!-- Votre tableau ici -->
+       
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Poste</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                </tr>
+            </thead>
+            {% for n in nom %}
+                <tr>
+                    <td>{{ n.id }}</td>
+                    <td> <a href=" {% url 'userprofile:userprofile_e' n.id %} "> {{ n.name }} </a></td>
+                    <td>{{ n.prenom }}</td>
+                    <td>{{ n.email }}</td>
+                </tr>
+                {% endfor %}
+                <!-- Ajoutez d'autres lignes selon vos besoins -->
+         
+        </table>
+    </div>
+    <script src="{%static 'userprofile/js/navbar.js'%}"></script>
+</body>
+</html>

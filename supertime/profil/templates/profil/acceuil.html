@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>acceuil</title>
+    <link rel="stylesheet" href="{% static 'profil/css/style.css'%}">
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+</head>
+    <body>
+        <div class="sidebar">
+            <div class="logo-details">
+                <i class="bx bxl-python"></i>
+                <span class="logo_name">Inno Time</span>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="{%url 'profil:acceuil'%}">
+                        <i class="bx bxs-home"></i>
+                        <span class="link_name">Accueil</span>
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li><a class="link_name" href="{%url 'profil:acceuil'%}">Accueil</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="icon-link">
+                        <a href="{%url 'profil:liste_e'%}">
+                            <i class="bx bxs-user-detail"></i>
+                            <span class="link_name">Employés</span>
+                        </a>
+                            <i class="bx bxs-chevron-down arrow arrow"></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="{%url 'profil:liste_e'%}">Employés</a></li>
+                        <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
+                        <li><a href="{%url 'profil:add_Profil'%}">Ajouter</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="icon-link">
+                        <a href="#">
+                            <i class="bx bxs-time"></i>
+                            <span class="link_name">Présences</span></a>
+                            <i class="bx bxs-chevron-down arrow"></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="{%url 'profil:attendance'%}">Présences</a></li>
+                        <li><a href="{%url 'profil:attendance'%}">Présences</a></li>
+                        <li><a href="{%url 'profil:historique'%}">Historique</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="{%url 'profil:help'%}">
+                        <i class='bx bxs-help-circle' ></i>
+                        <span class="link_name">Aide</span>
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li><a class="link_name" href="{%url 'profil:help'%}">Aide</a></li>
+                    </ul>
+                </li>
+                <li>
+            <div class="profile-details">
+                <div class="profile-content">
+                    <img src="{% static 'profil/ressources/Profile.png' %}" alt="profile">
+                </div>
+                
+                <div class="name-job">
+                    <div class="profile_name">{{ user.username }}</div>
+                    <div class="job">Admin</div>
+                </div>
+                <a href="{% url 'accounts:logout' %}">
+                <i class="bx bx-log-out"></i>
+                </a>
+            </div>
+        </li>
+    </ul>
+        </div>
+        <section class="home-section home">
+            <div class="home-content">
+                <i class="bx bx-menu"></i>
+                <span class="text">Acceuil</span>
+            </div>
+            <h1>Bienvenue à vous <br> {{ user.username }}</h1>
+        </section>
+    <script src="{% static 'profil/js/sidebar.js' %}"></script>
+</body>
+</html>

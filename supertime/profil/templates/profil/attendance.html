@@ -36,7 +36,7 @@
                         <ul class="sub-menu">
                             <li><a class="link_name" href="{%url 'profil:liste_e'%}">Employés</a></li>
                             <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
-                            <li><a href="{%url 'profil:add_Profil'%}">Ajouter</a></li>
+                            <li><a href="{%url 'profil:part1'%}">Ajouter</a></li>
                         </ul>
                     </li>
                     <li>
@@ -95,17 +95,22 @@
                         <th>Durée</th>
                     </tr>
                 </thead>
+               
+                {% for horaire in horaires %}
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        
+                        <td> {{horaire.id}} </td>
+                        <td> 2024-08-31 </td>
+                        <td> {{horaire.personnel}}</td>
+                        <td> {{horaire.arrival_time}}</td>
+                        <td> {{horaire.departure_time}}</td>
+                        <td>{{horaire.calculate_duration}}</td>
+                        
                     </tr>
+                    {% endfor %}
             </table>
         </div>
-        
+       
     </section>
 <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>

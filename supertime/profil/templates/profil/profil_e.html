@@ -36,7 +36,7 @@
                         <ul class="sub-menu">
                             <li><a class="link_name" href="{%url 'profil:liste_e'%}">Employés</a></li>
                             <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
-                            <li><a href="{%url 'profil:add_Profil'%}">Ajouter</a></li>
+                            <li><a href="{%url 'profil:part1'%}">Ajouter</a></li>
                         </ul>
                     </li>
                     <li>
@@ -93,6 +93,7 @@
                             {% endfor %}
                 </div>
             </div>
+        
             <div class="content c2">
                 <div class="profile-box b2">
                             {% for Personnel in Personnel %}
@@ -100,26 +101,30 @@
                                 <p class="header">PRENOM : {{Personnel.prenom}} </p>
                                 <p class="header">EMAIL : {{Personnel.email}} </p>
                                 <p class="header">SEXE : {{Personnel.gender}} </p>
-                                <p class="header">HEURE_D'ENTREE : {{Personnel.date_e}} </p>
-                                <p class="header">HEURE_DE_SORTI: {{Personnel.date_s}} </p>
+                                <p class="header">HEURE_D'ENTREE : {{personnel.arrival_time}} </p>
+                                <p class="header">HEURE_DE_SORTI: {{Personnel.departure_time}} </p>
+                               
         
                             {% endfor %}
+                            
                 </div>
             </div>
             <div class="content c3">
                 <div class="profile-box b3">
                     <img src="{% static 'profil/ressources/male1.png' %}" >
-                            {% for Personnel in Personnel %}
+                            {% for Personnel in Personnels %}
                             <h1>ID_Personnel : {{ Personnel.id  }} </h1>
                                 <p class="header">NOM : {{Personnel.name}} </p>
                                 <p class="header">PRENOM : {{Personnel.prenom}} </p>
                                 <p class="header">EMAIL : {{Personnel.email}} </p>
-                                <p class="header">SEXE : {{Personnel.sexe}} </p>
-                                <p class="header">POSTE :  </p>
-                                <p class="header">HEURE_D'ENTREE : {{Personnel.date_e}} </p>
-                                <p class="header">HEURE_DE_SORTI: {{Personnel.date_s}} </p>
-        
-                            {% endfor %}
+                                <p class="header">SEXE : {{Personnel.gender}} </p>
+                                <p class="header">POSTE :{{Personnel.poste}}  </p>
+                                {% endfor %}
+                                
+                                <p class="header">HEURE_D'ENTREE : {{horaire.arrival_time}} </p>
+                                <p class="header">HEURE_DE_SORTI: {{horaire.departure_time}} </p>
+                               
+                            
                 </div>
             </div>
             <div class="content c4">

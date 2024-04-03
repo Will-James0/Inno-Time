@@ -13,8 +13,11 @@ urlpatterns=[
     path('attendance/',views.attendance,name='attendance'),
     path('historique/',views.historique,name='historique'),
      path('help/',views.help,name='help'),
-    path('modifie_infor/<int:Personnel_id>/',views.edit_Personnel,name='edit_Personnel'),
+    path('modifie_infor_poste/<int:Poste_id>/',views.edit_Poste,name='partm1'),
+    path('modifie_infor_personnel/<int:Personnel_id>/',views.edit_Personnel,name='partm2'),
+    path('modifie_infor_horaire/<int:Horaire_id>/',views.edit_Horaire,name='partm3'),
      path('<int:Personnel_id>/',views.profil_e,name='profil_e'),
-    path('del/<int:Personnel_id>/',views.del_user,name='delt_user'),
+    path('delete/<int:Personnel_id>/',views.del_user,name='delt_user'),
+     path('s/<int:Personnel_id>/', views.personnel_salary, name='salary'),
     # path('ajout_profil/',views.add_Profil,name='add_Profil'),
 ]

@@ -10,8 +10,6 @@ class Poste(models.Model):
     def __str__(self):
         return self.as_poste
 
-
-
 class Personnel(models.Model):
     # nom de l'emplouyés
     name = models.CharField(max_length=64,verbose_name="Nom")

@@ -18,7 +18,7 @@ def part1(request):
        if form.is_valid():
            form.save()
      
-           return redirect('profil:part2')
+           return redirect('profil:poste')
    else:
        form = Part1Form()
    return render(request, 'profil/part1.html', {'form': form})
@@ -99,20 +99,27 @@ def del_user(request,Personnel_id):
     Personne.delete()
     return redirect("profil:liste_e")
 
+@login_required
+def del_poste(request,Poste_id):
+    poste = Poste.objects.get(pk=Poste_id)
+    poste.delete()
+    return redirect("profil:poste")
+
+
 
 
 @login_required
 def edit_Poste(request,Poste_id):
-    Personnels = Personnel.objects.get(pk=Poste_id)
+    poste = Poste.objects.get(pk=Poste_id)
     if request.method == 'POST':
-        form = Part1Form(request.POST,instance=Personnels)
+        form = Part1Form(request.POST,instance=poste)
         if form.is_valid():
             form.save()
-            return redirect("profil:part2")
+            return redirect("profil:poste")
     else:
-        form = Part1Form(instance=Personnels)
+        form = Part1Form(instance=poste)
     
-    return render(request,"profil/part1.html",{"form": form})
+    return render(request,"profil/partm1.html",{"form": form})
 
 @login_required
 def edit_Personnel(request,Personnel_id):
@@ -154,13 +161,13 @@ def calculate_daily_work_hours(personnel):
 
 def calculate_daily_salary(personnel):
     total_work_hours = calculate_daily_work_hours(personnel)
-    daily_salary = total_work_hours.total_seconds() / 3600 * personnel.poste.somme
+    daily_salary = total_work_hours.total_seconds() / 3600 * (personnel.poste.somme+personnel.salary)#n
 
     return daily_salary
 
 @login_required
-def personnel_salary(request, personnel_id):
-    personnel = Personnel.objects.get(id=personnel_id)
+def personnel_salary(request, Personnel_id):
+    personnel = Personnel.objects.get(id=Personnel_id)
   
     daily_work_hours = calculate_daily_work_hours(personnel)
     daily_salary = calculate_daily_salary(personnel)
@@ -173,19 +180,23 @@ def personnel_salary(request, personnel_id):
 
     return render(request, 'profil/salary.html', context)
 
-# 
-# def add_Profil(request):
-   
-#     if request.method == 'POST':
-#         form = ProfilForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect("profil:liste_e")
-#     else:
-#         form = ProfilForm()
-#     context = {"form": form}
-#     return render(request,"profil/form.html",context)
+@login_required
+def fiche(request,personnel_id):
+    personnel = Personnel.objects.get(id=personnel_id)
+  
+    daily_work_hours = calculate_daily_work_hours(personnel)
+    daily_salary = calculate_daily_salary(personnel)
+
+    context = {
+        'personnel': personnel,
+        'daily_work_hours': daily_work_hours,
+        'daily_salary': daily_salary,
+    }
+
+    return render(request, 'profil/salaire.html', context)
 
 
-# 
-
+@login_required
+def post(request):
+    context={'postes':Poste.objects.all(),}
+    return render(request, "profil/post.html",context)

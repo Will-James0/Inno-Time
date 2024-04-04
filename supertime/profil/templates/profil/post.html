@@ -1,3 +1,4 @@
+<!-- -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
@@ -5,7 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>liste</title>
-    <link rel="stylesheet" href="{% static 'profil/css/profile.css' %}">
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
 </head>
@@ -53,7 +53,6 @@
                             <li><a href="{%url 'profil:part1'%}">Ajouter</a></li>
                         </ul>
                     </li>
-                    </li>
                     <li>
                         <div class="icon-link">
                             <a href="#">
@@ -96,59 +95,40 @@
     <section class="home-section emp">
         <div class="home-content">
             <i class="bx bx-menu"></i>
-            <span class="text">Profile</span>
+            <span class="text">Liste des employés</span>
         </div>
-        <div class="body">
-            <div class="content c1">
-                <div class="profile-box b1">
-                    <img src="{% static 'profil/ressources/male1.png' %}" >
-                            {% for Personnel in Personnels %}
-                            <h1>ID_Personnel : {{ Personnel.id  }} </h1>
-                            <p class="header">Poste: {{Personnel.poste}} </p>
-                            {% endfor %}
-                </div>
-            </div>
-            <div class="content c2">
-                <div class="profile-box b2">
-                            {% for Personnel in Personnels %}
-                                <p class="header">NOM : {{Personnel.name}} </p>
-                                <p class="header">PRENOM : {{Personnel.prenom}} </p>
-                                <p class="header">EMAIL : {{Personnel.email}} </p>
-                                <p class="header">SEXE : {{Personnel.gender}} </p>
-                                <p class="header">HEURE_D'ENTREE : {{Personnel.poste.heure_debut}} </p>
-                                <p class="header">HEURE_DE_SORTI: {{Personnel.poste.heure_fin}} </p>
-        
-                            {% endfor %}
-                </div>
-            </div>
-            <div class="content c3">
-                <div class="profile-box b3">
-                    <img src="{% static 'profil/ressources/male1.png' %}" >
-                    {% for Personnel in Personnels %}
-                    <h1>ID_Personnel : {{ Personnel.id  }} </h1>
-                        <p class="header">NOM : {{Personnel.name}} </p>
-                        <p class="header">PRENOM : {{Personnel.prenom}} </p>
-                        <p class="header">EMAIL : {{Personnel.email}} </p>
-                        <p class="header">SEXE : {{Personnel.gender}} </p>
-                        <p class="header">POSTE :{{Personnel.poste}}  </p>
-                        <p class="header">HEURE_D'ENTREE : {{personnel.poste.heure_debut}} </p>
-                        <p class="header">HEURE_DE_SORTI: {{personnel.poste.heure_fin}} </p>
-                        
-                        {% endfor %}
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
                        
-                </div>
-            </div>
-            <div class="content c4">
-                <div class="profile-box b4">
-                            {% for Personnel in Personnels %}
-                            <h1>Statut</h1>
-                            <p class="header">Présent</p>
-                            <a href="{%url 'profil:salaire' Personnel.id %}">Fiche de paie</a>
-                            {% endfor %}
-                            
-                </div>
-            </div>
+                        <th>Alias poste</th>
+                        <th>Nom poste</th>
+                        <th>Heure d'arrivée</th>
+                        <th>Heure de départ</th>
+                        <th>Salaire</th>
+                        <th>Modifier</th>
+                        <th>Supprimer</th>
+                    </tr>
+                </thead>
+               {% for poste in postes %}
+                    <tr>
+            
+                       
+                        <td>{{poste.as_poste}}</td>
+                        <td>{{poste.nom_poste}}</td>
+                        <td>{{poste.heure_debut}}</td>
+                        <td>{{poste.heure_fin}}</td>
+                        <td> {{poste.somme}} </td>
+                        <td style="text-align: center;"><a href="{% url 'profil:partm1' poste.id %}"><i class="bx bxs-edit"></i></a></td>
+                        <td style="text-align: center;"><a href="{% url 'profil:delt_poste' poste.id %}"><i class="bx bxs-trash"></i></a></td>
+                       
+                    </tr>
+                  
+                   {% endfor %}
+            </table>
         </div>
+        
     </section>
 <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>

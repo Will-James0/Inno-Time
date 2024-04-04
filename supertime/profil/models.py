@@ -7,6 +7,8 @@ class Poste(models.Model):
     as_poste = models.CharField(max_length=6,verbose_name="ALIAS_Poste")
     nom_poste = models.CharField(max_length=62,verbose_name="Poste")
     somme = models.IntegerField()
+    heure_debut= models.TimeField(null=True)
+    heure_fin = models.TimeField(null=True)
     def __str__(self):
         return self.as_poste
 
@@ -21,7 +23,10 @@ class Personnel(models.Model):
     # poste auccupé par l'emplouyés
     poste = models.ForeignKey(Poste,on_delete=models.CASCADE,verbose_name="Poste")
     # nom de l'emplouyés
-    gender = models.CharField(max_length=100, choices=[('Masculin','Masculin'),('Feminin','Feminin')])
+    gender = models.CharField(max_length=100, choices=[('Masculin','Masculin'),('Feminin','Feminin')],verbose_name="Genre")
+    heure_fixe = models.IntegerField(null=True)# n
+    salary = models.FloatField(null=True) # n
+
     class Meta:
         verbose_name ="Personnel"
         verbose_name_plural ="Personnels"
@@ -29,9 +34,11 @@ class Personnel(models.Model):
         return self.name
 
 class Horaire(models.Model):
-    arrival_time = models.TimeField()
-    departure_time = models.TimeField()
-    personnel = models.ForeignKey(Personnel,on_delete=models.CASCADE,verbose_name="Horaire")
+    date_d = models.DateField(null=True) # n
+    arrival_time = models.TimeField(null=True)
+    departure_time = models.TimeField(null=True)
+    personnel = models.ForeignKey(Personnel,on_delete=models.CASCADE,verbose_name="Personnel")
+
 
     def calculate_duration(self):
         arrival = datetime.combine(datetime.today(), self.arrival_time)

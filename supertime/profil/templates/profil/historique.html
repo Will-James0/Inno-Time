@@ -37,6 +37,20 @@
                     <ul class="sub-menu">
                         <li><a class="link_name" href="{%url 'profil:liste_e'%}">Employés</a></li>
                         <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
+                        <li><a href="{%url 'profil:part2'%}">Ajouter</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="icon-link">
+                        <a href="{%url 'profil:poste'%}">
+                            <i class='bx bxs-briefcase'></i>
+                            <span class="link_name">Postes</span>
+                        </a>
+                            <i class="bx bxs-chevron-down arrow arrow"></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="{%url 'profil:poste'%}">Postes</a></li>
+                        <li><a href="{%url 'profil:poste'%}">Liste</a></li>
                         <li><a href="{%url 'profil:part1'%}">Ajouter</a></li>
                     </ul>
                 </li>
@@ -84,6 +98,7 @@
                 <i class="bx bx-menu"></i>
                 <span class="text">Historique</span>
             </div>
+            
         </section>
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>

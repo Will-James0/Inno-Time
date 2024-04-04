@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>liste</title>
-    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.mipersonnel.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
 </head>
 <body>
@@ -35,12 +35,26 @@
                         <ul class="sub-menu">
                             <li><a class="link_name" href="{%url 'profil:liste_e'%}">Employés</a></li>
                             <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
+                            <li><a href="{%url 'profil:part2'%}">Ajouter</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="icon-link">
+                            <a href="{%url 'profil:poste'%}">
+                                <i class='bx bxs-briefcase'></i>
+                                <span class="link_name">Postes</span>
+                            </a>
+                                <i class="bx bxs-chevron-down arrow arrow"></i>
+                        </div>
+                        <ul class="sub-menu">
+                            <li><a class="link_name" href="{%url 'profil:poste'%}">Postes</a></li>
+                            <li><a href="{%url 'profil:poste'%}">Liste</a></li>
                             <li><a href="{%url 'profil:part1'%}">Ajouter</a></li>
                         </ul>
                     </li>
                     <li>
                         <div class="icon-link">
-                            <a href="{%url 'profil:attendance'%}">
+                            <a href="#">
                                 <i class="bx bxs-time"></i>
                                 <span class="link_name">Présences</span></a>
                                 <i class="bx bxs-chevron-down arrow"></i>
@@ -106,7 +120,7 @@
                         <td>{{ personnel.gender }}</td>
                         <td>{{ personnel.poste }}</td>
                         <td>{{ personnel.poste.somme }}</td>
-                        <td style="text-align: center;"><a href="{% url 'profil:edit_Personnel' personnel.id %}"><i class="bx bxs-edit"></i></a></td>
+                        <td style="text-align: center;"><a href="{% url 'profil:partm2' personnel.id %}"><i class="bx bxs-edit"></i>  </a></td>
                         <td style="text-align: center;"><a href="{% url 'profil:delt_user' personnel.id %} "><i class="bx bxs-trash"></i> </a></td>
                     </tr>
                 {% endfor %}

@@ -10,74 +10,7 @@
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo-details">
-            <i class="bx bxl-python"></i>
-            <span class="logo_name">Inno Time</span>
-        </div>
-        <ul class="nav-links">
-                    <li>
-                        <a href="{%url 'profil:acceuil'%}">
-                            <i class="bx bxs-home"></i>
-                            <span class="link_name">Accueil</span>
-                        </a>
-                        <ul class="sub-menu blank">
-                            <li><a class="link_name" href="{%url 'profil:acceuil'%}">Accueil</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="icon-link">
-                            <a href="{%url 'profil:liste_e'%}">
-                                <i class="bx bxs-user-detail"></i>
-                                <span class="link_name">Employés</span>
-                            </a>
-                                <i class="bx bxs-chevron-down arrow arrow"></i>
-                        </div>
-                        <ul class="sub-menu">
-                            <li><a class="link_name" href="{%url 'profil:liste_e'%}">Employés</a></li>
-                            <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
-                            <li><a href="{%url 'profil:part1'%}">Ajouter</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="icon-link">
-                            <a href="#">
-                                <i class="bx bxs-time"></i>
-                                <span class="link_name">Présences</span></a>
-                                <i class="bx bxs-chevron-down arrow"></i>
-                        </div>
-                        <ul class="sub-menu">
-                            <li><a class="link_name" href="{%url 'profil:attendance'%}">Présences</a></li>
-                            <li><a href="{%url 'profil:attendance'%}">Présences</a></li>
-                            <li><a href="{%url 'profil:historique'%}">Historique</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="{%url 'profil:help'%}">
-                            <i class='bx bxs-help-circle' ></i>
-                            <span class="link_name">Aide</span>
-                        </a>
-                        <ul class="sub-menu blank">
-                            <li><a class="link_name" href="{%url 'profil:help'%}">Aide</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                <div class="profile-details">
-                    <div class="profile-content">
-                        <img src="{% static 'profil/ressources/Profile.png' %}" alt="profile">
-                    </div>
-                    
-                    <div class="name-job">
-                        <div class="profile_name">{{ user.username }}</div>
-                        <div class="job">Admin</div>
-                    </div>
-                    <a href="{% url 'accounts:logout' %}">
-                    <i class="bx bx-log-out"></i>
-                    </a>
-                </div>
-            </li>
-        </ul>
-    </div>
+    {% include 'profil/couche/sidebar.html' %}
     <section class="home-section emp">
         <div class="home-content">
             <i class="bx bx-menu"></i>
@@ -87,52 +20,50 @@
             <div class="content c1">
                 <div class="profile-box b1">
                     <img src="{% static 'profil/ressources/male1.png' %}" >
-                            {% for Personnel in Personnel %}
+                            {% for Personnel in Personnels %}
                             <h1>ID_Personnel : {{ Personnel.id  }} </h1>
                             <p class="header">Poste: {{Personnel.poste}} </p>
                             {% endfor %}
                 </div>
             </div>
-        
             <div class="content c2">
                 <div class="profile-box b2">
-                            {% for Personnel in Personnel %}
+                            {% for Personnel in Personnels %}
                                 <p class="header">NOM : {{Personnel.name}} </p>
                                 <p class="header">PRENOM : {{Personnel.prenom}} </p>
                                 <p class="header">EMAIL : {{Personnel.email}} </p>
                                 <p class="header">SEXE : {{Personnel.gender}} </p>
-                                <p class="header">HEURE_D'ENTREE : {{personnel.arrival_time}} </p>
-                                <p class="header">HEURE_DE_SORTI: {{Personnel.departure_time}} </p>
-                               
+                                <p class="header">HEURE_D'ENTREE : {{Personnel.poste.heure_debut}} </p>
+                                <p class="header">HEURE_DE_SORTI: {{Personnel.poste.heure_fin}} </p>
         
                             {% endfor %}
-                            
                 </div>
             </div>
             <div class="content c3">
                 <div class="profile-box b3">
                     <img src="{% static 'profil/ressources/male1.png' %}" >
-                            {% for Personnel in Personnels %}
-                            <h1>ID_Personnel : {{ Personnel.id  }} </h1>
-                                <p class="header">NOM : {{Personnel.name}} </p>
-                                <p class="header">PRENOM : {{Personnel.prenom}} </p>
-                                <p class="header">EMAIL : {{Personnel.email}} </p>
-                                <p class="header">SEXE : {{Personnel.gender}} </p>
-                                <p class="header">POSTE :{{Personnel.poste}}  </p>
-                                {% endfor %}
-                                
-                                <p class="header">HEURE_D'ENTREE : {{horaire.arrival_time}} </p>
-                                <p class="header">HEURE_DE_SORTI: {{horaire.departure_time}} </p>
-                               
-                            
+                    {% for Personnel in Personnels %}
+                    <h1>ID_Personnel : {{ Personnel.id  }} </h1>
+                        <p class="header">NOM : {{Personnel.name}} </p>
+                        <p class="header">PRENOM : {{Personnel.prenom}} </p>
+                        <p class="header">EMAIL : {{Personnel.email}} </p>
+                        <p class="header">SEXE : {{Personnel.gender}} </p>
+                        <p class="header">POSTE :{{Personnel.poste}}  </p>
+                        <p class="header">HEURE_D'ENTREE : {{personnel.poste.heure_debut}} </p>
+                        <p class="header">HEURE_DE_SORTI: {{personnel.poste.heure_fin}} </p>
+                        
+                        {% endfor %}
+                       
                 </div>
             </div>
             <div class="content c4">
                 <div class="profile-box b4">
-                            {% for Personnel in Personnel %}
+                            {% for Personnel in Personnels %}
                             <h1>Statut</h1>
                             <p class="header">Présent</p>
+                            <a href="{%url 'profil:salaire' Personnel.id %}">Fiche de paie</a>
                             {% endfor %}
+                            
                 </div>
             </div>
         </div>

@@ -1,22 +1,29 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{%static 'profil/css/index.css'%}">
-        <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
-        <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
-    </head>>
-<!-- formulaire_partie1.html -->
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Suivant</button>
-  </form>
-  
-  
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'profil/css/index.css'%}">
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+</head>
+    <body>
+        {% include 'profil/couche/sidebar.html' %}
+        <section class="home-section form">
+            <div class="home-content">
+                <i class="bx bx-menu"></i>
+                <span class="text">Ajouter</span>
+            </div>
+            <div id="container">
+              <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Valider</button>
+              </form>
+            </div>
+        </section>
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>
 </html>

@@ -1,0 +1,54 @@
+<!-- -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>liste</title>
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+</head>
+<body>
+    {% include 'profil/couche/sidebar.html' %}
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Liste des postes</span>
+        </div>
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                       
+                        <th>Alias poste</th>
+                        <th>Nom poste</th>
+                        <th>Heure d'arrivée</th>
+                        <th>Heure de départ</th>
+                        <th>Salaire</th>
+                        <th>Modifier</th>
+                        <th>Supprimer</th>
+                    </tr>
+                </thead>
+               {% for poste in postes %}
+                    <tr>
+            
+                       
+                        <td>{{poste.as_poste}}</td>
+                        <td>{{poste.nom_poste}}</td>
+                        <td>{{poste.heure_debut}}</td>
+                        <td>{{poste.heure_fin}}</td>
+                        <td> {{poste.somme}} </td>
+                        <td style="text-align: center;"><a href="{% url 'profil:partm1' poste.id %}"><i class="bx bxs-edit"></i></a></td>
+                        <td style="text-align: center;"><a href="{% url 'profil:delt_poste' poste.id %}"><i class="bx bxs-trash"></i></a></td>
+                       
+                    </tr>
+                  
+                   {% endfor %}
+            </table>
+        </div>
+        
+    </section>
+<script src="{% static 'profil/js/sidebar.js' %}"></script>
+</body>
+</html>

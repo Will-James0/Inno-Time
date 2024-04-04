@@ -4,7 +4,7 @@ from .models import Personnel,Poste,Horaire
 class Part1Form(forms.ModelForm):
     class Meta:
         model = Poste
-        fields = ['as_poste','nom_poste','somme']
+        fields = ['as_poste','nom_poste','somme','heure_debut','heure_fin']
   
   
 class Part2Form(forms.ModelForm):

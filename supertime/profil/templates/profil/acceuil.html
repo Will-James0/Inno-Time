@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,86 +7,325 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>acceuil</title>
-    <link rel="stylesheet" href="{% static 'profil/css/style.css'%}">
-    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <!-- <link rel="stylesheet" href="{% static 'profil/css/style.css'%}"> -->
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}">
+    <link href="{% static 'profil/css/bootstrap.min.css' %}" rel="stylesheet" media="all">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="au theme template">
+    <meta name="author" content="Hau Nguyen">
+    <meta name="keywords" content="au theme template">
+
+
+
+    <!-- Fontfaces CSS-->
+    <link href="{% static 'profil/css/font-face.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/font-awesome-4.7/css/font-awesome.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/font-awesome-5/css/fontawesome-all.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/mdi-font/css/material-design-iconic-font.min.css' %}" rel="stylesheet" media="all">
+
+    <!-- Bootstrap CSS-->
+    <link href="{% static 'profil/vendor/bootstrap-4.1/bootstrap.min.css' %}" rel="stylesheet" media="all">
+
+    <!-- Vendor CSS-->
+    <link href="{% static 'profil/vendor/animsition/animsition.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/wow/animate.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/css-hamburgers/hamburgers.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/slick/slick.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/select2/select2.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/perfect-scrollbar/perfect-scrollbar.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/vector-map/jqvmap.min.css' %}" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="{% static 'profil/css/theme.css' %}" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/bootstrap-datetimepicker.min.css' %}">
+
 </head>
     <body>
         <div class="sidebar">
             <div class="logo-details">
-                <i class="bx bxl-python"></i>
+                <i class="bx bx-atom"></i>
                 <span class="logo_name">Inno Time</span>
             </div>
             <ul class="nav-links">
-                <li>
-                    <a href="{%url 'profil:acceuil'%}">
-                        <i class="bx bxs-home"></i>
-                        <span class="link_name">Accueil</span>
-                    </a>
-                    <ul class="sub-menu blank">
-                        <li><a class="link_name" href="{%url 'profil:acceuil'%}">Accueil</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <div class="icon-link">
-                        <a href="{%url 'profil:liste_e'%}">
-                            <i class="bx bxs-user-detail"></i>
-                            <span class="link_name">Employés</span>
+                        <li>
+                            <a href="{%url 'profil:acceuil'%}">
+                                <i class="bx bx-grid-alt"></i>
+                                <span class="link_name">Dashboard</span>
+                            </a>
+                            <ul class="sub-menu blank">
+                                <li><a class="link_name" href="{%url 'profil:acceuil'%}">Dashboard</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="icon-link">
+                                <a href="{%url 'profil:liste_e'%}">
+                                    <i class="bx bxs-user-detail"></i>
+                                    <span class="link_name">Employés</span>
+                                </a>
+                                    <i class="bx bxs-chevron-down arrow arrow"></i>
+                            </div>
+                            <ul class="sub-menu">
+                                <li><a class="link_name" href="{%url 'profil:liste_e'%}">Employés</a></li>
+                                <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
+                                <li><a href="{%url 'profil:part2'%}">Ajouter</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="icon-link">
+                                <a href="{%url 'profil:poste'%}">
+                                    <i class='bx bxs-briefcase'></i>
+                                    <span class="link_name">Postes</span>
+                                </a>
+                                    <i class="bx bxs-chevron-down arrow arrow"></i>
+                            </div>
+                            <ul class="sub-menu">
+                                <li><a class="link_name" href="{%url 'profil:poste'%}">Postes</a></li>
+                                <li><a href="{%url 'profil:poste'%}">Liste</a></li>
+                                <li><a href="{%url 'profil:part1'%}">Ajouter</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="icon-link">
+                                <a href="{%url 'profil:attendance'%}">
+                                    <i class="bx bxs-time"></i>
+                                    <span class="link_name">Présences</span></a>
+                                    <i class="bx bxs-chevron-down arrow"></i>
+                            </div>
+                            <ul class="sub-menu">
+                                <li><a class="link_name" href="{%url 'profil:attendance'%}">Présences</a></li>
+                                <li><a href="{%url 'profil:attendance'%}">Présences</a></li>
+                                <li><a href="{%url 'profil:historique'%}">Historique</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="{%url 'profil:help'%}">
+                                <i class='bx bxs-help-circle' ></i>
+                                <span class="link_name">Aide</span>
+                            </a>
+                            <ul class="sub-menu blank">
+                                <li><a class="link_name" href="{%url 'profil:help' %}">Aide</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                    <div class="profile-details">
+                        <div class="profile-content">
+                            <img src="{% static 'profil/ressources/Profile.png' %}" alt="profile">
+                        </div>
+                        
+                        <div class="name-job">
+                            <div class="profile_name">{{ user.username }}</div>
+                            <div class="job">Admin</div>
+                        </div>
+                        <!-- <a href="{% url 'accounts:logout' %}"> -->
+                        <i class="bx bx-log-out"></i>
                         </a>
-                            <i class="bx bxs-chevron-down arrow arrow"></i>
                     </div>
-                    <ul class="sub-menu">
-                        <li><a class="link_name" href="{%url 'profil:liste_e'%}">Employés</a></li>
-                        <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
-                        <li><a href="{%url 'profil:part1'%}">Ajouter</a></li>
-                    </ul>
                 </li>
-                <li>
-                    <div class="icon-link">
-                        <a href="#">
-                            <i class="bx bxs-time"></i>
-                            <span class="link_name">Présences</span></a>
-                            <i class="bx bxs-chevron-down arrow"></i>
-                    </div>
-                    <ul class="sub-menu">
-                        <li><a class="link_name" href="{%url 'profil:attendance'%}">Présences</a></li>
-                        <li><a href="{%url 'profil:attendance'%}">Présences</a></li>
-                        <li><a href="{%url 'profil:historique'%}">Historique</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="{%url 'profil:help'%}">
-                        <i class='bx bxs-help-circle' ></i>
-                        <span class="link_name">Aide</span>
-                    </a>
-                    <ul class="sub-menu blank">
-                        <li><a class="link_name" href="{%url 'profil:help'%}">Aide</a></li>
-                    </ul>
-                </li>
-                <li>
-            <div class="profile-details">
-                <div class="profile-content">
-                    <img src="{% static 'profil/ressources/Profile.png' %}" alt="profile">
-                </div>
-                
-                <div class="name-job">
-                    <div class="profile_name">{{ user.username }}</div>
-                    <div class="job">Admin</div>
-                </div>
-                <a href="{% url 'accounts:logout' %}">
-                <i class="bx bx-log-out"></i>
-                </a>
-            </div>
-        </li>
-    </ul>
+            </ul>
         </div>
+
         <section class="home-section home">
             <div class="home-content">
                 <i class="bx bx-menu"></i>
-                <span class="text">Acceuil</span>
+                <span class="text">Dashboard</span>
             </div>
-            <h1>Bienvenue à vous <br> {{ user.username }}</h1>
-        </section>
+            <main>
+                <!-- <section class="statistic">
+                    <div class="section__content section__content--p30">
+                       <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-3">
+                                 <div class="box">
+                                    <h2 class="number">100</h2>
+                                    <span class="desc">Nombre d'employés</span>
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-account-o"></i>
+                                    </div>
+                                 </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3">
+                              <div class="box">
+                                <h2 class="number">25</h2>
+                                <span class="desc">Nombre d'absences</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-account-o"></i>
+                                </div>
+                              </div>
+                         </div>
+
+                            <div class="col-md-6 col-lg-3">
+                              <div class="box">
+                                <h2 class="number">25</h2>
+                                <span class="desc">Nombre d'absences</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-account-o"></i>
+                                </div>
+                           </div>
+                        </div>
+                       </div>
+                    </div>   
+                </section> -->
+                <!-- Stactistic end  -->
+                <section class="statistic">
+                    <div class="section__content section__content--p30">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-6 col-lg-3">
+                                    <div class="statistic__item">
+                                        <h2 class="number">100</h2>
+                                        <span class="desc">Nombre d'employés</span>
+                                        <div class="icon">
+                                            <i class="zmdi zmdi-account-o"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-3">
+                                    <div class="statistic__item">
+                                        <h2 class="number">85</h2>
+                                        <span class="desc">Nombre de presences</span>
+                                        <div class="icon">
+                                            <i class="zmdi zmdi-account-o"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-3">
+                                    <div class="statistic__item">
+                                        <h2 class="number">15</h2>
+                                        <span class="desc">Nombre d'absences</span>
+                                        <div class="icon">
+                                            <i class="zmdi zmdi-account-o"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-3">
+                                    <div class="statistic__item">
+                                        <h2 style="color: #4272d7; font-size: 200%;" class="number"><span id="hrs">00</span>
+                                            <span>:</span>
+                                            <span id="min">00</span>
+                                            <span>:</span>
+                                            <span id="sec">00</span></h3>
+                                        <span class="desc">Horloge</span>
+                                        <h2 style="color: #4272d7; font-size: 200%;" class="number"><span id="jrs">00</span>
+                                            <span>/</span>
+                                            <span id="mois">00</span>
+                                            <span>/</span>
+                                            <span id="ann">0000</span></h3>
+                                        <!-- <div class="icon">
+                                            <i class="zmdi zmdi-account-o"></i>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- <section class="charts"> -->
+                                            
+                                         <!-- <h2>Présences et Absences</h2>
+                                          <canvas id="pie-chart"></canvas>
+                                         <h2>Taux de présence annuel</h2>
+                                         <canvas id="line-chart"></canvas>
+                                         </div> -->
+
+                                         <div class="main-content">
+                                            <div class="section__content section__content--p30">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <!-- <div class="col-lg-6">
+                                                            <div class="au-card m-b-30">
+                                                                <div class="au-card-inner">
+                                                                    <h3 class="title-2 m-b-40">Yearly Sales</h3>
+                                                                    <canvas id="sales-chart"></canvas>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                                                        <!-- <div class="col-lg-6">
+                                                            <div class="au-card m-b-30">
+                                                                <div class="au-card-inner">
+                                                                    <h3 class="title-2 m-b-40">Team Commits</h3>
+                                                                    <canvas id="team-chart"></canvas>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                                                        <div class="col-lg-6">
+                                                            <div class="au-card m-b-30">
+                                                                <div class="au-card-inner">
+                                                                    <h3 class="title-2 m-b-40">Presences et absences</h3>
+                                                                    <canvas id="pie-chart"></canvas>
+
+                                                                    <!-- <canvas id="barChart"></canvas> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-lg-6">
+                                                            <div class="au-card m-b-30">
+                                                                <div class="au-card-inner">
+                                                                    <h3 class="title-2 m-b-40">Taux de présence annuel</h3>
+                                                                    <canvas id="line-chart"></canvas>
+
+                                                                    <!-- <canvas id="lineChart"></canvas> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                         <div class="col-lg-6">
+                                                            <div class="au-card m-b-30">
+                                                                <div class="au-card-inner">
+                                                                    <h3 class="title-2 m-b-40">Presences annuelles</h3>
+                                                                    <!-- <canvas id="doughutChart"></canvas> -->
+                                                                    <canvas id="myChart" width="400" height="200"></canvas> 
+
+                                                                </div>
+                                                            </div>
+                                                        </div> 
+                                                     
+                                                    </div>
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                      
+                <!-- </section> -->
+
+            </main>
+    </section>
+
+    <!-- <script src="{% static 'profil/vendor/chartjs/chart.js' %}"></script> -->
+    <!-- Jquery JS-->
+    <script src="{% static 'profil/vendor/jquery-3.2.1.min.js' %}"></script>
+    <!-- Bootstrap JS-->
+    <script src="{% static 'profil/vendor/bootstrap-4.1/popper.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/bootstrap-4.1/bootstrap.min.js' %}"></script>
+    <!-- Vendor JS       -->
+    <script src="{% static 'profil/vendor/slick/slick.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/wow/wow.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/animsition/animsition.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/counter-up/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/counter-up/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/circle-progress/circle-progress.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'profil/vendor/chartjs/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/select2/select2.min.js' %}"> </script>
+    <script src="{% static 'profil/vendor/vector-map/jquery.vmap.js' %}"></script>
+    <script src="{% static 'profil/vendor/vector-map/jquery.vmap.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/vector-map/jquery.vmap.sampledata.js' %}"></script>
+    <script src="{% static 'profil/vendor/vector-map/jquery.vmap.world.js' %}"></script>
+
+    <!-- Main JS-->
+    <script src="{% static 'profil/js/main.js' %}"></script>
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js' %}"></script> -->
+    <script src="{% static 'profil/js/dashboard.js' %}"></script>
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
+    <script src="{% static 'profil/js/clock.js' %}"></script>
 </body>
 </html>

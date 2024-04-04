@@ -249,13 +249,23 @@
     font-size: 12px;
 }
 
+/* body{
+    background: #e4e9f7;
+} */
+
 .home-section{
+    margin: 0;
     position: relative;
-    background: #fff;
+    background: #e4e9f7;
+    top: 0;
     left: 260px;
     width: calc(100% - 260px);
     height: 100vh;
     transition: all 0.5s ease;
+}
+
+.home{
+    height: 100%;
 }
 
 .sidebar.close ~ .home-section{
@@ -271,7 +281,7 @@
 
 .home-section .home-content .bx-menu,
 .home-section .home-content .text{
-    color: #11101d;
+    color: #000;
     font-size: 35px;
 }
 
@@ -285,31 +295,18 @@
     font-weight: 600;
 }
 
+
 /* Styles de l'acceuil */
 
-.home{
-    background-image: url(../ressources/pexels.jpg);
-    background-size: cover;
-}
-
-.home-section.home .home-content .bx-menu,
+/* .home-section.home .home-content .bx-menu,
 .home-section.home .home-content .text{
     color: #fff;
-}
-
-.home-section.home h1{
-    position: absolute;
-    text-align: center;
-    color: #fff;
-    font-size: 400%;
-    top: 40%;
-    left: 35%;
-}
+} */
 
 /*Style d'employe.css*/
 
 .home-section.emp{
-    background: #fff;
+    background: #e4e9f7;
 }
 
 .content {

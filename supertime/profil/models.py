@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime
+from datetime import datetime,date
 
 # Create your models here.
 
@@ -28,6 +28,7 @@ class Personnel(models.Model):
     gender = models.CharField(max_length=100, choices=[('Masculin','Masculin'),('Feminin','Feminin')],verbose_name="Genre")
     heure_fixe = models.IntegerField(null=True)# n
     salary = models.FloatField(null=True) # n
+    image_user = models.ImageField(upload_to='images/employes/',blank=True)
 
     class Meta:
         verbose_name ="Personnel"
@@ -50,8 +51,28 @@ class Horaire(models.Model):
 
         return duration
    
+    def retard(self):
+        h_arrival = datetime.combine(datetime.today(), self.arrival_time)
+        h_arrival_fixe = datetime.combine(datetime.today(), self.personnel.poste.heure_debut)
+        # if h_arrival < h_arrival_fixe:
+        #    h_resultant_r= h_arrival_fixe - h_arrival
+        # else:
+        #      h_resultant_r= h_arrival_fixe - h_arrival
+        if h_arrival > h_arrival_fixe:
+           h_resultant_r=    h_arrival-h_arrival_fixe
+        else:
+            h_d = "00:00"
+            h_resultant_r = datetime.strptime(h_d,"%H:%M").time()
+
+
+        return h_resultant_r
+    def date_days(self):
+        d=date.today().strftime('%m-%Y')
+        return d
+    
     def __str__(self):
         return self.pk
+    
 
 class Attendance(models.Model):
     personnel_a = models.ForeignKey(Personnel,on_delete=models.CASCADE)

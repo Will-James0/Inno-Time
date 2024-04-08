@@ -7,10 +7,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>acceuil</title>
-    <!-- <link rel="stylesheet" href="{% static 'profil/css/style.css'%}"> -->
+    <link rel="stylesheet" href="{% static 'profil/css/acc.css'%}">
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}"> -->
     <link href="{% static 'profil/css/bootstrap.min.css' %}" rel="stylesheet" media="all">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -43,13 +43,18 @@
     <link href="{% static 'profil/css/theme.css' %}" rel="stylesheet" media="all">
     <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'profil/css/bootstrap-datetimepicker.min.css' %}">
-
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}">
 </head>
     <body>
         <div class="sidebar">
             <div class="logo-details">
                 <i class="bx bx-atom"></i>
                 <span class="logo_name">Inno Time</span>
+                <!-- <div class="logo-content">
+                    <img src="{% static 'profil/ressources/logo1.png' %}" alt="logo">
+                </div> -->
             </div>
             <ul class="nav-links">
                         <li>
@@ -123,9 +128,7 @@
                         </div>
                         <!-- <a href="{% url 'accounts:logout' %}"> -->
                         <i class="bx bx-log-out"></i>
-                        </a>
-                    </div>
-                </li>
+                
             </ul>
         </div>
 
@@ -234,7 +237,7 @@
                                          <canvas id="line-chart"></canvas>
                                          </div> -->
 
-                                         <div class="main-content">
+                                        <div class="main-content">
                                             <div class="section__content section__content--p30">
                                                 <div class="container-fluid">
                                                     <div class="row">
@@ -264,18 +267,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
                                                         <div class="col-lg-6">
-                                                            <div class="au-card m-b-30">
-                                                                <div class="au-card-inner">
-                                                                    <h3 class="title-2 m-b-40">Taux de présence annuel</h3>
-                                                                    <canvas id="line-chart"></canvas>
-
-                                                                    <!-- <canvas id="lineChart"></canvas> -->
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                         <div class="col-lg-6">
                                                             <div class="au-card m-b-30">
                                                                 <div class="au-card-inner">
                                                                     <h3 class="title-2 m-b-40">Presences annuelles</h3>
@@ -284,8 +276,47 @@
 
                                                                 </div>
                                                             </div>
-                                                        </div> 
-                                                     
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="au-card m-b-30">
+                                                                <div class="au-card-inner">
+                                                                    <h3  class="title-2 m-b-40">Employés les plus assidus</h3>
+                                                                    <div class="content">
+                                                                        <table>
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>N°</th>
+                                                                                    <th>Nom</th>
+                                                                                    <th>Poste</th>
+                                                                                    <th>Heures</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>1</td>
+                                                                                    <td>John Doe</td>
+                                                                                    <td>Developpeur</td>
+                                                                                    <td>60</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>2</td>
+                                                                                    <td>Loug</td>
+                                                                                    <td>comptable</td>
+                                                                                    <td>56</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>3</td>
+                                                                                    <td>Louis</td>
+                                                                                    <td>Architecte</td>
+                                                                                    <td>50</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <!-- <canvas id="lineChart"></canvas> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                    
                                                 </div>

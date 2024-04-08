@@ -16,7 +16,7 @@ const pieChart = new Chart(ctxPie, {
 
 // Graphe linéaire
 
-const ctxLine = document.getElementById("line-chart").getContext("2d");
+/*const ctxLine = document.getElementById("line-chart").getContext("2d");
 
 const lineChart = new Chart(ctxLine, {
   type: "line",
@@ -40,7 +40,7 @@ const lineChart = new Chart(ctxLine, {
       }]
     }
   }
-});
+});*/
 
 const ctx = document.getElementById("myChart").getContext("2d");
 

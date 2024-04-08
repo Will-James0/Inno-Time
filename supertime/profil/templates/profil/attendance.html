@@ -10,7 +10,92 @@
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
 </head>
 <body>
+
     {% include 'profil/couche/sidebar.html' %}
+
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class="bx bx-atom"></i>
+            <span class="logo_name">Inno Time</span>
+        </div>
+        <ul class="nav-links">
+                    <li>
+                        <a href="{%url 'profil:acceuil'%}">
+                            <i class="bx bx-grid-alt"></i>
+                            <span class="link_name">Dashboard</span>
+                        </a>
+                        <ul class="sub-menu blank">
+                            <li><a class="link_name" href="{%url 'profil:acceuil'%}">Dashboard</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="icon-link">
+                            <a href="{%url 'profil:liste_e'%}">
+                                <i class="bx bxs-user-detail"></i>
+                                <span class="link_name">Employés</span>
+                            </a>
+                                <i class="bx bxs-chevron-down arrow arrow"></i>
+                        </div>
+                        <ul class="sub-menu">
+                            <li><a class="link_name" href="{%url 'profil:liste_e'%}">Employés</a></li>
+                            <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
+                            <li><a href="{%url 'profil:part2'%}">Ajouter</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="icon-link">
+                            <a href="{%url 'profil:poste'%}">
+                                <i class='bx bxs-briefcase'></i>
+                                <span class="link_name">Postes</span>
+                            </a>
+                                <i class="bx bxs-chevron-down arrow arrow"></i>
+                        </div>
+                        <ul class="sub-menu">
+                            <li><a class="link_name" href="{%url 'profil:poste'%}">Postes</a></li>
+                            <li><a href="{%url 'profil:poste'%}">Liste</a></li>
+                            <li><a href="{%url 'profil:part1'%}">Ajouter</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="icon-link">
+                            <a href="{%url 'profil:attendance'%}">
+                                <i class="bx bxs-time"></i>
+                                <span class="link_name">Présences</span></a>
+                                <i class="bx bxs-chevron-down arrow"></i>
+                        </div>
+                        <ul class="sub-menu">
+                            <li><a class="link_name" href="{%url 'profil:attendance'%}">Présences</a></li>
+                            <li><a href="{%url 'profil:attendance'%}">Présences</a></li>
+                            <li><a href="{%url 'profil:historique'%}">Historique</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{%url 'profil:help'%}">
+                            <i class='bx bxs-help-circle' ></i>
+                            <span class="link_name">Aide</span>
+                        </a>
+                        <ul class="sub-menu blank">
+                            <li><a class="link_name" href="{%url 'profil:help'%}">Aide</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                <div class="profile-details">
+                    <div class="profile-content">
+                        <img src="{% static 'profil/ressources/Profile.png' %}" alt="profile">
+                    </div>
+                    
+                    <div class="name-job">
+                        <div class="profile_name">{{ user.username }}</div>
+                        <div class="job">Admin</div>
+                    </div>
+                    <a href="{% url 'accounts:logout' %}">
+                    <i class="bx bx-log-out"></i>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
     <section class="home-section emp">
         <div class="home-content">
             <i class="bx bx-menu"></i>
@@ -20,21 +105,28 @@
             <table>
                 <thead>
                     <tr>
+
+
                         <th>Date</th>
                         <th>ID Employé</th>
                         <th>Check In</th>
                         <th>Check Out</th>
                         <th>Durée</th>
+                        <th>Retard</th>
                     </tr>
                 </thead>
                
                 {% for horaire in horaires %}
                     <tr>
                         <td> 2024-08-31 </td>
+
+                        <td> {{horaire.date_days}} </td>
+
                         <td> {{horaire.personnel}}</td>
                         <td> {{horaire.arrival_time}}</td>
                         <td> {{horaire.departure_time}}</td>
                         <td>{{horaire.calculate_duration}}</td>
+                        <td> {{horaire.retard}} </td>
                         
                     </tr>
                     {% endfor %}

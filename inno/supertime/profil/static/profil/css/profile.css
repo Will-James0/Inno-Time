@@ -1,0 +1,81 @@
+.content{
+    margin-top: 15%;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-box{
+    background: #fff;
+    align-items: center;
+    padding: 30px 80px;
+    color: #000;
+    border-radius: 20px;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,0.9), 0 5px 5px 0 rgba(0, 0, 0, 0.90);
+    position: absolute;
+}
+
+.header{
+    margin-top: 5%;
+}
+
+.body{
+    margin-top: 20%;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 25%;
+    margin-right: 30%;
+}
+
+.b2{
+    padding: 10px 90px;
+}
+
+.c2{
+    position: absolute;
+    left: 50%;
+}
+
+.c3{
+    display: none;
+}
+
+.c4{
+    margin-left: -65%;
+    margin-bottom: -35%;
+}
+
+@media screen and (max-width: 1400px) {
+    .c3{
+        display: block;
+        position: absolute;
+        top: 10%;
+        left: 10%;
+    }
+
+    .header{
+        margin-left: 10%;
+    }
+    
+    .c1, .c2, .c4{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .profile-box {
+        padding: 1% 1%; /* Adjust padding for medium-sized screens */
+    }
+
+}
+
+@media screen and (max-width: 550px) {
+    .profile-box {
+        padding: 1% 1%; /* Adjust padding for medium-sized screens */
+    }
+
+    .header{
+        margin-left: 10%;
+    }
+}

@@ -1,0 +1,126 @@
+*{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: "poppins", sans-serif;
+}
+
+body{
+    background: #fff;
+}
+
+.navbar{
+    height: 13%;
+    top: 0;
+    background: #0e7ab7;
+    position: absolute;
+    /*padding: 40px;*/
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.navbar a{
+    color: #fff;
+}
+
+.navbar .logo{
+    font-size: 2em;
+    font-weight: bold;
+    color: #fff;
+    margin-left: 1%;
+}
+
+.navbar .nav-links ul{
+    display: flex;
+}
+
+.navbar .nav-links ul li{
+    margin: 0 25px;
+}
+
+.navbar .nav-links ul li:active a{
+    color: #ed3c57;
+    font-weight: 600;
+}
+
+.navbar .nav-links ul li a:hover{
+    color: #ff0;
+    font-weight: 600;
+}
+
+.navbar .material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 700,
+    'GRAD' 200,
+    'opsz' 24
+    }
+
+    .navbar .material-symbols-outlined {
+        color: #fff;
+        display: none;
+        }
+
+    .navbar .material-symbols-outlined {
+        position: absolute;
+        top: 30%;
+        right: 5%;
+    }
+
+.sidebar{
+    position: absolute;
+    top: 13%;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    background: #fff;
+    width: 90px;
+    overflow: hidden;
+    transition: width 0.2s linear;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar a{
+    position: relative;
+    color: rgb(85, 83, 83);
+    font-size: 14px;
+    display: table;
+    width: 300px;
+    padding: 10px;
+}
+
+.fas{
+    position: relative;
+    width: 70px;
+    height: 40px;
+    top: 14px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.nav-item{
+    position: relative;
+    top: 12px;
+    margin-left: 10px;
+}
+
+.sidebar a:hover{
+    background: #eee;
+}
+
+.sidebar:hover{
+    width: 280px;
+    transition: all 0.5s ease;
+}
+
+.historique{
+    position: absolute;
+    bottom: 0;
+}

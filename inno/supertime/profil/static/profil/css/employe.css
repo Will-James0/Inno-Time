@@ -1,0 +1,237 @@
+@import url("https://fonts.googleapis.com/css2?family=poppins:wght@400;500;600;700&display=swap");
+
+*{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: "poppins", sans-serif;
+}
+
+body{
+    background: #fff;
+}
+
+.navbar{
+    height: 13%;
+    top: 0;
+    background: #11101d;
+    position: absolute;
+    /*padding: 40px;*/
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.navbar a{
+    color: #fff;
+}
+
+.navbar .logo{
+    font-size: 2em;
+    font-weight: bold;
+    color: #fff;
+    margin-left: 1%;
+}
+
+.navbar .nav-links ul{
+    display: flex;
+}
+
+.navbar .nav-links ul li{
+    margin: 0 25px;
+}
+
+.navbar .nav-links ul li:active a{
+    color: #ed3c57;
+    font-weight: 600;
+}
+
+.navbar .nav-links ul li a:hover{
+    color: #ff0;
+    font-weight: 600;
+}
+
+.navbar .material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 700,
+    'GRAD' 200,
+    'opsz' 24
+    }
+
+    .navbar .material-symbols-outlined {
+        color: #fff;
+        display: none;
+        }
+
+    .navbar .material-symbols-outlined {
+        position: absolute;
+        top: 30%;
+        right: 5%;
+    }
+
+.sidebar{
+    position: absolute;
+    top: 13%;
+    bottom: 0;
+    height: 87%;
+    left: 0;
+    background: #fff;
+    width: 90px;
+    overflow: hidden;
+    transition: width 0.2s linear;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar a{
+    position: relative;
+    color: rgb(85, 83, 83);
+    font-size: 14px;
+    display: table;
+    width: 300px;
+    padding: 10px;
+}
+
+.fas{
+    position: relative;
+    width: 70px;
+    height: 40px;
+    top: 14px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.nav-item{
+    position: relative;
+    top: 12px;
+    margin-left: 10px;
+}
+
+.sidebar a:hover{
+    background: #eee;
+}
+
+.sidebar:hover{
+    width: 280px;
+    transition: all 0.5s ease;
+}
+
+.historique{
+    position: absolute;
+    bottom: 0;
+}
+
+
+.content {
+    margin-top: 100px; /* Pour éviter que le contenu soit caché sous la barre de navigation */
+    padding: 15px;
+    margin-left: 10%;
+}
+
+
+.content table {
+    width: 100%;
+    border-collapse: collapse; /* Pour fusionner les bordures des cellules */
+}
+
+.content th, .content td {
+    padding: 5px;
+    border: 1px solid #ddd; /* Ajoute des bordures aux cellules */
+    text-align: left;
+}
+
+.content th {
+    background-color: #f2f2f2;  /*Couleur de fond pour les en-têtes*/ 
+}
+
+h1{
+    color: #000;
+    text-align: center;
+    margin-bottom: 5%;
+}
+
+td{
+    color: #000;
+}
+
+.sidebar{
+    z-index: 20;
+}
+
+@media screen and (max-width: 900px){
+    body {
+        overflow-x: auto;
+    }
+
+    .navbar{
+        align-items: center;
+    }
+
+    .navbar a{
+        color: #0e7ab7;
+    }
+
+    .navbar .logo {
+        position: absolute;
+        top: 30%;
+        left: 5%;
+    }
+
+    .navbar .material-symbols-outlined {
+        display: block;
+        cursor: pointer;
+        z-index: 51;
+    }
+
+    .nav-links{
+        top: 0;
+        left: 0;
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.20);
+        backdrop-filter: blur(8px);
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 50;
+        margin-left: -100%;
+        transition: all 0.5s ease;
+    }
+
+    .nav-links.mobile-menu{
+        margin-left: 0;
+    }
+
+    .nav-links ul{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar .nav-links ul li {
+        margin: 25px 0;
+        font-size: 1.2em;
+    }
+
+    .sidebar:hover{
+        width: 200px;
+        transition: all 0.5s ease;
+    }
+
+    h1{
+        margin-bottom: 10%;
+    }
+
+    #container{
+        position: absolute;
+        top: 20%;
+        left: 20%;
+       }
+}

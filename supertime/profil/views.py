@@ -127,16 +127,6 @@ def delete_employees(request):
     return redirect('profil:liste_e')
 
 
-
-
-
-
-
-
-
-
-
-
 # 
 @login_required
 def del_poste(request,Poste_id):

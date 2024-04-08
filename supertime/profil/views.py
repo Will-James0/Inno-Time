@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Personnel,Horaire,Poste,Attendance
 from .forms import Part1Form, Part2Form,Part3Form
 from datetime import datetime, timedelta
+from django.core.paginator import Paginator
 
 
 
@@ -55,11 +56,25 @@ def part3(request):
 
 @login_required
 def liste_e(request):
-    context={'postes':Poste.objects.all(),
-           
-           'personnels':Personnel.objects.all(),
-      
-           }
+
+    #personnel = Personnel.objects.all()  # Récupérer la liste complète des employés depuis la base de données
+    employee_list = Personnel.objects.all()
+    if request.method == "GET":
+        
+        name=request.GET.get('rechercher')
+        if name is not None:
+            employee_list = Personnel.objects.filter(name=name)
+    
+
+
+    paginator = Paginator(employee_list, 3)  # Paginer la liste avec 10 employés par page
+    
+    page_number = request.GET.get('page')  # Récupérer le numéro de page depuis les paramètres GET
+    page_obj = paginator.get_page(page_number)  # Obtenir l'objet Page pour la page demandée
+    context = {'page_obj': page_obj,
+               
+               
+               }
     return render(request,"profil/liste_e.html",context)
 
 
@@ -99,6 +114,30 @@ def del_user(request,Personnel_id):
     Personne.delete()
     return redirect("profil:liste_e")
 
+
+
+def delete_employees(request):
+    if request.method == 'POST':
+        selected_employees = request.POST.getlist('selected_employees')
+        # Code pour supprimer les employés sélectionnés
+        # selected_employees contient une liste des ID des employés sélectionnés
+        Personnel.objects.filter(id__in=selected_employees).delete()
+        
+    
+    return redirect('profil:liste_e')
+
+
+
+
+
+
+
+
+
+
+
+
+# 
 @login_required
 def del_poste(request,Poste_id):
     poste = Poste.objects.get(pk=Poste_id)
@@ -161,7 +200,7 @@ def calculate_daily_work_hours(personnel):
 
 def calculate_daily_salary(personnel):
     total_work_hours = calculate_daily_work_hours(personnel)
-    daily_salary = total_work_hours.total_seconds() / 3600 * (personnel.poste.somme+personnel.salary)#n
+    daily_salary = (total_work_hours.total_seconds() / 3600 * (personnel.poste.somme + personnel.salary))/personnel.heure_fixe #n
 
     return daily_salary
 
@@ -178,7 +217,7 @@ def personnel_salary(request, Personnel_id):
         'daily_salary': daily_salary,
     }
 
-    return render(request, 'profil/salary.html', context)
+    return render(request, 'profil/salaire.html', context)
 
 @login_required
 def fiche(request,personnel_id):

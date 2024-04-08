@@ -6,24 +6,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>acceuil</title>
-    <link rel="stylesheet" href="{% static 'profil/css/style.css'%}">
+    <!-- <link rel="stylesheet" href="{% static 'profil/css/style.css'%}"> -->
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}">
 </head>
     <body>
         <div class="sidebar">
             <div class="logo-details">
-                <i class="bx bxl-python"></i>
+                <i class="bx bx-atom"></i>
                 <span class="logo_name">Inno Time</span>
+                <!-- <div class="logo-content">
+                    <img src="{% static 'profil/ressources/logo1.png' %}" alt="logo">
+                </div> -->
             </div>
             <ul class="nav-links">
                 <li>
                     <a href="{%url 'profil:acceuil'%}">
-                        <i class="bx bxs-home"></i>
-                        <span class="link_name">Accueil</span>
+                        <i class="bx bx-grid-alt"></i>
+                        <span class="link_name">Dashboard</span>
                     </a>
                     <ul class="sub-menu blank">
-                        <li><a class="link_name" href="{%url 'profil:acceuil'%}">Accueil</a></li>
+                        <li><a class="link_name" href="{%url 'profil:acceuil'%}">Dashboard</a></li>
                     </ul>
                 </li>
                 <li>
@@ -96,9 +100,59 @@
         <section class="home-section home">
             <div class="home-content">
                 <i class="bx bx-menu"></i>
-                <span class="text">Acceuil</span>
+                <span class="text">Dashboard</span>
             </div>
-            <h1>Bienvenue à vous <br> {{ user.username }}</h1>
+            <section id="content">
+                <!-- MAIN -->
+                <main>
+                    <ul class="box-info">
+                        <li>
+                            <!--<i class='bx bxs-calendar-check' > <img src="img/people.png" alt=""> </i>-->
+                            <img src="{% static 'profil/ressources/1.png' %}" alt="">  
+                            <span class="text">
+                                <h3>Consulter la liste des employés</h3> <br>
+                            <a href="{%url 'profil:liste_e'%}"><button> Liste</button> </a>
+                            </span>
+                        </li>
+                        <li>
+                            <img src="{% static 'profil/ressources/2.png' %}" alt="">  
+                            <span class="text">
+                                <h3>Consulter les présences</h3> <br>
+                            <a href="{%url 'profil:attendance'%}"><button> Présences</button> </a>
+                            </span>
+                        </li>
+                    </ul>
+        
+                    <!---->
+        
+                    <ul class="box-info-2">
+                        <li>
+                            <!--<i class='bx bxs-calendar-check' > <img src="img/people.png" alt=""> </i>-->
+                            <img src="{% static 'profil/ressources/5.png' %}" alt="">  
+                            <span class="text">
+                                <p>Consulter les profiles</p> <br>
+                            <!--<a href="#"><button> Consulter</button> </a>-->
+                            </span>
+                        </li>
+                        <li>
+                            <img src="{% static 'profil/ressources/3.png' %}" alt="">  
+                            <span class="text">
+                                <p>La liste des postes des employés</p> <br>
+                            </span>
+                        </li>
+                        <li>
+                            <!--<i class='bx bxs-calendar-check' > <img src="img/people.png" alt=""> </i>-->
+                            <img src="{% static 'profil/ressources/5.jpg' %}" alt=""> 
+                            <span class="text">
+                                <p>Ajouter de nouveaux employés</p> <br>
+                            </span>
+                        </li>
+                        
+                    </ul>
+                </main>
+                <!-- MAIN -->
+            </section>
+            <!-- CONTENT -->
         </section>
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>

@@ -11,17 +11,17 @@
 <body>
     <div class="sidebar">
         <div class="logo-details">
-            <i class="bx bxl-python"></i>
+            <i class="bx bx-atom"></i>
             <span class="logo_name">Inno Time</span>
         </div>
         <ul class="nav-links">
                     <li>
                         <a href="{%url 'profil:acceuil'%}">
-                            <i class="bx bxs-home"></i>
-                            <span class="link_name">Accueil</span>
+                            <i class="bx bx-grid-alt"></i>
+                            <span class="link_name">Dashboard</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link_name" href="{%url 'profil:acceuil'%}">Accueil</a></li>
+                            <li><a class="link_name" href="{%url 'profil:acceuil'%}">Dashboard</a></li>
                         </ul>
                     </li>
                     <li>
@@ -96,10 +96,18 @@
             <i class="bx bx-menu"></i>
             <span class="text">Liste des employés</span>
         </div>
+        <!-- bare rechercher-->
+        <form action="" method="GET">
+            <input type="search" name="rechercher" placeholder="Search employees">
+            <button type="submit">Search</button>
+           <!---->
+        </form>
+
         <div class="content">
             <table>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>ID</th>
                         <th>Nom</th>
                         <th>Prénom</th>
@@ -109,10 +117,17 @@
                         <th>Salaire_poste</th>
                         <th>Modifier</th>
                         <th>Supprimer</th>
+                        <th>Suppri</th>
                     </tr>
                 </thead>
-                {% for personnel in personnels %}
+<!--  -->
+                <form action="{% url 'profil:delete_employees' %}" method="POST">
+                    {% csrf_token %}
+                    {% for personnel in page_obj %}
+                      <label>
+              
                     <tr>
+                        <td><input type="checkbox" name="selected_employees" value="{{ personnel.id }}"></td>
                         <td>{{ personnel.id }}</td>
                         <td> <a href=" {% url 'profil:profil_e' personnel.id %} "> {{ personnel.name }} </a></td>
                         <td>{{ personnel.prenom }}</td>
@@ -120,13 +135,31 @@
                         <td>{{ personnel.gender }}</td>
                         <td>{{ personnel.poste }}</td>
                         <td>{{ personnel.poste.somme }}</td>
+                        <td><a href="{%url 'profil:salaire' personnel.id %}">Fiche de paie</a>/td>
                         <td style="text-align: center;"><a href="{% url 'profil:partm2' personnel.id %}"><i class="bx bxs-edit"></i>  </a></td>
                         <td style="text-align: center;"><a href="{% url 'profil:delt_user' personnel.id %} "><i class="bx bxs-trash"></i> </a></td>
                     </tr>
-                {% endfor %}
+                             <!--  -->
+                            
+    </label>
+    <br>
+  {% endfor %}
+  <button type="submit">Del</button>
+</form>
+
             </table>
         </div>
-        
+       
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}">Précédent</a>
+            {% endif %}
+            
+            page <span class="current-page">{{ page_obj.number }}</span>
+            
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}">Suivant</a>
+            {% endif %}
+         
     </section>
 <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>

@@ -26,8 +26,9 @@ class Personnel(models.Model):
     poste = models.ForeignKey(Poste,on_delete=models.CASCADE,verbose_name="Poste")
     # nom de l'emplouyés
     gender = models.CharField(max_length=100, choices=[('Masculin','Masculin'),('Feminin','Feminin')],verbose_name="Genre")
-    heure_fixe = models.IntegerField(null=True)# n
-    salary = models.FloatField(null=True) # n
+    heure_fixe = models.IntegerField(default='100',null=True)# n
+    salary = models.FloatField(default='0',null=True) # n
+    is_present = models.CharField(max_length=24,choices=[('Present','Present'),('Absent','Absent')])
 
     class Meta:
         verbose_name ="Personnel"
@@ -37,8 +38,8 @@ class Personnel(models.Model):
 
 class Horaire(models.Model):
     date_d = models.DateField(null=True) # n
-    arrival_time = models.TimeField(null=True)
-    departure_time = models.TimeField(null=True)
+    arrival_time = models.TimeField(default='08:00',null=True)
+    departure_time = models.TimeField(default='19:00',null=True)
     personnel = models.ForeignKey(Personnel,on_delete=models.CASCADE,verbose_name="Personnel")
 
 

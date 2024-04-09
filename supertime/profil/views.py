@@ -2,9 +2,60 @@ from django.shortcuts import render, get_list_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from .models import Personnel,Horaire,Poste,Attendance
 from .forms import Part1Form, Part2Form,Part3Form
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone,date
 from django.core.paginator import Paginator
+from django.db.models import Count
 
+
+
+# def display_attendance_dates():
+#     # Récupérer les dates de présence dans la base de données
+#     attendance_dates = Horaire.objects.values_list('date', flat=True)
+#     l=[]
+#     # Afficher les dates de présence
+#     for date in attendance_dates:
+#         l=[].append(date)
+#     r
+
+
+# def get_month_dates():
+#     # Récupérer les dates de présence distinctes dans la base de données
+#     attendance_dates = Horaire.objects.values_list('date_d', flat=True).distinct()
+
+#     # Extraire les mois des dates et les mettre dans une liste
+#     date_month_list = [date.strftime("%Y-%m") for date in attendance_dates]
+
+#     return date_month_list
+@login_required(login_url="account/login_admin")
+def acceuil(request):
+    attendance_dates = Horaire.objects.values('date_d').annotate(employees_present=Count('personnel'))
+    # Extraire les dates et le nombre d'employés présents pour chaque date
+    dates = [data['date_d'] for data in attendance_dates]
+    present_p =Horaire.objects.values_list('date_d').count()
+    #[data['employees_present'] for data in attendance_dates]
+
+
+    total_employees = Personnel.objects.count()
+    # Date donnée (à remplacer par votre propre date)
+    date_j = date.today()
+    # Compter le nombre d'employés présents à la date donnée
+    employees_present = Horaire.objects.filter(date_d=date_j).count()
+    # Calculer le nombre d'employés absents
+    employees_absent = total_employees - employees_present
+
+
+    context={
+         'total_employees':total_employees,
+         'p':employees_present,
+         'a':employees_absent,
+         'dates': dates, 
+         'nbre_present': present_p,
+
+         }
+
+
+
+    return render(request,"profil/acceuil.html",context)
 
 
 def index(request):
@@ -12,7 +63,7 @@ def index(request):
     return render(request,"profil/index.html")
 
 # Poste
-@login_required
+@login_required(login_url="account/login_admin")
 def part1(request):
    if request.method == 'POST':
        form = Part1Form(request.POST)
@@ -25,7 +76,7 @@ def part1(request):
    return render(request, 'profil/part1.html', {'form': form})
 
 # Personnel
-@login_required
+@login_required(login_url="account/login_admin")
 def part2(request):
    if request.method == 'POST':
        form = Part2Form(request.POST)
@@ -34,27 +85,27 @@ def part2(request):
         #    request.session['field2'] = form.cleaned_data['field2']
         #    request.session['field3'] = form.cleaned_data['field3']
            # Enregistrez les données dans la base de données ou effectuez toute autre action requise
-           return redirect('profil:part3')
+           return redirect('profil:liste_e')
    else:
        form = Part2Form()
    return render(request, 'profil/part2.html', {'form': form})
 
 # Horaire
-@login_required
+@login_required(login_url="account/login_admin")
 def part3(request):
    if request.method == 'POST':
        form = Part3Form(request.POST)
        if form.is_valid():
            form.save()
            #request.session['field1'] = form.cleaned_data['field1']
-           return redirect("profil:liste_e")
+           return redirect("profil:attendance")
    else:
        form = Part3Form()
    return render(request, 'profil/part3.html', {'form': form})
 
 
 
-@login_required
+@login_required(login_url="account/login_admin")
 def liste_e(request):
 
     #personnel = Personnel.objects.all()  # Récupérer la liste complète des employés depuis la base de données
@@ -63,7 +114,8 @@ def liste_e(request):
         
         name=request.GET.get('rechercher')
         if name is not None:
-            employee_list = Personnel.objects.filter(name=name)
+            employee_list = Personnel.objects.filter(name__icontains=name)
+            employee_list = Personnel.objects.filter(name__startswith=name)
     
 
 
@@ -78,12 +130,8 @@ def liste_e(request):
     return render(request,"profil/liste_e.html",context)
 
 
-@login_required
-def acceuil(request):
-    
-    return render(request,"profil/acceuil.html")
 
-@login_required
+@login_required(login_url="account/login_admin")
 def attendance(request):
     context={'postes':Poste.objects.all(),
            'horaires':Horaire.objects.all(),
@@ -93,26 +141,64 @@ def attendance(request):
            }
     return render(request,"profil/attendance.html",context)
 
-@login_required
+@login_required(login_url="account/login_admin")
 def historique(request):
     return render(request,"profil/historique.html")
 
-@login_required
+@login_required(login_url="account/login_admin")
 def profil_e(request,Personnel_id): 
     context = {"Personnels": get_list_or_404(Personnel,pk=Personnel_id),
                
             }
     return render(request, "profil/profil_e.html", context)
 
-@login_required
-def help(request):
-    return render(request,"Profil/help.html")
 
-@login_required
+
+
+
+def labels_date(date_planing):
+    horaires = Horaire.objects.filter(date_d=date_planing)
+    lab_date=[]
+    for horaire in horaires:
+        lab_date.append(horaire)
+
+    return lab_date
+
+
+
+@login_required(login_url="account/login_admin")
+def help(request):
+
+    attendance_dates = Horaire.objects.values_list('date_d', flat=True)
+    # Afficher les dates de présence
+    for date_day in attendance_dates:
+        l=[]
+        l.append(date_day)
+        count_perso=Horaire.objects.filter(date_d=date_day).count()
+        present_p=[]
+        present_p.append(count_perso)
+  
+
+
+    con={
+    'date':l,
+    'count':present_p
+
+         }
+    return render(request,"Profil/help.html",con)
+
+@login_required(login_url="account/login_admin")
 def del_user(request,Personnel_id):
     Personne = Personnel.objects.get(pk=Personnel_id)
     Personne.delete()
     return redirect("profil:liste_e")
+
+@login_required(login_url="account/login_admin")
+def del_poste(request,Poste_id):
+    poste = Poste.objects.get(pk=Poste_id)
+    poste.delete()
+    return redirect("profil:poste")
+
 
 
 
@@ -127,8 +213,18 @@ def delete_employees(request):
     return redirect('profil:liste_e')
 
 
+
+
+
+
+
+
+
+
+
+
 # 
-@login_required
+@login_required(login_url="account/login_admin")
 def del_poste(request,Poste_id):
     poste = Poste.objects.get(pk=Poste_id)
     poste.delete()
@@ -137,7 +233,7 @@ def del_poste(request,Poste_id):
 
 
 
-@login_required
+@login_required(login_url="account/login_admin")
 def edit_Poste(request,Poste_id):
     poste = Poste.objects.get(pk=Poste_id)
     if request.method == 'POST':
@@ -150,7 +246,7 @@ def edit_Poste(request,Poste_id):
     
     return render(request,"profil/partm1.html",{"form": form})
 
-@login_required
+@login_required(login_url="account/login_admin")
 def edit_Personnel(request,Personnel_id):
     Personnels = Personnel.objects.get(pk=Personnel_id)
     if request.method == 'POST':
@@ -163,7 +259,7 @@ def edit_Personnel(request,Personnel_id):
     
     return render(request,"profil/part2.html",{"form": form})
 
-@login_required
+@login_required(login_url="account/login_admin")
 def edit_Horaire(request,Horaire_id):
     Personnels = Personnel.objects.get(pk=Horaire_id)
     if request.method == 'POST':
@@ -190,14 +286,14 @@ def calculate_daily_work_hours(personnel):
 
 def calculate_daily_salary(personnel):
     total_work_hours = calculate_daily_work_hours(personnel)
+    daily_salary = total_work_hours.total_seconds() / 3600 * (personnel.poste.somme+personnel.salary)
     daily_salary = (total_work_hours.total_seconds() / 3600 * (personnel.poste.somme + personnel.salary))/personnel.heure_fixe #n
 
     return daily_salary
 
-@login_required
+@login_required(login_url="account/login_admin")
 def personnel_salary(request, Personnel_id):
     personnel = Personnel.objects.get(id=Personnel_id)
-  
     daily_work_hours = calculate_daily_work_hours(personnel)
     daily_salary = calculate_daily_salary(personnel)
 
@@ -209,7 +305,7 @@ def personnel_salary(request, Personnel_id):
 
     return render(request, 'profil/salaire.html', context)
 
-@login_required
+@login_required(login_url="account/login_admin")
 def fiche(request,personnel_id):
     personnel = Personnel.objects.get(id=personnel_id)
   
@@ -222,10 +318,24 @@ def fiche(request,personnel_id):
         'daily_salary': daily_salary,
     }
 
+    return render(request, 'profil/salary.html', context)
+
+@login_required(login_url="account/login_admin")
+def fiche(request,personnel_id):
+    personnel = Personnel.objects.get(id=personnel_id)
+  
+    daily_work_hours = calculate_daily_work_hours(personnel)
+    daily_salary = calculate_daily_salary(personnel)
+
+    context = {
+        'personnel': personnel,
+        'daily_work_hours': daily_work_hours,
+        'daily_salary': daily_salary,
+    }
     return render(request, 'profil/salaire.html', context)
 
 
-@login_required
+@login_required(login_url="account/login_admin")
 def post(request):
     context={'postes':Poste.objects.all(),}
     return render(request, "profil/post.html",context)

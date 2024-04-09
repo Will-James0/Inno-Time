@@ -1,0 +1,38 @@
+.main-content{
+    margin-top: -10%;
+}
+
+.sidebar.close{
+    background: #110d11;
+}
+
+.content {
+    margin-top: 2%; /* Pour éviter que le contenu soit caché sous la barre de navigation */
+    padding: 15px;
+    margin-left: 0;
+}
+
+
+.content table {
+    width: 100%;
+    border-collapse: collapse; /* Pour fusionner les bordures des cellules */
+}
+
+.content th, .content td {
+    padding: 5px;
+    border: 1px solid #ddd; /* Ajoute des bordures aux cellules */
+    text-align: left;
+}
+
+.content th {
+    background-color: #f2f2f2;  /*Couleur de fond pour les en-têtes*/ 
+}
+
+
+td{
+    color: #000;
+}
+
+.statistic__item{
+    border-radius: 15px;
+}

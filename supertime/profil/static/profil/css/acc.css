@@ -1,34 +1,70 @@
+.statistic__item{
+  border-radius: 15px;
+}
+
+.number{
+  position: absolute;
+  left: 46%;
+  bottom: 20%;
+  font-weight: bold;
+}
+
+.desc1{
+  position: absolute;
+  right: 15%;
+  top: 40%;
+  font-size: 120%;
+  font-weight: bold;
+}
+
+.bx-user, .bx-user-check, .bx-user-x{
+  font-size: 3em;
+}
+
+#pre{
+  color: #0f0;
+}
+
+#abs{
+  color: #f00;
+}
+
 .main-content{
-    margin-top: -10%;
+  margin-top: -10%;
 }
 
-.sidebar.close{
-    background: #110d11;
+.icoin{
+  position: absolute;
+  left: 45%;
+  border-radius: 50%;
 }
 
-.content {
-    margin-top: 2%; /* Pour éviter que le contenu soit caché sous la barre de navigation */
-    padding: 15px;
-    margin-left: 0;
+.i1{
+  border: 1px rgb(126, 214, 255);
+  padding: 1px;
+  background: rgb(126, 214, 255);
 }
 
-
-.content table {
-    width: 100%;
-    border-collapse: collapse; /* Pour fusionner les bordures des cellules */
+.b1{
+  color: #00f;
 }
 
-.content th, .content td {
-    padding: 5px;
-    border: 1px solid #ddd; /* Ajoute des bordures aux cellules */
-    text-align: left;
+.i2{
+  border: 1px rgb(205, 251, 227);
+  padding: 1px;
+  background: rgb(205, 251, 227);
 }
 
-.content th {
-    background-color: #f2f2f2;  /*Couleur de fond pour les en-têtes*/ 
+.b2{
+  color: #0f0;
 }
 
+.i3{
+  border: 1px rgb(249, 166, 166);
+  padding: 1px;
+  background: rgb(249, 166, 166);
+}
 
-td{
-    color: #000;
+.b3{
+  color: #f00;
 }

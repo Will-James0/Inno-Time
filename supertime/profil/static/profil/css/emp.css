@@ -16,6 +16,22 @@
 }
 
 .bx-refresh{
-    height: 400;
-    width: 700;
+    font-size: 3em;
+}
+
+#rech{
+    position: absolute;
+    right: 10%;
+}
+
+.suivant{
+    position: absolute;
+    right: 40%;
+    bottom: 0;
+}
+
+.precedent{
+    position: absolute;
+    left: 40%;
+    bottom: 0;
 }

@@ -148,7 +148,7 @@ form input[type="submit"] {
 }
 
 label{
-    display: none;
+    display: block;
 }
 
 form input[type="text"],

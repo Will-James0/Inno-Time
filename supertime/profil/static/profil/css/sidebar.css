@@ -6,6 +6,11 @@
     font-family: 'poppins', sans-serif;
 }
 
+body{
+    background: #e4e9f7;
+}
+
+
 .sidebar{
     position: fixed;
     top: 0;
@@ -13,6 +18,7 @@
     height: 100%;
     width: 260px;
     background: #11101d;
+    z-index: 100;
     transition: all 0.5s ease;
 }
 
@@ -248,10 +254,6 @@
     font-size: 12px;
 }
 
-/* body{
-    background: #e4e9f7;
-} */
-
 .home-section{
     margin: 0;
     position: relative;
@@ -309,7 +311,15 @@
 }
 
 .content {
-    margin-top: 2%; /* Pour éviter que le contenu soit caché sous la barre de navigation */
+    padding: 10px;
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 100%;
+}
+
+/* .content {
+    margin-top: 2%;
     padding: 15px;
     margin-left: 0;
 }
@@ -317,23 +327,23 @@
 
 .content table {
     width: 100%;
-    border-collapse: collapse; /* Pour fusionner les bordures des cellules */
+    border-collapse: collapse;
 }
 
 .content th, .content td {
     padding: 5px;
-    border: 1px solid #ddd; /* Ajoute des bordures aux cellules */
+    border: 1px solid #ddd;
     text-align: left;
 }
 
 .content th {
-    background-color: #f2f2f2;  /*Couleur de fond pour les en-têtes*/ 
+    background-color: #f2f2f2; 
 }
 
 
 td{
     color: #000;
-}
+} */
 
 /* profile */
 

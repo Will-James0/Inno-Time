@@ -1,0 +1,100 @@
+{
+    "type": "table",
+    "database": null,
+    "name": "profil_poste",
+    "withoutRowId": false,
+    "strict": false,
+    "ddl": "CREATE TABLE \"profil_poste\" (\"id\" integer NOT NULL PRIMARY KEY AUTOINCREMENT, \"as_poste\" varchar(6) NOT NULL, \"nom_poste\" varchar(62) NOT NULL, \"heure_debut\" time NULL, \"heure_fin\" time NULL, \"somme\" integer NOT NULL);",
+    "columns": [
+        {
+            "name": "id",
+            "type": "integer",
+            "constraints": [
+                {
+                    "type": "NOT NULL",
+                    "definition": "NOT NULL "
+                },
+                {
+                    "type": "PRIMARY KEY",
+                    "definition": "PRIMARY KEY AUTOINCREMENT"
+                }
+            ]
+        },
+        {
+            "name": "as_poste",
+            "type": "varchar",
+            "constraints": [
+                {
+                    "type": "NOT NULL",
+                    "definition": "NOT NULL"
+                }
+            ]
+        },
+        {
+            "name": "nom_poste",
+            "type": "varchar",
+            "constraints": [
+                {
+                    "type": "NOT NULL",
+                    "definition": "NOT NULL"
+                }
+            ]
+        },
+        {
+            "name": "heure_debut",
+            "type": "time",
+            "constraints": [
+                {
+                    "type": null,
+                    "definition": "NULL"
+                }
+            ]
+        },
+        {
+            "name": "heure_fin",
+            "type": "time",
+            "constraints": [
+                {
+                    "type": null,
+                    "definition": "NULL"
+                }
+            ]
+        },
+        {
+            "name": "somme",
+            "type": "integer",
+            "constraints": [
+                {
+                    "type": "NOT NULL",
+                    "definition": "NOT NULL"
+                }
+            ]
+        }
+    ],
+    "rows": [
+        [
+            8,
+            "DG",
+            "Directeur Général",
+            "08:00:00",
+            "18:00:00",
+            563
+        ],
+        [
+            9,
+            "RRH",
+            "Responsable des ressouce humain",
+            "08:00:00",
+            "18:00:00",
+            0
+        ],
+        [
+            10,
+            "Secretaria",
+            "Secretere",
+            "07:30:00",
+            "19:00:00",
+            1000
+        ]
+    ]
+}

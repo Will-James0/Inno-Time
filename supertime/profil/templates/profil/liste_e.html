@@ -8,28 +8,24 @@
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
     <link rel="stylesheet" href="{% static 'profil/css/emp.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'profil/css/Animated.css' %}"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
 
     {% include 'profil/couche/sidebar.html' %}
-   
+
     <section class="home-section emp">
         <div class="home-content">
             <i class="bx bx-menu"></i>
             <span class="text">Liste des employés</span>
         </div>
-
-
-        <!-- bare rechercher-->
-        <form action="" method="GET">
-            <input type="search" name="rechercher" placeholder="Search employees">
-            <button type="submit" id="search">Search</button>
-           <!---->
+        <form action="" method="GET" id="rech">
+            <input type="search" name="rechercher" placeholder="rechercher">
+            <button type="submit" id="search"><i class="bx bx-search"></i></button>
+            <a class="link_name" href="{%url 'profil:liste_e'%}"> <i class='bx bx-refresh'></i></a>
         </form>
-
-
         <div class="content">
             <table>
                 <thead>
@@ -46,14 +42,13 @@
                         
                     </tr>
                 </thead>
-<!--  --><a class="link_name" href="{%url 'profil:liste_e'%}"> <i class='bx bx-refresh'></i></a>
                 <form action="{% url 'profil:delete_employees' %}" method="POST">
                     {% csrf_token %}
                     {% for personnel in page_obj %}
                       <label>
               
                     <tr>
-                        <td><input type="checkbox" name="selected_employees" value="{{ personnel.id }}" id="checkbox"></td>
+                        <td><input type="checkbox" name="selected_employees" value="{{ personnel.id }}" class="checkbox"></td>
                        
                         <td> <a href=" {% url 'profil:profil_e' personnel.id %} "> {{ personnel.name }} </a></td>
                         <td>{{ personnel.prenom }}</td>
@@ -77,17 +72,17 @@
 
         
 
-       
+        <div class="fin">
             {% if page_obj.has_previous %}
-              <a href="?page={{ page_obj.previous_page_number }}">Précédent</a>
+              <div class="precedent"><a href="?page={{ page_obj.previous_page_number }}">Précédent</a></div>
             {% endif %}
             
            <div class="endpage"><span class="current-page">{{ page_obj.number }}</span></div>
             
             {% if page_obj.has_next %}
-              <a href="?page={{ page_obj.next_page_number }}">Suivant</a>
+              <div class="suivant"><a href="?page={{ page_obj.next_page_number }}">Suivant</a></div>
             {% endif %}
-         
+        </div>
 
     </section>
 <script src="{% static 'profil/js/sidebar.js' %}"></script>

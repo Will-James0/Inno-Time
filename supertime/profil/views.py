@@ -8,49 +8,39 @@ from django.db.models import Count
 
 
 
-# def display_attendance_dates():
-#     # Récupérer les dates de présence dans la base de données
-#     attendance_dates = Horaire.objects.values_list('date', flat=True)
-#     l=[]
-#     # Afficher les dates de présence
-#     for date in attendance_dates:
-#         l=[].append(date)
-#     r
-
-
-# def get_month_dates():
-#     # Récupérer les dates de présence distinctes dans la base de données
-#     attendance_dates = Horaire.objects.values_list('date_d', flat=True).distinct()
-
-#     # Extraire les mois des dates et les mettre dans une liste
-#     date_month_list = [date.strftime("%Y-%m") for date in attendance_dates]
-
-#     return date_month_list
 @login_required(login_url="account/login_admin")
 def acceuil(request):
-    attendance_dates = Horaire.objects.values('date_d').annotate(employees_present=Count('personnel'))
-    # Extraire les dates et le nombre d'employés présents pour chaque date
-    dates = [data['date_d'] for data in attendance_dates]
-    present_p =Horaire.objects.values_list('date_d').count()
-    #[data['employees_present'] for data in attendance_dates]
-
-
-    total_employees = Personnel.objects.count()
-    # Date donnée (à remplacer par votre propre date)
+    
     date_j = date.today()
+    attendance_dates = Horaire.objects.values_list('date_d', flat=True).distinct()
+    # Séparer les dates et les nombres d'employés en deux listes distinctes
+    dates_list = []
+    counts_list = []
+    # i=30
+    # day_nbr = date.today().strftime("%d")
+    # while i == 30:
+    for entry in  attendance_dates:
+            dates_list.append(str(entry.strftime("%d-%m-%Y")))
+            present = Horaire.objects.filter(date_d=entry).count()
+            counts_list.append(int(present))
+
+    # i +=1
+    total_employees = Personnel.objects.count()
+    
     # Compter le nombre d'employés présents à la date donnée
     employees_present = Horaire.objects.filter(date_d=date_j).count()
     # Calculer le nombre d'employés absents
     employees_absent = total_employees - employees_present
 
-
     context={
          'total_employees':total_employees,
          'p':employees_present,
          'a':employees_absent,
-         'dates': dates, 
-         'nbre_present': present_p,
-
+        #  'dates': date_month_list, 
+        'dates':dates_list,
+        #  'nbre_present': present_p,
+        'nbrepresent':counts_list,
+      
          }
 
 
@@ -114,12 +104,12 @@ def liste_e(request):
         
         name=request.GET.get('rechercher')
         if name is not None:
-            employee_list = Personnel.objects.filter(name__icontains=name)
+            #employee_list = Personnel.objects.filter(name__icontains=name)
             employee_list = Personnel.objects.filter(name__startswith=name)
     
 
 
-    paginator = Paginator(employee_list, 3)  # Paginer la liste avec 10 employés par page
+    paginator = Paginator(employee_list, 10)  # Paginer la liste avec 10 employés par page
     
     page_number = request.GET.get('page')  # Récupérer le numéro de page depuis les paramètres GET
     page_obj = paginator.get_page(page_number)  # Obtenir l'objet Page pour la page demandée
@@ -169,23 +159,8 @@ def labels_date(date_planing):
 @login_required(login_url="account/login_admin")
 def help(request):
 
-    attendance_dates = Horaire.objects.values_list('date_d', flat=True)
-    # Afficher les dates de présence
-    for date_day in attendance_dates:
-        l=[]
-        l.append(date_day)
-        count_perso=Horaire.objects.filter(date_d=date_day).count()
-        present_p=[]
-        present_p.append(count_perso)
-  
-
-
-    con={
-    'date':l,
-    'count':present_p
-
-         }
-    return render(request,"Profil/help.html",con)
+    
+    return render(request,"Profil/help.html")
 
 @login_required(login_url="account/login_admin")
 def del_user(request,Personnel_id):
@@ -319,20 +294,6 @@ def fiche(request,personnel_id):
     }
 
     return render(request, 'profil/salary.html', context)
-
-@login_required(login_url="account/login_admin")
-def fiche(request,personnel_id):
-    personnel = Personnel.objects.get(id=personnel_id)
-  
-    daily_work_hours = calculate_daily_work_hours(personnel)
-    daily_salary = calculate_daily_salary(personnel)
-
-    context = {
-        'personnel': personnel,
-        'daily_work_hours': daily_work_hours,
-        'daily_salary': daily_salary,
-    }
-    return render(request, 'profil/salaire.html', context)
 
 
 @login_required(login_url="account/login_admin")

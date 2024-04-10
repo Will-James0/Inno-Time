@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone,date
 
 
-d=date.today()
-print(d)
+da=date.today()
+nj=da.monthrange(da.year,da.month)[1]
+print(nj)

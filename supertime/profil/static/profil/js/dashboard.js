@@ -1,6 +1,18 @@
 // Graphe camembert
 
+const ctxPie = document.getElementById("pie-chart").getContext("2d");
 
+const pieChart = new Chart(ctxPie, {
+  type: "pie",
+  data: {
+    labels: ["Présences", "Absences"],
+    datasets: [{
+      data: [90, 10],
+      backgroundColor: ["#007bff", "#dc3545"],
+      borderWidth: 1
+    }]
+  }
+});
 
 // Graphe linéaire
 
@@ -29,3 +41,28 @@ const lineChart = new Chart(ctxLine, {
     }
   }
 });*/
+
+const ctx = document.getElementById("myChart").getContext("2d");
+
+const data = {
+  labels: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov", "Déc"],
+  datasets: [{
+    label: "Présences",
+    data: [80, 85, 90, 95, 90, 85, 80, 85, 90, 95, 90, 85],
+    backgroundColor: "rgba(0, 100, 255, 0.2)"
+  }]
+};
+
+const myChart = new Chart(ctx, {
+  type: "bar",
+  data: data,
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  }
+});

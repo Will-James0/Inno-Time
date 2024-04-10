@@ -8,12 +8,11 @@
     <title>attendance</title>
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
 </head>
 <body>
 
     {% include 'profil/couche/sidebar.html' %}
-
-   
 
     <section class="home-section emp">
         <div class="home-content">
@@ -23,9 +22,9 @@
         <div class="content">
             <table>
                 <thead>
-                 
-                  
                     <tr>
+
+
                         <th>Date</th>
                         <th>Nom Employé</th>
                         <th>Check In</th>
@@ -37,6 +36,7 @@
                
                 {% for horaire in horaires %}
                     <tr>
+                        
                         <td> {{horaire.date_d}} </td>
                         <td> {{horaire.personnel}}</td>
                         <td> {{horaire.arrival_time}}</td>

@@ -262,6 +262,7 @@ def calculate_daily_work_hours(personnel):
 def calculate_daily_salary(personnel):
     total_work_hours = calculate_daily_work_hours(personnel)
     daily_salary = total_work_hours.total_seconds() / 3600 * (personnel.poste.somme+personnel.salary)
+    daily_salary = total_work_hours.total_seconds() / 3600 * (personnel.poste.somme+personnel.salary)
     daily_salary = (total_work_hours.total_seconds() / 3600 * (personnel.poste.somme + personnel.salary))/personnel.heure_fixe #n
 
     return daily_salary

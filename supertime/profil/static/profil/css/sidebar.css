@@ -256,13 +256,19 @@ body{
 
 .home-section{
     margin: 0;
+    margin: 0;
     position: relative;
     background: #e4e9f7;
+    top: 0;
     top: 0;
     left: 260px;
     width: calc(100% - 260px);
     height: 100vh;
     transition: all 0.5s ease;
+}
+
+.home{
+    height: 100%;
 }
 
 .home{
@@ -308,6 +314,7 @@ body{
 
 .home-section.emp{
     background: #e4e9f7;
+    background: #e4e9f7;
 }
 
 .content {
@@ -328,21 +335,25 @@ body{
 .content table {
     width: 100%;
     border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 .content th, .content td {
     padding: 5px;
+    border: 1px solid #ddd;
     border: 1px solid #ddd;
     text-align: left;
 }
 
 .content th {
     background-color: #f2f2f2; 
+    background-color: #f2f2f2; 
 }
 
 
 td{
     color: #000;
+} */
 } */
 
 /* profile */

@@ -11,8 +11,15 @@
     <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'profil/css/Animated.css' %}"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="{% static 'profil/css/emp.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'profil/css/Animated.css' %}"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
+
+    {% include 'profil/couche/sidebar.html' %}
+
 
     {% include 'profil/couche/sidebar.html' %}
 
@@ -32,6 +39,7 @@
                     <tr>
                         <th></th>
                        
+                       
                         <th>Nom</th>
                         <th>Prénom</th>
                         <th>Email</th>
@@ -39,6 +47,7 @@
                         <th>Poste</th>
                         <th>Salaire_poste</th>
                         <th>Modifier</th>
+                        
                         
                     </tr>
                 </thead>
@@ -50,6 +59,8 @@
                     <tr>
                         <td><input type="checkbox" name="selected_employees" value="{{ personnel.id }}" class="checkbox"></td>
                        
+                        <td><input type="checkbox" name="selected_employees" value="{{ personnel.id }}" class="checkbox"></td>
+                       
                         <td> <a href=" {% url 'profil:profil_e' personnel.id %} "> {{ personnel.name }} </a></td>
                         <td>{{ personnel.prenom }}</td>
                         <td>{{ personnel.email }}</td>
@@ -58,12 +69,14 @@
                         <td>{{ personnel.poste.somme }}</td>
                         <td style="text-align: center;"><a href="{% url 'profil:partm2' personnel.id %}"><i class="bx bxs-edit"></i>  </a></td>
                         
+                        
                     </tr>
                              <!--  -->
                             
     </label>
     <br>
   {% endfor %}
+  <button type="submit" id="supp">Supprimer <i class="bx bxs-trash"></i></button>
   <button type="submit" id="supp">Supprimer <i class="bx bxs-trash"></i></button>
 </form>
 
@@ -75,17 +88,22 @@
         <div class="fin">
             {% if page_obj.has_previous %}
               <div class="precedent"><a href="?page={{ page_obj.previous_page_number }}">Précédent</a></div>
+              <div class="precedent"><a href="?page={{ page_obj.previous_page_number }}">Précédent</a></div>
             {% endif %}
             
            <div class="endpage"><span class="current-page">{{ page_obj.number }}</span></div>
+           <div class="endpage"><span class="current-page">{{ page_obj.number }}</span></div>
             
             {% if page_obj.has_next %}
+              <div class="suivant"><a href="?page={{ page_obj.next_page_number }}">Suivant</a></div>
               <div class="suivant"><a href="?page={{ page_obj.next_page_number }}">Suivant</a></div>
             {% endif %}
         </div>
 
     </section>
 <script src="{% static 'profil/js/sidebar.js' %}"></script>
+<script src="{% static 'profil/js/chk.js' %}"></script>
+
 <script src="{% static 'profil/js/chk.js' %}"></script>
 
 </body>

@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="{%static 'profil/css/index.css'%}"> -->
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
-    <link rel="stylesheet" href="{%static 'profil/css/machine.css'%}">
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/machine.css' %}">
 </head>
     <body>
 
@@ -17,19 +17,23 @@
         <section class="home-section form">
             <div class="home-content">
                 <i class="bx bx-menu"></i>
-                <span class="text">Ajouter</span>
+                <span class="text">Terminal</span>
             </div>
             <main class="wrapper">
                 <div class="form signup">
-                    <header>Ajouter un poste</header>
+                    <header>CONNECTER UN TERMINAL 
+                        </header>
                     <form method="post">
                         {% csrf_token %}
                         {{ form.as_p }}
->                        <input type="submit" id="loginBtn" value="Valider" />
-                      </form>
+                        <p>{{message}}</p>
+                        <input type="submit" id="loginBtn" value="Se connecter" />
+                    </form>
                 </div>
             </main>
+            
         </section>
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>
 </html>
+

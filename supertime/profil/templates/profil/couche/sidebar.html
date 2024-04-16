@@ -57,6 +57,43 @@
                     </ul>
                 </li>
                 <li>
+                    <div class="icon-link">
+                        <a href="{%url 'profil:liste_e'%}">
+                            <i class="bx bxs-user"></i>
+                            <span class="link_name">Utilisateurs</span>
+                        </a>
+                            <i class="bx bxs-chevron-down arrow arrow"></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="{%url 'profil:liste_e'%}">Utilisateurs</a></li>
+                        <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
+                        <li><a href="{%url 'profil:part2'%}">Ajouter</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="icon-link">
+                        <a href="{%url 'profil:machine'%}">
+                            <i class="bx bx-laptop"></i>
+                            <span class="link_name">Terminal</span>
+                        </a>
+                            <i class="bx bxs-chevron-down arrow arrow"></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="{%url 'profil:machine' %}">Terminal</a></li>
+                        <li><a href="{%url 'profil:machine'%}">Ajouter</a></li>
+                        <li><a href="{%url 'profil:liste_t'%}">Liste</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="{%url 'profil:data'%}">
+                        <i class='bx bx-rss'></i>
+                        <span class="link_name">Data</span>
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li><a class="link_name" href="{%url 'profil:data'%}">Data</a></li>
+                    </ul>
+                </li>
+                <li>
                     <a href="{%url 'profil:help'%}">
                         <i class='bx bxs-help-circle' ></i>
                         <span class="link_name">Aide</span>
@@ -68,7 +105,7 @@
                 <li>
             <div class="profile-details">
                 <div class="profile-content">
-                    <img src="{% static 'profil/ressources/Profile.png' %}" alt="profile">
+                    <img src="{% static 'profil/ressources/user_48px.png' %}" alt="profile">
                 </div>
                 
                 <div class="name-job">

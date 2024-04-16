@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>attendance</title>
@@ -25,26 +24,30 @@
                     <tr>
 
 
-                        <th>Date</th>
-                        <th>ID Employé</th>
+                        <th>Dates</th>
+                        <th>Employés</th>
+                        <th>Type de pointage</th>
                         <th>Check In</th>
                         <th>Check Out</th>
                         <th>Durée</th>
                         <th>Retard</th>
+                        <th>Heures supplémentaires</th>
                     </tr>
                 </thead>
                
                 {% for horaire in horaires %}
                     <tr>
-                        <td> 2024-08-31 </td>
+                       
 
-                        <td> {{horaire.date_days}} </td>
+                        <td> {{horaire.date_d}} </td>
 
                         <td> {{horaire.personnel}}</td>
+                        <td></td>
                         <td> {{horaire.arrival_time}}</td>
                         <td> {{horaire.departure_time}}</td>
                         <td>{{horaire.calculate_duration}}</td>
                         <td> {{horaire.retard}} </td>
+                        <td></td>
                         
                     </tr>
                     {% endfor %}

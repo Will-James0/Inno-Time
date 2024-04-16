@@ -6,9 +6,9 @@ from datetime import datetime,date
 class Poste(models.Model):
     as_poste = models.CharField(max_length=6,verbose_name="ALIAS_Poste")
     nom_poste = models.CharField(max_length=62,verbose_name="Poste")
-    somme = models.IntegerField()
-    heure_debut= models.TimeField(null=True)
-    heure_fin = models.TimeField(null=True)
+    somme = models.IntegerField(default='2500')
+    heure_debut= models.TimeField(default='08:00',null=True)
+    heure_fin = models.TimeField(default='18:00',null=True)
     def __str__(self):
         return self.as_poste
 
@@ -25,10 +25,11 @@ class Personnel(models.Model):
     # poste auccupé par l'emplouyés
     poste = models.ForeignKey(Poste,on_delete=models.CASCADE,verbose_name="Poste")
     # nom de l'emplouyés
-    gender = models.CharField(max_length=100, choices=[('Masculin','Masculin'),('Feminin','Feminin')],verbose_name="Genre")
-    heure_fixe = models.IntegerField(null=True)# n
-    salary = models.FloatField(null=True) # n
-    image_user = models.ImageField(upload_to='images/employes/',blank=True)
+    gender = models.CharField(default='Masculin',max_length=100, choices=[('Masculin','Masculin'),('Feminin','Feminin')],verbose_name="Genre")
+    heure_fixe = models.IntegerField(default='100',null=True)# n
+    salary = models.FloatField(default='0',null=True) # n
+    
+
 
     class Meta:
         verbose_name ="Personnel"
@@ -38,8 +39,8 @@ class Personnel(models.Model):
 
 class Horaire(models.Model):
     date_d = models.DateField(null=True) # n
-    arrival_time = models.TimeField(null=True)
-    departure_time = models.TimeField(null=True)
+    arrival_time = models.TimeField(default='08:30',null=True)
+    departure_time = models.TimeField(default='17:40',null=True)
     personnel = models.ForeignKey(Personnel,on_delete=models.CASCADE,verbose_name="Personnel")
 
 

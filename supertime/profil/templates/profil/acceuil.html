@@ -1,5 +1,5 @@
 {% load static %}
-
+<!-- ç erreurs sont affiche ma sans inpacte sur l'execusion du code -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -56,43 +56,8 @@
                 <span class="text">Dashboard</span>
             </div>
             <main>
-                <!-- <section class="statistic">
-                    <div class="section__content section__content--p30">
-                       <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-3">
-                                 <div class="box">
-                                    <h2 class="number">100</h2>
-                                    <span class="desc">Nombre d'employés</span>
-                                    <div class="icon">
-                                        <i class="zmdi zmdi-account-o"></i>
-                                    </div>
-                                 </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-3">
-                              <div class="box">
-                                <h2 class="number">25</h2>
-                                <span class="desc">Nombre d'absences</span>
-                                <div class="icon">
-                                    <i class="zmdi zmdi-account-o"></i>
-                                </div>
-                              </div>
-                         </div>
-
-                            <div class="col-md-6 col-lg-3">
-                              <div class="box">
-                                <h2 class="number">25</h2>
-                                <span class="desc">Nombre d'absences</span>
-                                <div class="icon">
-                                    <i class="zmdi zmdi-account-o"></i>
-                                </div>
-                           </div>
-                        </div>
-                       </div>
-                    </div>   
-                </section> -->
-                <!-- Stactistic end  -->
+               
+                
                 <section class="statistic">
                     <div class="section__content section__content--p30">
                         <div class="container-fluid">
@@ -101,7 +66,7 @@
                                     <div class="statistic__item">
                                         <div class="icoin i1"><i class='bx bx-user b1'></i></div>
                                        <span class="desc1">Nombre d'employés</span>
-                                       <h2 class="number"><strong>100</strong></h2>
+                                       <h2 class="number"><strong> {{total_employees}} </strong></h2>
                                         <!-- <div class="icon">
                                             <i class="zmdi zmdi-account-o"></i>
                                         </div> -->
@@ -111,7 +76,7 @@
                                     <div class="statistic__item">
                                         <div class="icoin i2"><i class='bx bx-user-check b2'></i></div>
                                        <span class="desc1">Nombre de presences</span>
-                                       <h2 class="number" id="pre"><strong>85</strong></h2>
+                                       <h2 class="number" id="pre"><strong> {{p}} </strong></h2>
                                         <!-- <div class="icon">
                                             <i class="zmdi zmdi-account-o"></i>
                                         </div> -->
@@ -121,7 +86,7 @@
                                     <div class="statistic__item">
                                         <div class="icoin i3"><i class='bx bx-user-x b3'></i></div>
                                        <span class="desc1">Nombre d'absences</span>
-                                       <h2 class="number" id="abs"><strong>15</strong></h2>
+                                       <h2 class="number" id="abs"><strong> {{a}} </strong></h2>
                                         <!-- <div class="icon">
                                             <i class="zmdi zmdi-account-o"></i>
                                         </div> -->
@@ -152,22 +117,8 @@
                         <div class="section__content section__content--p30">
                             <div class="container-fluid">
                                 <div class="row">
-                                    <!-- <div class="col-lg-6">
-                                        <div class="au-card m-b-30">
-                                            <div class="au-card-inner">
-                                                <h3 class="title-2 m-b-40">Yearly Sales</h3>
-                                                <canvas id="sales-chart"></canvas>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="col-lg-6">
-                                        <div class="au-card m-b-30">
-                                            <div class="au-card-inner">
-                                                <h3 class="title-2 m-b-40">Team Commits</h3>
-                                                <canvas id="team-chart"></canvas>
-                                            </div>
-                                        </div>
-                                    </div> -->
+
+
                                     <div class="col-lg-6">
                                         <div class="au-card m-b-30">
                                             <div class="au-card-inner">
@@ -181,7 +132,7 @@
                                     <div class="col-lg-6">
                                         <div class="au-card m-b-30">
                                             <div class="au-card-inner">
-                                                <h3 class="title-2 m-b-40">Presences annuelles</h3>
+                                                <h3 class="title-2 m-b-40">Evolution des présences</h3>
                                                 <!-- <canvas id="doughutChart"></canvas> -->
                                                 <canvas id="myChart" width="400" height="200"></canvas> 
 
@@ -189,75 +140,42 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
-                                        <div class="au-card m-b-30">
+                                        <!-- <div class="au-card m-b-30">
                                             <div class="au-card-inner">
                                                 <h3  class="title-2 m-b-40">Employés les plus assidus</h3>
-                                                <div class="container">         
-                                                    <table class="table">
-                                                      <thead>
-                                                        <tr>
-                                                          <th>N°</th>
-                                                          <th>Nom</th>
-                                                          <th>Poste</th>
-                                                          <th>Heures</th>
-                                                        </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>John Doe</td>
-                                                            <td>Développeur</td>
-                                                            <td>60</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>2</td>
-                                                            <td>Loug</td>
-                                                            <td>Comptable</td>
-                                                            <td>56</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>3</td>
-                                                            <td>Louis</td>
-                                                            <td>Architecte</td>
-                                                            <td>50</td>
-                                                        </tr>
-                                                      </tbody>
-                                                    </table>
-                                                  </div>
-                                                <!-- <div class="content">
-                                                    <table class="table table-bordered table-striped">
-                                                        <thead class="thead-light">
-                                                          <tr>
-                                                            <th scope="col" class="rounded-top">N°</th>
-                                                            <th scope="col" class="rounded-top">Nom</th>
-                                                            <th scope="col" class="rounded-top">Poste</th>
-                                                            <th scope="col" class="rounded-top">Heures</th>
-                                                          </tr>
+                                                <div class="content">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>N°</th>
+                                                                <th>Nom</th>
+                                                                <th>Poste</th>
+                                                                <th>Heures</th>
+                                                            </tr>
                                                         </thead>
                                                         <tbody>
-                                                          <tr>
-                                                            <td>1</td>
-                                                            <td>John Doe</td>
-                                                            <td>Développeur</td>
-                                                            <td>60</td>
-                                                          </tr>
-                                                          <tr>
-                                                            <td>2</td>
-                                                            <td>Loug</td>
-                                                            <td>Comptable</td>
-                                                            <td>56</td>
-                                                          </tr>
-                                                          <tr>
-                                                            <td>3</td>
-                                                            <td>Louis</td>
-                                                            <td>Architecte</td>
-                                                            <td>50</td>
-                                                          </tr>
+                                                            <tr>
+                                                                <td>1</td>
+                                                                <td>John Doe</td>
+                                                                <td>Developpeur</td>
+                                                                <td>60</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>2</td>
+                                                                <td>Loug</td>
+                                                                <td>comptable</td>
+                                                                <td>56</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>3</td>
+                                                                <td>Louis</td>
+                                                                <td>Architecte</td>
+                                                                <td>50</td>
+                                                            </tr>
                                                         </tbody>
-                                                      </table>
-                                                      
-                                                </div> -->
-                                                <!-- <canvas id="lineChart"></canvas> -->
+                                                    </table>
+                                                </div>
+                                                <canvas id="lineChart"></canvas> -->
                                             </div>
                                         </div>
                                     </div>
@@ -310,8 +228,56 @@
 
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js' %}"></script> -->
-    <script src="{% static 'profil/js/dashboard.js' %}"></script>
+
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
-    <script src="{% static 'profil/js/clock.js' %}"></script>
+    <script>
+
+        const ctxPie = document.getElementById("pie-chart").getContext("2d");
+
+
+        const pieChart = new Chart(ctxPie, {
+        type: "pie",
+        data: {
+            labels: ["Présences", "Absences"],
+            datasets: [{
+            data: ["{{p}}", "{{a}}"],
+            backgroundColor: ["#007bff", "#dc3545"],
+            borderWidth: 1
+            }]
+        }
+        });
+        
+
+
+
+
+        var ctx = document.getElementById("myChart").getContext("2d");
+
+        var myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+
+        labels: {{dates|safe}},
+        // labels: ["08-04-2024","09-04-2024","10-04-2024","11-04-2024"],
+        datasets: [{
+            label: "Présences",
+            // data:[ "{{nbrepresent }}"],
+            data:{{nbrepresent|safe}},
+            backgroundColor: "rgba(0, 100, 255, 0.2)",
+        }]
+        },
+        options: {
+            scales: {
+            yAxes: [{
+                ticks: {
+                beginAtZero: true
+                }
+            }]
+            }
+        }
+        });
+
+            
+    </script>
 </body>
 </html>

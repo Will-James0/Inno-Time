@@ -6,6 +6,11 @@
     font-family: 'poppins', sans-serif;
 }
 
+body{
+    background: #e4e9f7;
+}
+
+
 .sidebar{
     position: fixed;
     top: 0;
@@ -264,6 +269,10 @@
     height: 100%;
 }
 
+.sidebar.close ~ .home-section table{
+    width: 93.5%;
+}
+
 .sidebar.close ~ .home-section{
     left: 78px;
     width: calc(100% - 78px);
@@ -306,8 +315,11 @@
 }
 
 .content {
-    padding: 15px;
-    margin-left: 0;
+    padding: 10px;
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 100%;
 }
 
 /* .content {

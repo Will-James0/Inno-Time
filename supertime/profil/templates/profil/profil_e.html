@@ -19,6 +19,7 @@
             <span class="text">Profile</span>
         </div>
         <div class="body">
+            <div class="block1"></div>
             <div class="content c1">
                 <div class="profile-box b1">
                     <img src="{% static 'profil/ressources/male1.png' %}" >
@@ -28,47 +29,48 @@
                             {% endfor %}
                 </div>
             </div>
-            <div class="content c2">
-                <div class="profile-box b2">
-                            {% for Personnel in Personnels %}
-                                <p class="header">NOM : {{Personnel.name}} </p>
-                                <p class="header">PRENOM : {{Personnel.prenom}} </p>
-                                <p class="header">EMAIL : {{Personnel.email}} </p>
-                                <p class="header">SEXE : {{Personnel.gender}} </p>
-                                <p class="header">HEURE_D'ENTREE : {{Personnel.poste.heure_debut}} </p>
-                                <p class="header">HEURE_DE_SORTI: {{Personnel.poste.heure_fin}} </p>
-        
-                            {% endfor %}
+            <div class="block2">
+                <div class="content c2">
+                    <div class="profile-box b2">
+                                {% for Personnel in Personnels %}
+                                    <p class="header">NOM : {{Personnel.name}} </p>
+                                    <p class="header">PRENOM : {{Personnel.prenom}} </p>
+                                    <p class="header">EMAIL : {{Personnel.email}} </p>
+                                    <p class="header">SEXE : {{Personnel.gender}} </p>
+                                    <p class="header">HEURE_D'ENTREE : {{Personnel.poste.heure_debut}} </p>
+                                    <p class="header">HEURE_DE_SORTI: {{Personnel.poste.heure_fin}} </p>
+            
+                                {% endfor %}
+                    </div>
                 </div>
-            </div>
-            <div class="content c3">
-                <div class="profile-box b3">
-                    <img src="{% static 'profil/ressources/male1.png' %}" >
-                    {% for Personnel in Personnels %}
-                    <h1>ID_Personnel : {{ Personnel.id  }} </h1>
-                        <p class="header">NOM : {{Personnel.name}} </p>
-                        <p class="header">PRENOM : {{Personnel.prenom}} </p>
-                        <p class="header">EMAIL : {{Personnel.email}} </p>
-                        <p class="header">SEXE : {{Personnel.gender}} </p>
-                        <p class="header">POSTE :{{Personnel.poste}}  </p>
-                        <p class="header">HEURE_D'ENTREE : {{personnel.poste.heure_debut}} </p>
-                        <p class="header">HEURE_DE_SORTI: {{personnel.poste.heure_fin}} </p>
-                        
+                </div>
+                <div class="content c4">
+                    <div class="profile-box b4">
+                        {% for Personnel in Personnels %}
+                        <h1>Statut</h1>
+                        <p class="header">Présent</p>
+                        <a href="{%url 'profil:salaire' Personnel.id %}">Fiche de paie</a>
                         {% endfor %}
-                       
+                    </div>
                 </div>
-            </div>
-            <div class="content c4">
-                <div class="profile-box b4">
-                            {% for Personnel in Personnels %}
-                            <h1>Statut</h1>
-                            <p class="header">Présent</p>
-                            <a href="{%url 'profil:salaire' Personnel.id %}">Fiche de paie</a>
-                            {% endfor %}
+                </div>
+                <div class="content c3">
+                    <div class="profile-box b3">
+                        <img src="{% static 'profil/ressources/male1.png' %}" >
+                        {% for Personnel in Personnels %}
+                        <h1>ID_Personnel : {{ Personnel.id  }} </h1>
+                            <p class="header">NOM : {{Personnel.name}} </p>
+                            <p class="header">PRENOM : {{Personnel.prenom}} </p>
+                            <p class="header">EMAIL : {{Personnel.email}} </p>
+                            <p class="header">SEXE : {{Personnel.gender}} </p>
+                            <p class="header">POSTE :{{Personnel.poste}}  </p>
+                            <p class="header">HEURE_D'ENTREE : {{personnel.poste.heure_debut}} </p>
+                            <p class="header">HEURE_DE_SORTI: {{personnel.poste.heure_fin}} </p>
                             
-                </div>
-            </div>
-        </div>
+                            {% endfor %}
+                        
+                    </div>
+           </div>
     </section>
 <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>

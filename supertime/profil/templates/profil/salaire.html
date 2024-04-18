@@ -10,24 +10,50 @@
 </head>
 <body>
     <div id="container" class="container">
-        <h1>Fiche de paie</h1>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Poste</th>
-                <th>Heures</th>
-                <th>Salaire</th>
-            </tr>
-            <tr>
-                <th>{{personnel.id}}</th>
-                <th>{{personnel}}</th>
-                <th>{{personnel.poste}}</th>
-                <th>{{daily_work_hours}}</th>
-                <th>{{daily_salary}}</th>
-            </tr>
-        </table>
-        
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dates: 2024-04-13 - 2024-04-15</th>
+                        <th>ID: 1</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Nom:</th>
+                        <td>{{personnel}}</td>
+                    </tr>
+                    <tr>
+                        <th>Prenom:</th>
+                        <td>{{personnel.prenom}}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>{{personnel.email}}</td>
+                    </tr>
+                    <tr>
+                        <th>Poste:</th>
+                        <td>{{personnel.poste}}</td>
+                    </tr>
+                    <tr>
+                        <th>Heures attendues:</th>
+                        <td>60</td>
+                    </tr>
+                    <tr>
+                        <th>Heures effectuées</th>
+                        <td>50</td>
+                    </tr>
+                    <tr>
+                        <th>Salaire normal</th>
+                        <th>Salaire résiduel</th>
+                    </tr>
+                    <tr>
+                        <td>5000$</td>
+                        <td>4000$</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>

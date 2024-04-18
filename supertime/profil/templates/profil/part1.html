@@ -5,31 +5,77 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="{%static 'profil/css/index.css'%}"> -->
+    <link rel="stylesheet" href="{%static 'profil/css/form.css'%}">
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
-    <link rel="stylesheet" href="{%static 'profil/css/machine.css'%}">
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
 </head>
-    <body>
+      <body>
 
         {% include 'profil/couche/sidebar.html' %}
+          
+          <section class="home-section form">
+              <div class="home-content">
+                  <i class="bx bx-menu"></i>
+                  <span class="text">Ajouter</span>
+              </div>
+                  <!-- MAIN -->
+                  <div id="content">
+                  <main>
+                    
 
-        <section class="home-section form">
-            <div class="home-content">
-                <i class="bx bx-menu"></i>
-                <span class="text">Ajouter</span>
-            </div>
-            <main class="wrapper">
-                <div class="form signup">
-                    <header>Ajouter un poste</header>
-                    <form method="post">
+                    <div class="container">
+                      <header>Formulaire d'ajout d'un poste</header>
+                  
+                      <form action="{% url 'profil:part1' %}" method="post">
                         {% csrf_token %}
-                        {{ form.as_p }}
->                        <input type="submit" id="loginBtn" value="Valider" />
+                        <div class="form first">
+                          <div class="details personal">
+                            <span class="title">Details du poste</span>
+                  
+                            <div class="fields">
+                              <div class="input-field">
+                                <label for="as_poste">Alias poste:</label>
+                                <input type="text" placeholder="Abréviation du poste:" name="as_poste" required>
+                              </div>
+                              <div class="input-field">
+                                <label for="poste">Poste:</label>
+                                <input type="text" placeholder="Nom du poste:" name="poste" required>
+                              </div>
+
+                              <div class="input-field">
+                                <label for="salary">Salaire:</label>
+                                <input type="number" name="salary" required>
+                              </div>
+                  
+                              <div class="input-field">
+                                <label for="debut">Arrivé:</label>
+                                <input type="time" placeholder="Heure d'arrivée" name="debut" required>
+                              </div>
+                  
+                              <div class="input-field">
+                                <label for="fin">Sortie:</label>
+                                <input type="time" placeholder="Heure de sortie" name="fin" required>
+                              </div>
+                  
+                            </div>
+                          </div>
+                  
+                          <div class="details ID">
+                            <div class="fields">
+                            </div>
+                  
+                            <button type="submit" class="nextBtn">
+                              <span class="btnText">Valider</span>
+                            </button>
+                          </div> 
+                        </div>
+                        <!-- </div>  end div second form -->
                       </form>
-                </div>
-            </main>
-        </section>
-    <script src="{% static 'profil/js/sidebar.js' %}"></script>
-</body>
-</html>
+                    </div>
+                  </main>
+                  </div>
+	              	<!-- MAIN -->
+          </section>
+      <script src="{% static 'profil/js/sidebar.js' %}"></script>
+  </body>
+  </html>

@@ -9,7 +9,7 @@ import subprocess
 from zk import ZK
 
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def acceuil(request):
     
     date_j = date.today()
@@ -54,20 +54,22 @@ def index(request):
     return render(request,"profil/index.html")
 
 # Poste
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def part1(request):
    if request.method == 'POST':
-       form = Part1Form(request.POST)
-       if form.is_valid():
-           form.save()
-     
-           return redirect('profil:poste')
-   else:
-       form = Part1Form()
-   return render(request, 'profil/part1.html', {'form': form})
+       as_poste = request.POST.get('as_poste')
+       poste = request.POST.get('poste')
+       salary = request.POST.get('salary')
+       debut = request.POST.get('debut')
+       fin = request.POST.get('fin')
+
+       poste = Poste(as_poste = as_poste, nom_poste = poste, somme = salary, heure_debut = debut, heure_fin = fin)
+       poste.save()
+       return redirect('profil:poste')
+   return render(request, 'profil/part1.html')
 
 # Personnel
-# @login_required(login_url="inno-time/")
+# @login_required(login_url="/account/login_admin")
 # def part2(request):
 #    if request.method == 'POST':
 #        form = Part2Form(request.POST)
@@ -81,7 +83,7 @@ def part1(request):
 #        form = Part2Form()
 #    return render(request, 'profil/part2.html', {'form': form})
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def part2(request):
         if request.method == 'POST':
                 nom = request.POST.get('nom')
@@ -108,7 +110,7 @@ def part2(request):
         return render(request, 'profil/part2.html', {"postes":Poste.objects.all()})
 
 # Horaire
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def part3(request):
    if request.method == 'POST':
        form = Part3Form(request.POST)
@@ -122,7 +124,7 @@ def part3(request):
 
 
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def liste_e(request):
 
     #personnel = Personnel.objects.all()  # Récupérer la liste complète des employés depuis la base de données
@@ -148,7 +150,7 @@ def liste_e(request):
 
 
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def attendance(request):
     context={'postes':Poste.objects.all(),
            'horaires':Horaire.objects.all(),
@@ -158,11 +160,11 @@ def attendance(request):
            }
     return render(request,"profil/attendance.html",context)
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def historique(request):
     return render(request,"profil/historique.html")
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def profil_e(request,Personnel_id): 
     context = {"Personnels": get_list_or_404(Personnel,pk=Personnel_id),
                
@@ -183,7 +185,7 @@ def labels_date(date_planing):
 
 
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def help(request):
     if request.method == 'POST':
         ip_address = request.POST.get('ip_address')
@@ -196,13 +198,13 @@ def help(request):
     
     return render(request,"Profil/help.html")
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def del_user(request,Personnel_id):
     Personne = Personnel.objects.get(pk=Personnel_id)
     Personne.delete()
     return redirect("profil:liste_e")
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def del_poste(request,Poste_id):
     poste = Poste.objects.get(pk=Poste_id)
     poste.delete()
@@ -230,16 +232,17 @@ def delete_employees(request):
 
 
 # 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def del_poste(request,Poste_id):
     poste = Poste.objects.get(pk=Poste_id)
     poste.delete()
     return redirect("profil:poste")
 
+def profil_u(request):
+    return render(request, 'profil/profil_u.html')
 
 
-
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def edit_Poste(request,Poste_id):
     poste = Poste.objects.get(pk=Poste_id)
     if request.method == 'POST':
@@ -252,7 +255,7 @@ def edit_Poste(request,Poste_id):
     
     return render(request,"profil/partm1.html",{"form": form})
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def edit_Personnel(request,Personnel_id):
     Personnels = Personnel.objects.get(pk=Personnel_id)
     if request.method == 'POST':
@@ -265,7 +268,7 @@ def edit_Personnel(request,Personnel_id):
     
     return render(request,"profil/part2.html",{"form": form})
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def edit_Horaire(request,Horaire_id):
     Personnels = Personnel.objects.get(pk=Horaire_id)
     if request.method == 'POST':
@@ -297,7 +300,7 @@ def calculate_daily_salary(personnel):
 
     return daily_salary
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def personnel_salary(request, Personnel_id):
     personnel = Personnel.objects.get(id=Personnel_id)
     daily_work_hours = calculate_daily_work_hours(personnel)
@@ -311,7 +314,7 @@ def personnel_salary(request, Personnel_id):
 
     return render(request, 'profil/salaire.html', context)
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def fiche(request,personnel_id):
     personnel = Personnel.objects.get(id=personnel_id)
   
@@ -326,7 +329,7 @@ def fiche(request,personnel_id):
 
     return render(request, 'profil/salary.html', context)
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def fiche(request,personnel_id):
     personnel = Personnel.objects.get(id=personnel_id)
   
@@ -341,16 +344,16 @@ def fiche(request,personnel_id):
     return render(request, 'profil/salaire.html', context)
 
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def post(request):
     context={'postes':Poste.objects.all(),}
     return render(request, "profil/post.html",context)
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def liste_t(request):
     return render(request, 'profil/liste_t.html')
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def machine(request):
     message=None
     if request.method == 'POST':
@@ -407,7 +410,7 @@ def retrieve_users_data(zk):
     return users_data
 
 
-@login_required(login_url="inno-time/")
+@login_required(login_url="/account/login_admin")
 def data(request):
     return render(request, 'profil/data.html')
 

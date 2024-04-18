@@ -1,0 +1,27 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px auto;
+    margin-top: 10%;
+    font-size: small;
+  }
+  
+  th {
+    border: none;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th:first-child {
+    border-top-left-radius: 10px;
+  }
+  
+  th:last-child {
+    border-top-right-radius: 10px;
+  }
+  
+  tbody tr {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  

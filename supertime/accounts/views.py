@@ -2,10 +2,10 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.models import User 
+from .models import Profile, Poste
 
-
-
-
+#{{ user.personne.get_self.nom }}
 
 # Create your views here.
 def login_admin(request):
@@ -54,10 +54,35 @@ def register_user(request):
 
         if form.is_valid():
             form.save()
-            return redirect("profil:acceuil")
+            return redirect("accounts:details_user")
     else:
         form = UserCreationForm()
         
     return render(request, "accounts/register.html",{"form":form})
     
 
+#details
+def register(request):
+    if request.method == 'POST':
+        # Récupérer les données du formulaire HTML
+        user_id = request.POST.get('user_id')
+        email = request.POST.get('email')
+        nom = request.POST.get('nom')
+        prenom = request.POST.get('prenom')
+        genre = request.POST.get('genre')
+        poste_id = request.POST.get('poste')
+        photo = request.FILES.get('photo')  # Récupérer le fichier image (optionnel)
+
+        users = User.objects.get(pk=user_id)
+        poste_d = Poste.objects.get(pk=poste_id)
+        profile = Profile(user=users, nom=nom,prenom=prenom,email=email, genre=genre,poste=poste_d, photo = photo)
+        profile.save()
+        return redirect('profil:acceuil')
+        # return render(request, 'accounts/details_user.html', {'message':"bon"})
+
+    postes = Poste.objects.all()
+    
+    context = {'postes': postes,
+               'users': User.objects.all()
+               }
+    return render(request, 'accounts/details_user.html', context)

@@ -6,16 +6,26 @@ body{
 
 .container{
     width: 800px;
+    height: 500px;
     margin: 50px auto;
-    padding: 20px;
+    padding: 50px;
+    border-radius: 10px;
     border: 1px solid #ccc;
 }
 
-h1{
+.content{
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 790px;
+    height: 490px;
+}
+
+/* h1{
     text-align: center;
 }
 
 table{
+    margin-top: 10%;
     width: 100%;
     border-collapse: collapse;
 }
@@ -24,4 +34,34 @@ th,td{
     border: 1px solid #ccc;
     padding: 10px;
     text-align: left;
+} */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px auto;
+    margin-top: 5%;
+    font-size: small;
+  }
+  
+  th {
+    border: none;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th:first-child {
+    border-top-left-radius: 10px;
+  }
+  
+  th:last-child {
+    border-top-right-radius: 10px;
+  }
+  
+  tbody tr {
+    border-bottom: 1px solid #ddd;
+  }
+  
+.fiche{
+	margin-top: 6%;
 }

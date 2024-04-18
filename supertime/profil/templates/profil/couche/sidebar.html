@@ -67,7 +67,7 @@
                     <ul class="sub-menu">
                         <li><a class="link_name" href="{%url 'profil:liste_e'%}">Utilisateurs</a></li>
                         <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
-                        <li><a href="{%url 'profil:part2'%}">Ajouter</a></li>
+                        <li><a href="{%url 'accounts:details_user'%}">Ajouter</a></li>
                     </ul>
                 </li>
                 <li>
@@ -105,12 +105,12 @@
                 <li>
             <div class="profile-details">
                 <div class="profile-content">
-                    <img src="{% static 'profil/ressources/user_48px.png' %}" alt="profile">
+                    <a href="{% url 'profil:profil_user' %}"><img src="{{ user.profile.get_self.photo.url }}" alt="profile"></a>
                 </div>
                 
                 <div class="name-job">
                     <div class="profile_name">{{ user.username }}</div>
-                    <div class="job">Admin</div>
+                    <div class="job">{{ user.profile.get_self.poste }}</div>
                 </div>
                 <a href="{% url 'accounts:logout' %}">
                 <i class="bx bx-log-out"></i>

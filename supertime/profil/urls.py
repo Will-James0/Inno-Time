@@ -22,7 +22,7 @@ urlpatterns=[
     path('delete employé/id=<int:Personnel_id>/',views.del_user,name='delt_user'),
     path('delete poste/id=<int:Poste_id>/',views.del_poste,name='delt_poste'),
     path('liste_t', views.liste_t, name = 'liste_t'),
-  
+    path('profil_u/',views.profil_u, name = 'profil_user'),
     path('poste/', views.post, name='poste'),
     path('data', views.data, name='data'),
     path('Fiche/<int:Personnel_id>/', views.personnel_salary, name='salaire'),

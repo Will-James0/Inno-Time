@@ -23,7 +23,7 @@
             <table>
                 <thead>
                     <tr>
-                       
+                        <th><input type="checkbox" name="" value="" class="checkall"></th>
                         <th>Alias poste</th>
                         <th>Nom poste</th>
                         <th>Heure d'arrivée</th>
@@ -36,7 +36,7 @@
                {% for poste in postes %}
                     <tr>
             
-                       
+                        <td><input type="checkbox" name="" value="{{ poste.id }}" class="checkbox"></td>
                         <td>{{poste.as_poste}}</td>
                         <td>{{poste.nom_poste}}</td>
                         <td>{{poste.heure_debut}}</td>

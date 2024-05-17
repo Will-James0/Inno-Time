@@ -1,0 +1,50 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'accounts/css/index.css'%}">
+    <!-- <link rel="stylesheet" href="{%static 'profil/css/employe.css'%}"> -->
+    <title>Inscription</title>
+</head>
+<body>
+    <section class="wrapper">
+
+        <div class="form signup">
+          <header>INSCRIPTION</header>
+          <form method="post" action="">
+            {% csrf_token %}
+            <label for="username">Nom d'utilisateur:</label>
+            <input type="text" id="username" name="username" required><br>
+    
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="password" required><br>
+    
+            <input type="submit" value="S'inscrire">
+        </form>
+        </div>
+        <div class="form login">
+          
+        <label for=""></label><br>
+        <label for=""></label><br>
+        <label for=""></label><br>
+        <label for=""></label><br>
+        <label for=""></label><br>
+        
+            <header></header>
+            <form action="#">
+              <input type="text" placeholder="Nom:" required />
+              <input type="text" placeholder="Adresse email:" required />
+              <input type="password" placeholder="Mot de passe:" required />
+              
+              <input type="submit" value="S'inscrire" />
+            </form>
+          </div>
+      </section>
+</div>
+</body>
+</html>
+

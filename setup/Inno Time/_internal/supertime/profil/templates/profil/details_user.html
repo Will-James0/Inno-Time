@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'profil/css/form.css'%}">
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+</head>
+      <body>
+
+        {% include 'profil/couche/sidebar.html' %}
+          
+          <section class="home-section form">
+              <div class="home-content">
+                  <i class="bx bx-menu"></i>
+                  <span class="text">Ajouter</span>
+              </div>
+                  <!-- MAIN -->
+                  <div id="content">
+                  <main>
+                    
+
+                    <div class="container">
+                      <header>Formulaire d'ajout d'un utilisateur</header>
+                  
+                      <form method="post" action="{% url 'profil:details' %}">
+                        {% csrf_token %}
+                        <div class="form first">
+                          <div class="details personal">
+                            <span class="title">Details de l'utilisateur</span>
+                  
+                            
+                              <div class="input-field">
+                                <label for="user_id">Nom d'utilisateur:</label>
+                                <input type="text" value="{{user.username}}" name="user_id" readonly>
+                              </div>
+
+                              <div class="input-field">
+                                <label for="photo">Photo:</label>
+                                <input type="file" name="photo" accept="image/*">
+                              </div>
+
+                            </div>
+                          </div>
+                  
+                          <div class="details ID">
+                            <div class="fields">
+                            </div>
+                  
+                            <button type="submit" class="nextBtn">
+                              <span class="btnText">Valider</span>
+                            </button>
+                          </div> 
+                        </div>
+                        <!-- </div>  end div second form -->
+                        <p> {{message}} </p>
+                      </form>
+                    </div>
+                  </main>
+                  </div>
+	              	<!-- MAIN -->
+          </section>
+      <script src="{% static 'profil/js/sidebar.js' %}"></script>
+  </body>
+  </html>

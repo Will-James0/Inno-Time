@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>liste</title>
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
+</head>
+<body>
+
+    {% include 'profil/couche/sidebar.html' %}
+
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Données brutes</span>
+        </div>
+        <div class="content">
+            
+
+  <h1>Liste des utilisateurs</h1>
+
+  {% if users %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>privilege</th>
+          <!-- <th>password</th>
+          <th>group_id</th> -->
+          <th>id_user</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user_data in users %}
+          <tr>
+            <td>{{ user_data.uid}}</td>
+            <td>{{ user_data.name }}</td>
+            {% if user_data.privilege == 14 %}
+                <td>Admin</td>
+            {% else %}
+                <td>User</td>
+            {% endif %}
+            <!-- <td>{{ user_data.password }}</td>
+            <td>{{ user_data.group_id }}</td> -->
+            <td>{{ user_data.user_id }}</td>
+           
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Aucune donnée d'utilisateur disponible.</p>
+  {% endif %}
+
+        </div>
+    </section>
+
+    <script src="{% static 'profil/js/sidebar.js' %}"></script>
+</body>
+</html>

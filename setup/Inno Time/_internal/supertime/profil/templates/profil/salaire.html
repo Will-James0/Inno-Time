@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche de paie</title>
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{%static 'profil/css/sidebar.css'%}">
+    <link rel="stylesheet" href="{%static 'profil/css/fiche.css'%}">
+</head>
+<body>
+    {% include 'profil/couche/sidebar.html' %}
+
+    <section class="home-section home">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Fiche de paie</span>
+            <div class="fiche">
+                <button class="btn" onclick="printFiche()">Imprimer</button>
+            </div>
+        </div>
+        <div id="container" class="container">
+            <!-- <div class="content"> -->
+                <table>
+                        <tr class="head">
+                            <th>Mois: {{ first_month }} - {{ last_month }} </th>
+                            <th class="id">ID: {{personnel.id}}</th>
+                        </tr>
+                    <tbody>
+                        <tr>
+                            <th>Nom:</th>
+                            <td>{{personnel}}</td>
+                        </tr>
+                        <tr>
+                            <th>Prenom:</th>
+                            <td>{{personnel.prenom}}</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>{{personnel.email}}</td>
+                        </tr>
+                        <tr>
+                            <th>Poste:</th>
+                            <td>{{personnel.poste.nom_poste}}</td>
+                        </tr>
+                        <tr>
+                            <th>Heures attendues:</th>
+                            <td>{{personnel.heure_fixe}}</td>
+                        </tr>
+                        <tr>
+                            <th>Heures effectuées</th>
+                            <td>{{daily_work_hours}}</td>
+                        </tr>
+                        <tr>
+                            <th>Salaire normal</th>
+                            <th>Salaire résiduel</th>
+                        </tr>
+                        <tr>
+                            <td>{{personnel.salary}} XAF</td>
+                            <td>{{daily_salary|floatformat:"2"}} XAF</td>
+                        </tr>
+                    </tbody>
+                </table>
+            <!-- </div> -->
+        </div>
+    </section>
+    <script src="{% static 'profil/js/print.js' %}"></script>
+    <script src="{% static 'profil/js/sidebar.js' %}"></script>
+</body>
+</html>

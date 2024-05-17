@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'profil/css/form.css'%}">
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+</head>
+      <body>
+
+        {% include 'profil/couche/sidebar.html' %}
+          
+          <section class="home-section form">
+              <div class="home-content">
+                  <i class="bx bx-menu"></i>
+                  <span class="text">Modifier</span>
+              </div>
+                  <!-- MAIN -->
+                  <div id="content">
+                  <main>
+                    
+
+                    <div class="container">
+                      <header>Formulaire de modification d'un employé</header>
+                  
+                      <form action="{% url 'profil:partm2' personnel.id %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form first">
+                          <div class="details personal">
+                            <span class="title">Details de l'employé</span>
+                  
+                            <div class="fields">
+                              <div class="input-field">
+                                <label for="nom">Nom:</label>
+                                <input type="text" placeholder="Entrer un nom:" value="{{ personnel.name }}" name="nom" >
+                              </div>
+                              <div class="input-field">
+                                <label for="prenom">Prenom:</label>
+                                <input type="text" placeholder="Entrer un prenom:" value="{{ personnel.prenom }}" name="prenom" >
+                              </div>
+                  
+                              <div class="input-field">
+                                <label for="email">Email:</label>
+                                <input type="email" placeholder="Entrer un email" value="{{ personnel.email }}" name="email" >
+                              </div>
+                  
+                              <div class="input-field">
+                                <label for="gender">Genre:</label>
+                                <select name="gender" >
+                                    <option disabled selected>----------------</option>
+                                    {% if personnel.gender == 'Masculin' %}
+                                        <option value="Masculin" selected>Masculin</option>
+                                        <option value="Feminin">Féminin</option>
+                                    {% else %}
+                                        <option value="Masculin">Masculin</option>
+                                        <option value="Feminin" selected>Féminin</option>
+                                    {% endif %}
+                                </select>
+                              </div>
+
+                              <div class="input-field">
+                                <label for="poste">Poste:</label>
+                                <select id="poste" name="poste" >
+                                    <option value="{{ personnel.poste.id }}" selected>{{ personnel.poste.nom_poste }}</option>
+                                    {% for poste in postes %}
+                                        {% if poste.id != personnel.poste.id %}
+                                            <option value="{{ poste.id }}">{{ poste.nom_poste }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                              </div>
+                          
+                  
+                              <div class="input-field">
+                                <label for="heure_fixe">Heures à effectuer:</label>
+                                <input type="number" value="{{ personnel.heure_fixe }}" name="heure_fixe" >
+                              </div>
+                  
+                              <div class="input-field">
+                                <label for="salary">Salaire mensuel:</label>
+                                <input type="number" value="{{ personnel.salary|default_if_none:'' }}" name="salary" >
+                            </div>
+
+                              
+                              <div class="input-field">
+                                <label for="time_a">Heure d'arrivée:</label>
+                                <input type="time" value="{{ personnel.time_a }}" name="time_a" >
+                              </div>
+
+                              <div class="input-field">
+                                <label for="tolerance_time">Heure de tolérance :</label>
+                                <input type="time" placeholder="Heure de tolérance" value="{{ personnel.tolerance_time }}" name="tolerance_time" >
+                              </div>
+
+                              <div class="input-field">
+                                <label for="time_s">Heure de sortie:</label>
+                                <input type="time" value="{{ personnel.time_s }}" name="time_s" >
+                              </div>
+
+                              <div class="input-field">
+                                <label for="user_id">Nom d'utilisateur:</label>
+                                <select id="user" name="user_id" >
+                                  {% for user in users %}
+                                      {% if user.id == personnel.user.id %}
+                                          <option value="{{ user.id }}" selected>{{ user.username }}</option>
+                                      {% else %}
+                                          <option value="{{ user.id }}">{{ user.username }}</option>
+                                      {% endif %}
+                                  {% endfor %}
+                              </select>
+                            </div>
+
+                            <div class="input-field">
+                                <label for="photo">Photo:</label>
+                                <input type="file" name="photo" accept="image/*">
+                              </div>
+
+                            </div>
+                          </div>
+                  
+                          <div class="details ID">
+                            <div class="fields">
+                            </div>
+                  
+                            <button type="submit" class="nextBtn">
+                              <span class="btnText">Valider</span>
+                            </button>
+                          </div> 
+                        </div>
+                        <!-- </div>  end div second form -->
+                      </form>
+                    </div>
+                  </main>
+                  </div>
+	              	<!-- MAIN -->
+          </section>
+      <script src="{% static 'profil/js/sidebar.js' %}"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var posteSelect = document.getElementById('poste');
+          var salaryInput = document.querySelector('input[name="salary"]');
+
+          posteSelect.addEventListener('change', function() {
+              var selectedPosteId = this.value;
+              if (selectedPosteId) {
+                  // Envoyer une requête AJAX pour récupérer la valeur de somme associée à ce poste
+                  var xhr = new XMLHttpRequest();
+                  xhr.onreadystatechange = function() {
+                      if (xhr.readyState === XMLHttpRequest.DONE) {
+                          if (xhr.status === 200) {
+                              // Mettre à jour la valeur du champ salaire avec la valeur récupérée
+                              var response = JSON.parse(xhr.responseText);
+                              salaryInput.value = response.somme;
+                          } else {
+                              console.error('Une erreur s\'est produite');
+                          }
+                      }
+                  };
+                  xhr.open('GET', '{% url "profil:get_somme_for_poste" %}?poste_id=' + selectedPosteId, true);
+                  xhr.send();
+              } else {
+                  salaryInput.value = ''; // Effacer la valeur si aucun poste n'est sélectionné
+              }
+          });
+      });
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var posteSelect = document.getElementById('poste');
+          var timeaInput = document.querySelector('input[name="time_a"]');
+
+          posteSelect.addEventListener('change', function() {
+              var selectedPosteId = this.value;
+              if (selectedPosteId) {
+                  // Envoyer une requête AJAX pour récupérer la valeur de somme associée à ce poste
+                  var xhr = new XMLHttpRequest();
+                  xhr.onreadystatechange = function() {
+                      if (xhr.readyState === XMLHttpRequest.DONE) {
+                          if (xhr.status === 200) {
+                              // Mettre à jour la valeur du champ salaire avec la valeur récupérée
+                              var response = JSON.parse(xhr.responseText);
+                              timeaInput.value = response.start;
+                          } else {
+                              console.error('Une erreur s\'est produite');
+                          }
+                      }
+                  };
+                  xhr.open('GET', '{% url "profil:get_start" %}?poste_id=' + selectedPosteId, true);
+                  xhr.send();
+              } else {
+                  timeaInput.value = ''; // Effacer la valeur si aucun poste n'est sélectionné
+              }
+          });
+      });
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var posteSelect = document.getElementById('poste');
+          var timesInput = document.querySelector('input[name="time_s"]');
+
+          posteSelect.addEventListener('change', function() {
+              var selectedPosteId = this.value;
+              if (selectedPosteId) {
+                  // Envoyer une requête AJAX pour récupérer la valeur de somme associée à ce poste
+                  var xhr = new XMLHttpRequest();
+                  xhr.onreadystatechange = function() {
+                      if (xhr.readyState === XMLHttpRequest.DONE) {
+                          if (xhr.status === 200) {
+                              // Mettre à jour la valeur du champ salaire avec la valeur récupérée
+                              var response = JSON.parse(xhr.responseText);
+                              timesInput.value = response.end;
+                          } else {
+                              console.error('Une erreur s\'est produite');
+                          }
+                      }
+                  };
+                  xhr.open('GET', '{% url "profil:get_end" %}?poste_id=' + selectedPosteId, true);
+                  xhr.send();
+              } else {
+                  timesInput.value = ''; // Effacer la valeur si aucun poste n'est sélectionné
+              }
+          });
+      });
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var posteSelect = document.getElementById('poste');
+          var timeWorkInput = document.querySelector('input[name="heure_fixe"]');
+
+          posteSelect.addEventListener('change', function() {
+              var selectedPosteId = this.value;
+              if (selectedPosteId) {
+                  // Envoyer une requête AJAX pour récupérer la valeur de somme associée à ce poste
+                  var xhr = new XMLHttpRequest();
+                  xhr.onreadystatechange = function() {
+                      if (xhr.readyState === XMLHttpRequest.DONE) {
+                          if (xhr.status === 200) {
+                              // Mettre à jour la valeur du champ salaire avec la valeur récupérée
+                              var response = JSON.parse(xhr.responseText);
+                              timeWorkInput.value = response.time_work;
+                          } else {
+                              console.error('Une erreur s\'est produite');
+                          }
+                      }
+                  };
+                  xhr.open('GET', '{% url "profil:get_time_work" %}?poste_id=' + selectedPosteId, true);
+                  xhr.send();
+              } else {
+                  timeWorkInput.value = ''; // Effacer la valeur si aucun poste n'est sélectionné
+              }
+          });
+      });
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var posteSelect = document.getElementById('poste');
+          var toleranceTimeInput = document.querySelector('input[name="tolerance_time"]');
+
+          posteSelect.addEventListener('change', function() {
+              var selectedPosteId = this.value;
+              if (selectedPosteId) {
+                  // Envoyer une requête AJAX pour récupérer la valeur de somme associée à ce poste
+                  var xhr = new XMLHttpRequest();
+                  xhr.onreadystatechange = function() {
+                      if (xhr.readyState === XMLHttpRequest.DONE) {
+                          if (xhr.status === 200) {
+                              // Mettre à jour la valeur du champ salaire avec la valeur récupérée
+                              var response = JSON.parse(xhr.responseText);
+                              toleranceTimeInput.value = response.tolerance_time;
+                          } else {
+                              console.error('Une erreur s\'est produite');
+                          }
+                      }
+                  };
+                  xhr.open('GET', '{% url "profil:get_tolerance_time" %}?poste_id=' + selectedPosteId, true);
+                  xhr.send();
+              } else {
+                  toleranceTimeInput.value = ''; // Effacer la valeur si aucun poste n'est sélectionné
+              }
+          });
+      });
+      </script>
+  </body>
+  </html>

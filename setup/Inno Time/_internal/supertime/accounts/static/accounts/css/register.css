@@ -1,0 +1,22 @@
+form input {
+    height: 60px;
+    outline: none;
+    border: none;
+    padding: 0 50px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333;
+    border-radius: 8px;
+    background: #fff;
+  }
+  
+  form input {
+    border: 1px solid #aaa;
+    display: block;
+  }
+
+  label{
+    font-weight: bold;
+    display: block;
+  }
+  

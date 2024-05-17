@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>liste</title>
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/emp.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/liste_u.css' %}">
+</head>
+<body>
+
+    {% include 'profil/couche/sidebar.html' %}
+
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Liste des employés</span>
+        </div>
+        <form action="" method="GET" id="rech">
+            <input type="search" name="rechercher" placeholder="rechercher">
+            <button type="submit" id="search"><i class="bx bx-search"></i></button>
+            <a class="link_name" href="{%url 'profil:liste_e'%}"> <i class='bx bx-refresh' id="refresh"></i></a>
+        </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" name="selected_employees" value="" class="checkall"></th>
+                       
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Sexe</th>
+                        <th>Poste</th>
+                        <th>Salaire</th>
+                        <th>Modifier</th>
+                        
+                    </tr>
+                </thead>
+                <form action="{% url 'profil:delete_employees' %}" method="POST">
+                    {% csrf_token %}
+                    {% for personnel in page_obj %}
+                      <label>
+              
+                    <tr>
+                        <td><input type="checkbox" name="selected_employees" value="{{ personnel.id }}" class="checkbox"></td>
+                       
+                        <td> <a href=" {% url 'profil:profil_e' personnel.id %} "> {{ personnel.name }} </a></td>
+                        <td>{{ personnel.prenom }}</td>
+                        <td>{{ personnel.email }}</td>
+                        <td>{{ personnel.gender }}</td>
+                        <td>{{ personnel.poste }}</td>
+                        <td>{{ personnel.salary }}</td>
+                        <td><a href="{% url 'profil:partm2' personnel.id %}"><i class="bx bxs-edit"></i>  </a></td>
+                        
+                    </tr>
+                             <!--  -->
+                            
+    </label>
+    <br>
+  {% endfor %}
+  <div class="trash"><button type="submit" id="supp">Supprimer <i class="bx bxs-trash"></i></button></div>
+</form>
+
+            </table>
+
+        
+
+        <div class="fin">
+            {% if page_obj.has_previous %}
+              <div class="precedent"><a href="?page={{ page_obj.previous_page_number }}">Précédent</a></div>
+            {% endif %}
+            
+           <div class="endpage"><span class="current-page">{{ page_obj.number }}</span></div>
+            
+            {% if page_obj.has_next %}
+              <div class="suivant"><a href="?page={{ page_obj.next_page_number }}">Suivant</a></div>
+            {% endif %}
+        </div>
+
+    </section>
+<script src="{% static 'profil/js/sidebar.js' %}"></script>
+<script src="{% static 'profil/js/chk.js' %}"></script>
+</body>
+</html>

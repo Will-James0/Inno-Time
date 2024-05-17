@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des terminaux</title>
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/emp.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/liste_u.css' %}">
+    <script src="{% static 'profil/js/jquery-3.6.0.min.js' %}"></script>
+</head>
+<body class="bod">
+
+    {% include 'profil/couche/sidebar.html' %}
+
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Liste des terminaux</span>
+        </div>
+            <div class="table-container">
+                <table class="list_t" id="list_t">
+                    <thead>
+                        <tr>
+                            <th>Machine ip</th>
+                            <th>Port</th>
+                            <th>Statut</th> 
+                            <th colspan="2">Action</th>
+                            <th colspan="2">Download</th>   
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lecteur in zklect %}
+                        <tr class="st">
+                            <td>{{ lecteur.ip_adresse }}</td>
+                            <td>{{ lecteur.n_port }}</td>
+                            <td class="statut">
+                                {% if forloop.counter0 < status_list|length %}
+                                    {% if status_list.0 %}
+                                        {% if status_list.0 %}
+                                            <i class='bx bxs-circle' style="color: green;"></i>
+                                        {% else %}
+                                            <i class='bx bxs-circle' style="color: red;"></i>
+                                        {% endif %}
+                                    {% else %}
+                                        <i class='bx bxs-circle' style="color: red;"></i>
+                                    {% endif %}
+                                {% else %}
+                                    <i class='bx bxs-circle' style="color: red;"></i> <!-- Statut par défaut si aucune information -->
+                                {% endif %}
+                            </td>
+                            <td><a href="{% url 'profil:edit_lecteur' lecteur.id %}"><i class="bx bxs-edit"></i></a></td>
+                            <td><a href="{% url 'profil:del_lecteur' lecteur.id %}"><i class="bx bxs-trash"></i></a></td>
+                            <td><a href="{% url 'profil:add_users' lecteur.id %}"><i class="bx bxs-user-plus"></i></a></td>
+                            <td><a href="{% url 'profil:add_attendance' lecteur.id %}"><i class="bx bxs-download"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+    </section>
+<script src="{% static 'profil/js/sidebar.js' %}"></script>
+<script src="{% static 'profil/js/chk.js' %}"></script>
+<script src="{% static 'profil/js/reload.js' %}"></script>
+</body>
+</html>

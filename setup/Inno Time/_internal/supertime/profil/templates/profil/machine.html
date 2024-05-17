@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="{%static 'profil/css/index.css'%}"> -->
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/machine.css' %}">
+</head>
+    <body>
+
+        {% include 'profil/couche/sidebar.html' %}
+
+        <section class="home-section form">
+            <div class="home-content">
+                <i class="bx bx-menu"></i>
+                <span class="text">Terminal</span>
+            </div>
+            <main class="wrapper">
+                <div class="form signup">
+                    <header>CONNECTER UN TERMINAL 
+                        </header>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <p>{{message}}</p>
+                        <input type="submit" id="loginBtn" value="Se connecter" />
+                    </form>
+                </div>
+            </main>
+            {% if users_data %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Date d'arrivée</th>
+          <th>Heure d'arrivée</th>
+          <th>Date de départ</th>
+          <th>Heure de départ</th>
+          <th>Durée</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user_data in users_data %}
+          <tr>
+            <td>{{ user_data.id }}</td>
+            
+            <td>{{ user_data.date_arrival }}</td>
+            <td>{{ user_data.time_arrival }}</td>
+            <!-- <td>{{ user_data.date_departure }}</td>
+            <td>{{ user_data.time_departure }}</td>
+            <td>{{ user_data.duration }}</td> -->
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+        </div>
+        </section>
+    <script src="{% static 'profil/js/sidebar.js' %}"></script>
+</body>
+</html>
+

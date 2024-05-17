@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>liste</title>
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/emp.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
+</head>
+<body>
+
+    {% include 'profil/couche/sidebar.html' %}
+
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Liste des employés</span>
+        </div>
+        <div id="tel">
+            <a href="{% url 'profil:add_horaire' %}"><button id="search"><i class="bx bxs-download" style="color: white;">  Download</i></button></a>
+        </div>
+        <form action="" method="GET" id="rech">
+            <!-- <input type="search" name="date_search" placeholder="date"> -->
+            <input type="search" name="user_search" placeholder="employés">
+            <button type="submit" id="search"><i class="bx bx-search"></i></button>
+            <a class="link_name" href="{%url 'profil:a_valide'%}"> <i class='bx bx-refresh' id="refresh"></i></a>
+        </form>
+        <div class="content">
+           <table>
+            <thead>
+                <tr>
+                    <thead>
+                    <tr>
+                        <!-- <th>ID</th> -->
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Type Punch</th>
+                        <th>User ID</th>
+                        <th>Heure du check </th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in page_obj %}
+                    <tr>
+                        <!-- <td>{{ entry.id_att }}</td> -->
+                        <td>{{ entry.date }}</td>
+                        <td>{{ entry.status }}</td>
+                        <td>{{ entry.punch }}</td>
+                        <td>{{ entry.personnel_a}}</td>
+                        <td>{{ entry.heure_punch }}</td>
+                        
+                        
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        
+
+        <div class="fin">
+            {% if page_obj.has_previous %}
+              <div class="precedent"><a href="?page={{ page_obj.previous_page_number }}">Précédent</a></div>
+            {% endif %}
+            
+           <div class="endpage"><span class="current-page">{{ page_obj.number }}</span></div>
+            
+            {% if page_obj.has_next %}
+              <div class="suivant"><a href="?page={{ page_obj.next_page_number }}">Suivant</a></div>
+            {% endif %}
+        </div>
+
+    </section>
+<script src="{% static 'profil/js/sidebar.js' %}"></script>
+<script src="{% static 'profil/js/chk.js' %}"></script>
+</body>
+</html>

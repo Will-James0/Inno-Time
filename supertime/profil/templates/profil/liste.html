@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste User</title>
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
+</head>
+<body>
+
+    {% include 'profil/couche/sidebar.html' %}
+
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Liste des Utilisateurs</span>
+        </div>
+        <div class="content">
+            <table>
+    <ul>
+     
+
+       
+        <thead>
+            <tr>
+               
+                
+                <th>Nom User</th>
+                <th>email</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+     
+            <tr>
+                <td>{{ user.username }} </td>
+                <td>{{ user.email }}</td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+       
+</section>
+<script src="{% static 'profil/js/sidebar.js' %}"></script>
+</body>
+</html>

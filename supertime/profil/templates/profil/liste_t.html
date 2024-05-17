@@ -25,20 +25,33 @@
                 <thead>
                     <tr>
                         <th><input type="checkbox" name="selected_employees" value="" class="checkall"></th>
-                       
+                       {{message}}
                         <th>Machine ip</th>
                         <th>Port</th>
                         <th>Statut</th> 
-                        <th>Modifier</th>       
+                        <th colspan="2">Action</th>
+                        <th>Download</th>  
+                        <th>gf</th>     
                     </tr>
                 </thead>
                     <tr>
                         <td><input type="checkbox" name="selected_employees" class="checkbox"></td>
-                        <td> 192.168.1.206 </td>
-                        <td> 4370 </td>
-                        <td class="statut"><i class='bx bxs-circle'></i></td>
-                        <td><i class="bx bxs-edit"></i></td>
+                        {% for l in zklect%}
+                        <td> {{l.ip_adresse}} </td>
+                        <td> {{l.n_port}} </td>
                         
+                        <td class="statut">
+                        {%if st == True %}
+                        <i class='bx bxs-circle' style="color: green;"></i>
+                        {%else%}
+                        <i class='bx bxs-circle' style="color: red;"></i>
+                        </td>
+                        {%endif%}
+                        <td><a href="{% url 'profil:edit_lecteur' l.id %} " ><i class="bx bxs-edit"></i></a> </td>
+                        <td> <a href="{% url 'profil:del_lecteur' l.id %}" ><i class="bx bxs-trash"></i></a> </td>
+                        <td><a href="{% url 'profil:add_attendance'%}" ><i class="bx bxs-download"></i></a> </td>
+                        <td> {{st}} </td>
+                        {%endfor%}
                     </tr>
                              <!--  -->
                             
@@ -53,5 +66,6 @@
     </section>
 <script src="{% static 'profil/js/sidebar.js' %}"></script>
 <script src="{% static 'profil/js/chk.js' %}"></script>
+<script src="{% static 'profil/js/reload.js' %}"></script>
 </body>
 </html>

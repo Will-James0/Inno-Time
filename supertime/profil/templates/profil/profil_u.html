@@ -22,7 +22,12 @@
         <div class="card-container">
             <div class="upper-container">
                 <div class="image-container">
+                    {% if user.profile.get_self.photo %}
                     <img src="{{ user.profile.get_self.photo.url }}" />
+                    {% else %}
+                    <!-- <img src="{% static 'profil/ressources/user-3331256_1280.png' %}" alt="profile"> -->
+                    {% endif %}
+                    
                 </div>
             </div>
     

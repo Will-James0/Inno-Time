@@ -1,11 +1,11 @@
-{% load static %}
 
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>liste</title>
+    <title>Liste attandence</title>
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
     <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
@@ -17,47 +17,39 @@
     <section class="home-section emp">
         <div class="home-content">
             <i class="bx bx-menu"></i>
-            <span class="text">Données brutes</span>
+            <span class="text">Liste des présences</span>
         </div>
         <div class="content">
-            
-
-  <h1>Liste des utilisateurs</h1>
-
-  {% if users_data %}
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nom</th>
-          <th>Date d'arrivée</th>
-          <th>Heure d'arrivée</th>
-          <th>Date de départ</th>
-          <th>Heure de départ</th>
-          <th>Durée</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user_data in users_data %}
-          <tr>
-            <td>{{ user_data.id }}</td>
-            <td>{{ user_data.name }}</td>
-            <td>{{ user_data.date_arrival }}</td>
-            <td>{{ user_data.time_arrival }}</td>
-            <td>{{ user_data.date_departure }}</td>
-            <td>{{ user_data.time_departure }}</td>
-            <td>{{ user_data.duration }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
+            <table>
+    <ul>
+        <thead>
+            <tr>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Punch</th>
+                    <th>User</th>
+                     <th>Date et Heure</th><!--
+                    <th>check out</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in attendance %}
+                <tr>
+                    <td>{{ entry.id_att }}</td>
+                    <td>{{ entry.date }}</td>
+                    <td>{{ entry.status }}</td>
+                    <td>{{ entry.punch }}</td>
+                    <td>{{ entry.personnel }}</td>
+                     <td>{{ entry.heure_punch}}</td><!--
+                    <td>{{ entry.heure_sortie}}</td> -->
+                    
+                </tr>
+                {% endfor %}
+        </tbody>
     </table>
-  {% else %}
-    <p>Aucune donnée d'utilisateur disponible.</p>
-  {% endif %}
-
-        </div>
-    </section>
-
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>
 </html>

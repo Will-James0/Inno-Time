@@ -45,29 +45,29 @@
                 </li>
                 <li>
                     <div class="icon-link">
-                        <a href="{%url 'profil:attendance'%}">
+                        <a href="{%url 'profil:data'%}">
                             <i class="bx bxs-time"></i>
                             <span class="link_name">Présences</span></a>
                             <i class="bx bxs-chevron-down arrow"></i>
                     </div>
                     <ul class="sub-menu">
-                        <li><a class="link_name" href="{%url 'profil:attendance'%}">Présences</a></li>
-                        <li><a href="{%url 'profil:attendance'%}">Présences</a></li>
+                        <li><a class="link_name" href="{%url 'profil:data'%}">Présences</a></li>
+                        <li><a href="{%url 'profil:data'%}">Présences</a></li>
                         <li><a href="{%url 'profil:historique'%}">Historique</a></li>
                     </ul>
                 </li>
                 <li>
                     <div class="icon-link">
-                        <a href="{%url 'profil:liste_e'%}">
+                        <a href="{%url 'profil:liste'%}">
                             <i class="bx bxs-user"></i>
                             <span class="link_name">Utilisateurs</span>
                         </a>
                             <i class="bx bxs-chevron-down arrow arrow"></i>
                     </div>
                     <ul class="sub-menu">
-                        <li><a class="link_name" href="{%url 'profil:liste_e'%}">Utilisateurs</a></li>
-                        <li><a href="{%url 'profil:liste_e'%}">Liste</a></li>
-                        <li><a href="{%url 'accounts:details_user'%}">Ajouter</a></li>
+                        <li><a class="link_name" href="{%url 'profil:liste'%}">Utilisateurs</a></li>
+                        <li><a href="{%url 'profil:liste'%}">Liste</a></li>
+                        <li><a href="{%url 'accounts:register'%}">Ajouter</a></li>
                     </ul>
                 </li>
                 <li>
@@ -79,11 +79,12 @@
                             <i class="bx bxs-chevron-down arrow arrow"></i>
                     </div>
                     <ul class="sub-menu">
-                        <li><a class="link_name" href="{%url 'profil:machine' %}">Terminal</a></li>
-                        <li><a href="{%url 'profil:machine'%}">Ajouter</a></li>
+                        <li><a class="link_name" href="{%url 'profil:liste_t' %}">Terminal</a></li>
                         <li><a href="{%url 'profil:liste_t'%}">Liste</a></li>
+                        <li><a href="{%url 'profil:machine'%}">Ajouter</a></li>
                     </ul>
                 </li>
+                {% comment %}
                 <li>
                     <a href="{%url 'profil:data'%}">
                         <i class='bx bx-rss'></i>
@@ -93,6 +94,7 @@
                         <li><a class="link_name" href="{%url 'profil:data'%}">Data</a></li>
                     </ul>
                 </li>
+                {% endcomment %}
                 <li>
                     <a href="{%url 'profil:help'%}">
                         <i class='bx bxs-help-circle' ></i>
@@ -105,7 +107,11 @@
                 <li>
             <div class="profile-details">
                 <div class="profile-content">
+                    {% if user.profile.get_self.photo %}
                     <a href="{% url 'profil:profil_user' %}"><img src="{{ user.profile.get_self.photo.url }}" alt="profile"></a>
+                    {% else %}
+                    <a href="{% url 'profil:profil_user' %}"><img src="{% static 'profil/ressources/user-3331256_1280.png' %}" alt="profile"></a>
+                    {% endif %}
                 </div>
                 
                 <div class="name-job">

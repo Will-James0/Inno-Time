@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User 
-from .models import Profile, Poste
+#from .models import Profile, Poste
 
 #{{ user.personne.get_self.nom }}
 
@@ -73,16 +73,17 @@ def register(request):
         poste_id = request.POST.get('poste')
         photo = request.FILES.get('photo')  # Récupérer le fichier image (optionnel)
 
-        users = User.objects.get(pk=user_id)
-        poste_d = Poste.objects.get(pk=poste_id)
-        profile = Profile(user=users, nom=nom,prenom=prenom,email=email, genre=genre,poste=poste_d, photo = photo)
-        profile.save()
-        return redirect('profil:acceuil')
-        # return render(request, 'accounts/details_user.html', {'message':"bon"})
+    #     users = User.objects.get(pk=user_id)
+    #     poste_d = Poste.objects.get(pk=poste_id)
+    #     profile = Profile(user=users, nom=nom,prenom=prenom,email=email, genre=genre,poste=poste_d, photo = photo)
+    #     profile.save()
+    #     return redirect('profil:acceuil')
+    #     # return render(request, 'accounts/details_user.html', {'message':"bon"})
 
-    postes = Poste.objects.all()
+    # postes = Poste.objects.all()
     
-    context = {'postes': postes,
-               'users': User.objects.all()
-               }
-    return render(request, 'accounts/details_user.html', context)
+    # context = {'postes': postes,
+    #            'users': User.objects.all()
+    #            }
+    # return render(request, 'accounts/details_user.html', context)
+    return render(request, 'accounts/details_user.html')

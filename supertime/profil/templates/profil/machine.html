@@ -31,7 +31,38 @@
                     </form>
                 </div>
             </main>
+            {% if users_data %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Date d'arrivée</th>
+          <th>Heure d'arrivée</th>
+          <th>Date de départ</th>
+          <th>Heure de départ</th>
+          <th>Durée</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user_data in users_data %}
+          <tr>
+            <td>{{ user_data.id }}</td>
             
+            <td>{{ user_data.date_arrival }}</td>
+            <td>{{ user_data.time_arrival }}</td>
+            <!-- <td>{{ user_data.date_departure }}</td>
+            <td>{{ user_data.time_departure }}</td>
+            <td>{{ user_data.duration }}</td> -->
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Aucune donnée d'utilisateur disponible.</p>
+  {% endif %}
+
+        </div>
         </section>
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>

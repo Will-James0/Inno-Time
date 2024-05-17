@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste attandence</title>
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
+</head>
+<body>
+
+    {% include 'profil/couche/sidebar.html' %}
+   
+    
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Liste des présences</span>
+        </div>
+        <div class="content">
+            <h1>les nouvelles attendances ont etait enregistres</h1>
+            <a href="{%url 'profil:liste_t'  %}">retoune</a>
+            
+            <table>
+    <ul>
+        <thead>
+            <tr>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Punch</th>
+                    <th>User</th>
+                     <th>Date et Heure</th><!--
+                    <th>check out</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in attendance %}
+                <tr>
+                    <td>{{ entry.id_att }}</td>
+                    <td>{{ entry.date }}</td>
+                    <td>{{ entry.status }}</td>
+                    <td>{{ entry.punch }}</td>
+                    <td>{{ entry.personnel }}</td>
+                     <td>{{ entry.heure_punch}}</td><!--
+                    <td>{{ entry.heure_sortie}}</td> -->
+                    
+                </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+    <script src="{% static 'profil/js/sidebar.js' %}"></script>
+</body>
+</html>

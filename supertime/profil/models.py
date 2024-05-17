@@ -1,14 +1,16 @@
 from django.db import models
 from datetime import datetime,date
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 class Poste(models.Model):
-    as_poste = models.CharField(max_length=6,verbose_name="ALIAS_Poste")
-    nom_poste = models.CharField(max_length=62,verbose_name="Poste")
-    somme = models.IntegerField(default='2500')
+    as_poste = models.CharField(max_length=6,verbose_name="ALIAS_Poste",null=True)
+    nom_poste = models.CharField(max_length=62,verbose_name="Poste",null=True)
+    somme = models.IntegerField(default='2500',null=True)
     heure_debut= models.TimeField(default='08:00',null=True)
     heure_fin = models.TimeField(default='18:00',null=True)
+    tolerance_time=models.TimeField(default='08:30',null=True)
     def __str__(self):
         return self.as_poste
 
@@ -16,11 +18,12 @@ class Poste(models.Model):
 
 class Personnel(models.Model):
     # nom de l'emplouyés
-    name = models.CharField(max_length=64,verbose_name="Nom")
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=64,verbose_name="Nom",null=True)
     # prénom de l'emplouyés
-    prenom = models.CharField(max_length=64,verbose_name="Prénom")
+    prenom = models.CharField(max_length=64,verbose_name="Prénom",null=True)
     # email de l'emplouyés
-    email = models.EmailField(unique=True,verbose_name="Email")
+    email = models.EmailField(unique=True,verbose_name="Email",null=True)
     #horaire_m = models.IntegerField(null=True,verbose_name="Horaire menseule")
     # poste auccupé par l'emplouyés
     poste = models.ForeignKey(Poste,on_delete=models.CASCADE,verbose_name="Poste")
@@ -29,8 +32,6 @@ class Personnel(models.Model):
     heure_fixe = models.IntegerField(default='100',null=True)# n
     salary = models.FloatField(default='0',null=True) # n
     
-
-
     class Meta:
         verbose_name ="Personnel"
         verbose_name_plural ="Personnels"
@@ -38,19 +39,34 @@ class Personnel(models.Model):
         return self.name
 
 class Horaire(models.Model):
-    date_d = models.DateField(null=True) # n
-    arrival_time = models.TimeField(default='08:30',null=True)
-    departure_time = models.TimeField(default='17:40',null=True)
+    date_d = models.DateTimeField(null=True) # n
+    arrival_time = models.DateTimeField(null=True)
+    departure_time = models.DateTimeField(null=True)
     personnel = models.ForeignKey(Personnel,on_delete=models.CASCADE,verbose_name="Personnel")
-
+    status = models.CharField(max_length=65,null=True, blank=True)
+    # punch = models.CharField(max_length=65,null=True, blank=True)
+    # id_att=models.IntegerField(null=True)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def calculate_duration(self):
-        arrival = datetime.combine(datetime.today(), self.arrival_time)
-        departure = datetime.combine(datetime.today(), self.departure_time)
+        check_in_time = datetime.combine(datetime.today(), self.arrival_time)
+        check_out_time = datetime.combine(datetime.today(), self.departure_time)
+        start_time=datetime.combine(datetime.today(),self.personnel.poste.heure_debut)
+        end_time=datetime.combine(datetime.today(),self.personnel.poste.heure_fin)
+        tolerance_time=datetime.combine(datetime.today(),self.personnel.poste.tolerance_time)
+        if check_in_time < tolerance_time:
+            if check_out_time > end_time:
+                real_time = end_time - check_in_time
+            elif check_in_time < start_time:
+                real_time = check_out_time - start_time
+            else:
+                real_time = check_out_time - check_in_time
+        else:
 
-        duration = departure - arrival
+            real_time =datetime.strptime("00:00","%H:%M").time()
+        #duration = check_in_time - check_out_time
 
-        return duration
+        return real_time
    
     def retard(self):
         h_arrival = datetime.combine(datetime.today(), self.arrival_time)
@@ -77,4 +93,18 @@ class Horaire(models.Model):
 
 class Attendance(models.Model):
     personnel_a = models.ForeignKey(Personnel,on_delete=models.CASCADE)
-    horaire_a = models.ForeignKey(Horaire,on_delete=models.CASCADE)
+    # horaire_a = models.ForeignKey(Horaire,on_delete=models.CASCADE)
+    id_att=models.IntegerField(unique=True,null=True)
+    date = models.DateTimeField(null=True)
+    heure_punch = models.DateTimeField(null=True, )
+    status = models.CharField(max_length=65,null=True, )
+    punch = models.CharField(max_length=65,null=True, )
+    # Autres champs pour les informations de présence
+
+    def __str__(self):
+        return f"{self.personnel_a.name} - {self.date}"
+
+
+class Zklecteur(models.Model):
+    ip_adresse = models.CharField(max_length=32)
+    n_port = models.IntegerField(default='4370')

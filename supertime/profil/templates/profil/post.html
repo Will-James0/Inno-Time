@@ -29,8 +29,7 @@
                         <th>Heure d'arrivée</th>
                         <th>Heure de départ</th>
                         <th>Salaire</th>
-                        <th>Modifier</th>
-                        <th>Supprimer</th>
+                        <th colspan="2">Action</th>
                     </tr>
                 </thead>
                {% for poste in postes %}
@@ -53,5 +52,6 @@
         
     </section>
 <script src="{% static 'profil/js/sidebar.js' %}"></script>
+<script src="{% static 'profil/js/chk.js' %}"></script>
 </body>
 </html>

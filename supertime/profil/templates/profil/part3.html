@@ -5,26 +5,77 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{%static 'profil/css/index.css'%}">
+    <link rel="stylesheet" href="{%static 'profil/css/form.css'%}">
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
 </head>
       <body>
 
         {% include 'profil/couche/sidebar.html' %}
-
+          
           <section class="home-section form">
               <div class="home-content">
                   <i class="bx bx-menu"></i>
                   <span class="text">Ajouter</span>
               </div>
-              <div id="container">
-                <form method="post">
-                  {% csrf_token %}
-                  {{ form.as_p }}
-                  <button type="submit">Valider</button>
-                </form>
-              </div>
+                  <!-- MAIN -->
+                  <div id="content">
+                  <main>
+                    
+
+                    <div class="container">
+                      <header>Formulaire d'ajout de présence</header>
+                  
+                      <form action="{% url 'profil:part3' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form first">
+                          <div class="details personal">
+                            <span class="title">Details</span>
+                  
+                            <div class="fields">
+                              <div class="input-field">
+                                <label for="date_d">Date du jour:</label>
+                                <input type="date" placeholder="Date du jour" name="date_d" required>
+                              </div>
+
+                              <div class="input-field">
+                                <label for="depart">Personnel:</label>
+                                <select name="person">
+                                  <option value="">-------------</option>
+                                  {% for per in personne %}
+                                  <option value="{{per.person.id}}"> {{per.name}} </option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+
+                              <div class="input-field">
+                                <label for="arrive">Heure d'arrivée:</label>
+                                <input type="time" placeholder="Heure d'arrivée:" name="arrive" required>
+                              </div>
+
+                              <div class="input-field">
+                                <label for="depart">Heure de départ:</label>
+                                <input type="time" placeholder="Heure de départ:" name="depart" required>
+                              </div>
+
+                            </div>
+                          </div>
+                  
+                          <div class="details ID">
+                            <div class="fields">
+                            </div>
+                  
+                            <button type="submit" class="nextBtn">
+                              <span class="btnText">Valider</span>
+                            </button>
+                          </div> 
+                        </div>
+                        <!-- </div>  end div second form -->
+                      </form>
+                    </div>
+                  </main>
+                  </div>
+	              	<!-- MAIN -->
           </section>
       <script src="{% static 'profil/js/sidebar.js' %}"></script>
   </body>

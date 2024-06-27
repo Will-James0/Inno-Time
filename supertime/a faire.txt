@@ -1,4 +1,0 @@
-Récupérer les utlisateurs et les enregistrer dans la BD
-Bouton de refresh pour la liste des utlisateurs
-CRUD des utilisateurs
-Enregistrer les présences manuellement

@@ -173,3 +173,7 @@ form .buttons button , .backBtn{
   .gender label {
 	color: #707070;
   }
+
+ .require{
+    color: #f00;
+  }

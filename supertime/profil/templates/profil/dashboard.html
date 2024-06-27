@@ -1,0 +1,256 @@
+{% load static %}
+<!-- ç erreurs sont affiche ma sans inpacte sur l'execusion du code -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>acceuil</title>
+    <link rel="stylesheet" href="{% static 'profil/css/acc.css'%}">
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <!-- <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}"> -->
+    <link href="{% static 'profil/css/bootstrap.min.css' %}" rel="stylesheet" media="all">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="au theme template">
+    <meta name="author" content="Hau Nguyen">
+    <meta name="keywords" content="au theme template">
+
+
+
+    <!-- Fontfaces CSS-->
+    <link href="{% static 'profil/css/font-face.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/font-awesome-4.7/css/font-awesome.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/font-awesome-5/css/fontawesome-all.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/mdi-font/css/material-design-iconic-font.min.css' %}" rel="stylesheet" media="all">
+
+    <!-- Bootstrap CSS-->
+    <link href="{% static 'profil/vendor/bootstrap-4.1/bootstrap.min.css' %}" rel="stylesheet" media="all">
+
+    <!-- Vendor CSS-->
+    <link href="{% static 'profil/vendor/animsition/animsition.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/wow/animate.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/css-hamburgers/hamburgers.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/slick/slick.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/select2/select2.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/perfect-scrollbar/perfect-scrollbar.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'profil/vendor/vector-map/jqvmap.min.css' %}" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="{% static 'profil/css/theme.css' %}" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/bootstrap-datetimepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/footer.css'%}">
+</head>
+    <body>
+        {% include 'profil/couche/sidebar.html' %}
+
+        <section class="home-section home">
+            <div class="home-content">
+                <i class="bx bx-menu"></i>
+                <span class="text">Dashboard</span>
+            </div>
+            <main>
+               
+                
+                <section class="statistic">
+                    <div class="section__content section__content--p30">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="statistic__item">
+                                        <div class="icoin i1"><i class='bx bx-user b1'></i></div>
+                                       <span class="desc1">Nombre d'employés</span>
+                                       <h2 class="number"><strong> {{total_employees}} </strong></h2>
+                                        <!-- <div class="icon">
+                                            <i class="zmdi zmdi-account-o"></i>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="statistic__item">
+                                        <div class="icoin i2"><i class='bx bx-user-check b2'></i></div>
+                                       <span class="desc1">Nombre de presences</span>
+                                       <h2 class="number" id="pre"><strong> {{p}} </strong></h2>
+                                        <!-- <div class="icon">
+                                            <i class="zmdi zmdi-account-o"></i>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="statistic__item">
+                                        <div class="icoin i3"><i class='bx bx-user-x b3'></i></div>
+                                       <span class="desc1">Nombre d'absences</span>
+                                       <h2 class="number" id="abs"><strong> {{a}} </strong></h2>
+                                        <!-- <div class="icon">
+                                            <i class="zmdi zmdi-account-o"></i>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-6 col-lg-3">
+                                    <div class="statistic__item">
+                                        <h2 style="color: #4272d7; font-size: 200%;" class="number"><span id="hrs">00</span>
+                                            <span>:</span>
+                                            <span id="min">00</span>
+                                            <span>:</span>
+                                            <span id="sec">00</span></h3>
+                                        <span class="desc">Horloge</span>
+                                        <h2 style="color: #4272d7; font-size: 200%;" class="number"><span id="jrs">00</span>
+                                            <span>.</span>
+                                            <span id="mois">00</span>
+                                            <span>.</span>
+                                            <span id="ann">0000</span></h3> -->
+                                        <!-- <div class="icon">
+                                            <i class="zmdi zmdi-account-o"></i>
+                                        </div> -->
+                                    <!-- </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-content">
+                        <div class="section__content section__content--p30">
+                            <div class="container-fluid">
+                                <div class="row">
+
+
+                                    <div class="col-lg-6">
+                                        <div class="au-card m-b-30">
+                                            <div class="au-card-inner">
+                                                <h3 class="title-2 m-b-40">Presences et absences</h3>
+                                                <canvas id="pie-chart"></canvas>
+
+                                                <!-- <canvas id="barChart"></canvas> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-lg-6">
+                                        <div class="au-card m-b-30">
+                                            <div class="au-card-inner">
+                                                <h3 class="title-2 m-b-40">Calendrier</h3>
+                                                
+
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="col-lg-12">
+                                        <div class="au-card m-b-30">
+                                            <div class="au-card-inner">
+                                                <h3 class="title-2 m-b-40">Evolution des présences</h3>
+                                                <!-- <canvas id="doughutChart"></canvas> -->
+                                                <canvas id="myChart" width="400" height="130"></canvas> 
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- <section class="charts"> -->
+                                            
+                                         <!-- <h2>Présences et Absences</h2>
+                                          <canvas id="pie-chart"></canvas>
+                                         <h2>Taux de présence annuel</h2>
+                                         <canvas id="line-chart"></canvas>
+                                         </div> -->
+
+                                        
+                      
+                <!-- </section> -->
+
+            </main>        
+    </section>
+    {% include 'profil/couche/footer.html' %}
+    <!-- <script src="{% static 'profil/vendor/chartjs/chart.js' %}"></script> -->
+    <!-- Jquery JS-->
+    <script src="{% static 'profil/vendor/jquery-3.2.1.min.js' %}"></script>
+    <!-- Bootstrap JS-->
+    <script src="{% static 'profil/vendor/bootstrap-4.1/popper.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/bootstrap-4.1/bootstrap.min.js' %}"></script>
+    <!-- Vendor JS       -->
+    <script src="{% static 'profil/vendor/slick/slick.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/wow/wow.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/animsition/animsition.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/counter-up/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/counter-up/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/circle-progress/circle-progress.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'profil/vendor/chartjs/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/select2/select2.min.js' %}"> </script>
+    <script src="{% static 'profil/vendor/vector-map/jquery.vmap.js' %}"></script>
+    <script src="{% static 'profil/vendor/vector-map/jquery.vmap.min.js' %}"></script>
+    <script src="{% static 'profil/vendor/vector-map/jquery.vmap.sampledata.js' %}"></script>
+    <script src="{% static 'profil/vendor/vector-map/jquery.vmap.world.js' %}"></script>
+
+    <!-- Main JS-->
+    <script src="{% static 'profil/js/main.js' %}"></script>
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js' %}"></script> -->
+
+    <script src="{% static 'profil/js/sidebar.js' %}"></script>
+    <script>
+
+        const ctxPie = document.getElementById("pie-chart").getContext("2d");
+
+
+        const pieChart = new Chart(ctxPie, {
+        type: "pie",
+        data: {
+            labels: ["Présences", "Absences"],
+            datasets: [{
+            data: ["{{p}}", "{{a}}"],
+            backgroundColor: ["#007bff", "#dc3545"],
+            borderWidth: 1
+            }]
+        }
+        });
+        
+
+
+
+
+        var ctx = document.getElementById("myChart").getContext("2d");
+
+        var myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+
+        labels: {{dates|safe}},
+        // labels: ["08-04-2024","09-04-2024","10-04-2024","11-04-2024"],
+        datasets: [{
+            label: "Présences",
+            // data:[ "{{nbrepresent }}"],
+            data:{{nbrepresent|safe}},
+            backgroundColor: "rgba(0, 100, 255, 0.2)",
+        }]
+        },
+        options: {
+            scales: {
+            yAxes: [{
+                ticks: {
+                beginAtZero: true
+                }
+            }]
+            }
+        }
+        });
+
+            
+    </script>
+</body>
+</html>
+

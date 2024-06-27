@@ -47,7 +47,7 @@
 
 .trash{
     position: absolute;
-    top: 19%;
+    top: 14%;
     left: 2%;
     display: flex;
     align-items: center;
@@ -79,7 +79,7 @@
 }
 
 input[type=search]{
-  width: 100%;
+  /* width: 100%; */
   padding: 16px 20px;
   margin: 8px 0;
   /* display: flex; */
@@ -100,3 +100,17 @@ input[type=search]{
         display: none;
     }
 } */
+
+/* .content{
+    height: 100%;
+} */
+
+#tel{
+    position: absolute;
+    top: 10%;
+    left: 0;
+}
+
+#search{
+    cursor: pointer;
+}

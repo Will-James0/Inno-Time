@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{%static 'profil/css/sidebar.css'%}">
     <link rel="stylesheet" href="{%static 'profil/css/fiche.css'%}">
+    <link rel="stylesheet" href="{% static 'profil/css/footer.css'%}">
 </head>
 <body>
     {% include 'profil/couche/sidebar.html' %}
@@ -25,8 +26,8 @@
             <!-- <div class="content"> -->
                 <table>
                         <tr class="head">
-                            <th>Dates: 13 Avril 2024 - 15 Mai 2024</th>
-                            <th class="id">ID: 1</th>
+                            <th>Mois: Mai</th>
+                            <th class="id">ID: {{personnel.id}}</th>
                         </tr>
                     <tbody>
                         <tr>
@@ -35,7 +36,7 @@
                         </tr>
                         <tr>
                             <th>Prenom:</th>
-                            <td>{{personnel.prenom}}</td>
+                            <td>{{personnel.first_name}}</td>
                         </tr>
                         <tr>
                             <th>Email:</th>
@@ -43,29 +44,30 @@
                         </tr>
                         <tr>
                             <th>Poste:</th>
-                            <td>{{personnel.poste.nom_poste}}</td>
+                            <td>{{personnel.poste.name_poste}}</td>
                         </tr>
                         <tr>
                             <th>Heures attendues:</th>
-                            <td>60</td>
+                            <td>{{personnel.time_works}}</td>
                         </tr>
                         <tr>
                             <th>Heures effectuées</th>
-                            <td>50</td>
+                            <td>{{daily_work_hours}}</td>
                         </tr>
                         <tr>
                             <th>Salaire normal</th>
                             <th>Salaire résiduel</th>
                         </tr>
                         <tr>
-                            <td>5000$</td>
-                            <td>4000$</td>
+                            <td>{{personnel.salary}} XAF</td>
+                            <td>{{daily_salary|floatformat:"2"}} XAF</td>
                         </tr>
                     </tbody>
                 </table>
             <!-- </div> -->
         </div>
     </section>
+    {% include 'profil/couche/footer.html' %}
     <script src="{% static 'profil/js/print.js' %}"></script>
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>

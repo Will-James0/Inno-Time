@@ -1,0 +1,59 @@
+<!-- -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>liste</title>
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/liste_u.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/footer.css'%}">
+</head>
+<body>
+
+    {% include 'profil/couche/sidebar.html' %}
+
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Liste des postes</span>
+        </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" name="" value="" class="checkall"></th>
+                        <th>Alias poste</th>
+                        <th>Nom poste</th>
+                        <th>Heure d'arrivée</th>
+                        <th>Heure de départ</th>
+                        <th>Salaire</th>
+                        <th colspan="2">Action</th>
+                    </tr>
+                </thead>
+               {% for poste in postes %}
+                    <tr>
+            
+                        <td><input type="checkbox" name="" value="{{ poste.id }}" class="checkbox"></td>
+                        <td>{{poste.as_poste}}</td>
+                        <td>{{poste.name_poste}}</td>
+                        <td>{{poste.start_time}}</td>
+                        <td>{{poste.end_time}}</td>
+                        <td> {{poste.salary}} </td>
+                        <td style="text-align: center;"><a href="{% url 'profil:modife_poste' poste.id %}"><i class="bx bxs-edit"></i></a></td>
+                        <td style="text-align: center;"><a href="{% url 'profil:delete_poste' poste.id %}"><i class="bx bxs-trash"></i></a></td>
+                       
+                    </tr>
+                  
+                   {% endfor %}
+            </table>
+
+        
+    </section>
+    {% include 'profil/couche/footer.html' %}
+<script src="{% static 'profil/js/sidebar.js' %}"></script>
+<script src="{% static 'profil/js/chk.js' %}"></script>
+</body>
+</html>

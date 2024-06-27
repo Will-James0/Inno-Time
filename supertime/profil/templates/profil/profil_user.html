@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>liste</title>
+    <link rel="stylesheet" href="{% static 'profil/css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/profil_u.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/footer.css'%}">
+</head>
+<body>
+
+    {% include 'profil/couche/sidebar.html' %}
+
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Profile</span>
+        </div>
+        <div class="card-container">
+            <div class="upper-container">
+                <div class="image-container">
+                    {% if user.personnel.photo %}
+                    <img src="{{ user.personnel.photo.url }}" />
+                    {% else %}
+                    <!-- <img src="{% static 'profil/ressources/user-3331256_1280.png' %}" alt="profile"> -->
+                    {% endif %}
+                    
+                </div>
+            </div>
+    
+            <div class="lower-container">
+                <div style="text-align: left; font-size: 24px; ">
+                    <table>
+                            <tr>
+                                <th>ID Utilisateur</th>
+                                <td>{{user.id}}</td>
+                            </tr>
+                            <tr>
+                                <th>Nom</th>
+                                <td>{{user.personnel.name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Prenom</th>
+                                <td>{{user.personnel.first_name}}</td>
+                            </tr>
+                                <th>Email</th>
+                                <td>{{user.personnel.email}}</td>
+                            <tr>    
+                                <th>Sexe</th>
+                                <td>{{user.personnel.gender}}</td>
+                                
+                            </tr>    
+                            </tr>
+                            <tr>
+                                <th>Nom d'utilisateur</th>
+                                <td>{{user.username}}</td>
+                            </tr>
+                            <tr>
+                                <th>Poste</th>
+                                <td>{{user.personnel.poste.name_poste}}</td>
+                            </tr>
+                    </table>
+                    <!-- <h6>ID Utilisateur: {{user.id}} </h6>
+                    <h6>Poste: {{user.profile.poste.nom_poste}}</h6>
+                    <h6>Nom: {{user.profile.nom}}</h6>
+                    <h6>Prenom: {{user.profile.prenom}}</h6>
+                    <h6>Email: {{user.email}}</h6>
+                    <h6>Nom d'utilisateur: {{user.username}} </h6>
+                    <h6>Sexe: {{user.profile.genre}}</h6> -->
+                </div>
+            </div>
+        </div>
+    </section>
+    {% include 'profil/couche/footer.html' %}
+<script src="{% static 'profil/js/sidebar.js' %}"></script>
+</body>
+</html>

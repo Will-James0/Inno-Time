@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(7+)+d%6ukc0+$z&$o96#2t@a$0naas+^2w5o5b%3zkn80$lw9'
+SECRET_KEY = 'django-insecure-woh&if4m=r74*qca-@+8@_(am4(0-b16_03f$_oe=c8^e5w+s4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,10 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'profil',
     'accounts',
-    'django_cron',
-    # 'schedule',
+    'profil',
 ]
 
 MIDDLEWARE = [
@@ -79,15 +77,15 @@ WSGI_APPLICATION = 'supertime.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-   'default': {
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME':'time_bd',
-        # 'USER':'postgres',
-        # 'PASSWORD':'willadmin',
-        # 'HOST':'localhost',
-        # 'PORT':'5432'
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'bd_inno.sqlite3',
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':'inno_db',
+        'USER':'postgres',
+        'PASSWORD':'postgres',
+        'HOST':'localhost',
+        'PORT':'5432'
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -120,7 +118,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -129,12 +127,9 @@ USE_TZ = False
 STATIC_URL = 'static/'
 STATIC_URL = 'profil/'
 STATIC_URL = 'accounts/'
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
-
-# MEDIA_URL = 'media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# AUTH_USER_MODEL = "profil.User" 

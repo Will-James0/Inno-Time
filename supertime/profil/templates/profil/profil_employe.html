@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>liste</title>
+    <link rel="stylesheet" href="{% static 'profil/css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/footer.css'%}">
+</head>
+<body>
+
+    {% include 'profil/couche/sidebar.html' %}
+
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Profile</span>
+        </div>
+        <div class="card-container">
+            {% for per in Personnels %}
+            <div class="upper-container">
+                <div class="image-container">
+                    <!-- <img src="{% static 'profil/ressources/male.jpeg' %}" /> -->
+                </div>
+            </div>
+    
+            <div class="lower-container">
+                <div style="text-align: left; font-size: 24px; ">
+                    <table>
+                        <tr>
+                            <th>Nom:</th>
+                            <td>{{per.name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Prénom:</th>
+                            <td>{{per.first_name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>{{per.email}}</td>
+                        </tr>
+                        <tr>
+                            <th>Sexe:</th>
+                            <td>{{per.gender}}</td>
+                        </tr>
+                        <tr>
+                            <th>Poste:</th>
+                            <td>{{per.poste.name_poste}}</td>
+                        </tr>
+                        <tr>
+                            <th>Heure d'entrée prédéfinie:</th>
+                            <td>{{per.poste.start_time}}</td>
+                        </tr>
+                        <tr>
+                            <th>Heure de sortie prédéfinie:</th>
+                            <td>{{per.poste.end_time}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="fiche">
+                    <a href="{%url 'profil:salary' per.id %}" class="btn">Fiche de paie</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% include 'profil/couche/footer.html' %}
+<script src="{% static 'profil/js/sidebar.js' %}"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@
     <!-- <link rel="stylesheet" href="{% static 'profil/css/style.css'%}"> -->
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/footer.css'%}">
 </head>
     <body>
 
@@ -19,7 +20,22 @@
                 <i class="bx bx-menu"></i>
                 <span class="text">Mode d'emploi</span>
             </div>
+            <p>Bienvenu à vous sur Inno Time notre application de gestions des présences et de calcul des salaires des employés</p>
+            <p>Pour l'utiliser il faut:</p>
+            <p>1. Ajouter un lecteur</p>
+            <p>2. Accéder à la liste des lecteurs puis Cliquer sur le bouton d'ajout d'utilisateurs d'un lecteur</p>
+            <p>3. Créer des postes</p>
+            <p>4. Ajout des employés et les lier aux utilisateurs</p>
+            <p>5. Retourne à la liste des lecteurs</p>
+            <p>6. Cliquer sur le bouton de téléchargement des logs d'un lecteur</p>
+            <p>7. Accéder aux logs</p>
+            <p>8. Cliquer sur le bouton de télécharger puis accéder aux présences</p>
+            <p>9. Accéder à la liste des employés</p>
+            <p>10. Accéder au profil d'un employé</p>
+            <p>11. Cliquer sur le bouton fiche de paie</p>
+            <p>12. Imprimer la fiche</p>
         </section>
+        {% include 'profil/couche/footer.html' %}
     <script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>
 </html>

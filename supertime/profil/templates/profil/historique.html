@@ -2,25 +2,56 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>acceuil</title>
-    <link rel="stylesheet" href="{% static 'profil/css/style.css'%}">
+    <title>Historique</title>
     <link rel="stylesheet" href="{% static 'profil/boxicons-2.1.4/css/boxicons.min.css' %}" />
     <link rel="stylesheet" href="{% static 'profil/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/table.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/liste_u.css' %}">
+    <link rel="stylesheet" href="{% static 'profil/css/footer.css'%}">
 </head>
-    <body>
+<body>
 
-        {% include 'profil/couche/sidebar.html' %}
+    {% include 'profil/couche/sidebar.html' %}
 
-        <section class="home-section help">
-            <div class="home-content">
-                <i class="bx bx-menu"></i>
-                <span class="text">Historique</span>
-            </div>
-            
-        </section>
-    <script src="{% static 'profil/js/sidebar.js' %}"></script>
+    <section class="home-section emp">
+        <div class="home-content">
+            <i class="bx bx-menu"></i>
+            <span class="text">Historique des présences</span>
+        </div>
+            <table>
+                    <thead>
+                        <tr>
+                            <th>Dates</th>
+                            <th>Employés</th>
+                            <th>Check In</th>
+                            <th>Type de pointage</th>
+                            <th>Check Out</th>
+                            <th>Type de pointage</th>
+                            <th>Durée</th>
+                            <th>Retard</th>
+                            <!-- <th>Heures supplémentaires</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for horaire in horaires %}
+                        <tr>
+                            <td> {{horaire.date_d |date:"d-m-Y"}} </td>
+                            <td> {{horaire.personnel}}</td>
+                            <td> {{horaire.start_time}}</td>
+                            <td> {{horaire.status}}</td>
+                            <td> {{horaire.end_time}}</td>
+                            <td> {{horaire.statute}} </td>
+                            <td> {{horaire.calculate_duration}}</td>
+                            <td> {{horaire.retard}} </td>
+                            <!-- <td></td> -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+            </table>
+    </section>
+    {% include 'profil/couche/footer.html' %}
+<script src="{% static 'profil/js/sidebar.js' %}"></script>
 </body>
 </html>

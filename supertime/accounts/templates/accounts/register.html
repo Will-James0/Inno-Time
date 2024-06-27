@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -5,114 +6,45 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'accounts/css/form.css'%}">
-    <link rel="stylesheet" href="{% static 'accounts/boxicons-2.1.4/css/boxicons.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'accounts/css/sidebar.css' %}">
-    <link rel="stylesheet" href="{% static 'accounts/css/register.css' %}">
+    <link rel="stylesheet" href="{%static 'accounts/css/index.css'%}">
+    <!-- <link rel="stylesheet" href="{%static 'profil/css/employe.css'%}"> -->
+    <title>Inscription</title>
 </head>
-      <body>
+<body>
+    <section class="wrapper">
 
-        {% include 'profil/couche/sidebar.html' %}
-          
-          <section class="home-section form">
-              <div class="home-content">
-                  <i class="bx bx-menu"></i>
-                  <span class="text">Ajouter</span>
-              </div>
-                  <!-- MAIN -->
-                  <div id="content">
-                  <main>
-                    
-
-                    <div class="container">
-                      <header>Formulaire d'ajout d'un utilisateur</header>
-                  
-                      <form method="post">
-                        {% csrf_token %}
-                        {{form.as_p}}
-                        <button type="submit" class="nextBtn">
-                          <span class="btnText">Valider</span>
-                        </button>
-                        <!-- <div class="form first">
-                          <div class="details personal">
-                            <span class="title">Details de l'utilisateur</span>
-                  
-                            <div class="fields">
-                              <div class="input-field">
-                                <label for="nom">Nom:</label>
-                                <input type="text" placeholder="Entrer un nom:" name="nom" required>
-                              </div>
-                              <div class="input-field">
-                                <label for="prenom">Prenom:</label>
-                                <input type="text" placeholder="Entrer un prenom:" name="prenom" required>
-                              </div>
-                  
-                              <div class="input-field">
-                                <label for="email">Email:</label>
-                                <input type="email" placeholder="Entrer un email" name="email" required>
-                              </div>
-                  
-                              <div class="input-field">
-                                <label for="gender">Genre:</label>
-                                <select name="gender" required>
-                                  <option disabled selected>------------</option>
-                                  <option>Masculin</option>
-                                  <option>Féminin</option>
-                                </select>
-                              </div>
-
-                              <div class="input-field">
-                                <label for="poste">Poste:</label>
+        <div class="form signup">
+          <header>INSCRIPTION</header>
+          <form method="post" action="">
+            {% csrf_token %}
+            <label for="username">Nom d'utilisateur:</label>
+            <input type="text" id="username" name="username" required><br>
     
-                                <select id="poste" name="poste" required>
-                                    <option value="">----------------</option>
-                                    <option value="">DG</option>
-                                    {% for poste in postes %}
-                                    <option value="{{ poste.id }}">{{ poste.nom_poste }}</option>
-                                  
-                                    {% endfor %}
-                                </select>
-                              </div>
-                  
-                              <div class="input-field">
-                                <label for="username">Nom d'utilisateur:</label>
-                                <input type="text" name="username" required>
-                              </div>
-                  
-                              <div class="input-field">
-                                <label for="password1">Mot de passe:</label>
-                                <input type="password" name="password1" required>
-                              </div>
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="password" required><br>
+    
+            <input type="submit" value="S'inscrire">
+        </form>
+        </div>
+        <div class="form login">
+          
+        <label for=""></label><br>
+        <label for=""></label><br>
+        <label for=""></label><br>
+        <label for=""></label><br>
+        <label for=""></label><br>
+        
+            <header></header>
+            <form action="#">
+              <input type="text" placeholder="Nom:" required />
+              <input type="text" placeholder="Adresse email:" required />
+              <input type="password" placeholder="Mot de passe:" required />
+              
+              <input type="submit" value="S'inscrire" />
+            </form>
+          </div>
+      </section>
+</div>
+</body>
+</html>
 
-                              <div class="input-field">
-                                <label for="password2">Confirmation du mot de passe:</label>
-                                <input type="password" name="password2" required>
-                              </div>
-
-                              <div class="input-field">
-                                <label for="photo">Photo:</label>
-                                <input type="file" name="photo" accept="image/*">
-                              </div>
-
-                            </div>
-                          </div>
-                  
-                          <div class="details ID">
-                            <div class="fields">
-                            </div>
-                  
-                            <button type="submit" class="nextBtn">
-                              <span class="btnText">Valider</span>
-                            </button>
-                          </div> 
-                        </div> -->
-                        <!-- </div>  end div second form -->
-                      </form>
-                    </div>
-                  </main>
-                  </div>
-	              	<!-- MAIN -->
-          </section>
-      <script src="{% static 'accounts/js/sidebar.js' %}"></script>
-  </body>
-  </html>

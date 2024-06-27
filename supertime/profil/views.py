@@ -1,17 +1,25 @@
 from django.shortcuts import render, get_list_or_404,redirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import Horaire,Poste,Zklecteur,Personnel,Attendance
-from .forms import Part1Form, Part2Form,Part3Form,ZKTecoForm
+from .models import Horaire,Poste, Salaire,Zklecteur,Personnel,Attendance
+from .forms import HoraireForm,ZKTecoForm
 from django.contrib.auth.models import User
-from datetime import datetime, timedelta, timezone,date
+from datetime import datetime, timedelta, timezone,date,time
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Q
 import subprocess
 from zk import ZK, const
+import threading
+from threading import Thread
 import os
 import sys
+import asyncio
 from django.utils import timezone
 import calendar
+from django.db.models import Min, Max
+from dateutil.relativedelta import relativedelta
+
+
 
 
 CWD = os.path.dirname(os.path.realpath(__file__))
@@ -19,316 +27,225 @@ ROOT_DIR = os.path.dirname(CWD)
 sys.path.append(ROOT_DIR)
 
 
+
 @login_required(login_url="/account/login_admin/")
-def liste_t(request):
-    zk = ZK('192.168.1.206' ,timeout=5)
-    conn = None
-    status = False
-    try:
-        conn = zk.connect()
-        status=conn.is_connect
-        return render(request, 'profil/liste_t.html',{'zklect':Zklecteur.objects.all() ,'st':status})
-    
-    except Exception as e:
-        msm = " {} ".format(e)
-        return render(request, 'profil/liste_t.html',{'zklect':Zklecteur.objects.all() ,'st':status,'message':msm})
-    finally:
-        if conn != None and conn.is_connect:
-            conn.disconnect()
+def terminal_list(request):
+    lecteurs = Zklecteur.objects.all()
+    status_list = []
+    messages = []
+
+    def check_status(lecteur):
+        zk = ZK(lecteur.ip_adresse, lecteur.n_port, timeout=1)
+        conn = None
+        status = False
+
+        try:
+            conn = zk.connect()
+            status = conn.is_connect
+            status_list.append(status)
+        except Exception as e:
+            messages.append("Erreur de connexion avec le lecteur {}: {}".format(lecteur.id, e))
+        finally:
+            if conn is not None and conn.is_connect:
+                conn.disconnect()
+
+    def check_all_statuses():
+        threads = []
+        for lecteur in lecteurs:
+            thread = threading.Thread(target=check_status, args=(lecteur,))
+            threads.append(thread)
+            thread.start()
+
+        for thread in threads:
+            thread.join()
+
+    check_all_statuses()
+
+    return render(request, 'profil/liste_drive.html', {'zklect': lecteurs, 'status_list': status_list, 'messages': messages})
 
 
 #-------------------------------------------------------------------------------------------------------------#
 @login_required(login_url="/account/login_admin/")
-def add_user(request):
-    
+def add_users(request, lecteur_id):
+    statut=None
+    lecteurs = Zklecteur.objects.get(pk=lecteur_id)
     conn = None
-    zk = ZK('192.168.1.206', port=4370,timeout=5)
+    zk = ZK(lecteurs.ip_adresse, port=lecteurs.n_port, timeout=2)
     try:
         conn = zk.connect()
-        print ('Disabling device ...')
+        print('Disabling device ...')
         conn.disable_device()
-        print ('--- Get User ---')
+        print('--- Get User ---')
         users = conn.get_users()
-       
+        
         for user in users:
             zkteco_username = user.name
-            zkteco_user_id = user.uid
-            pw=user.password
-            email_zk= f"{user.name}@gmail.com"
-            # Vérifiez si l'utilisateur ZKTeco existe déjà dans la base de données Django
+            zkteco_user_id = user.user_id
+            pw = user.password
+            print(zkteco_user_id, zkteco_username, pw)
+            
             try:
-                django_user = User.objects.get(username=zkteco_username)
+                django_user = User.objects.get(username=zkteco_user_id)
                 # Si l'utilisateur existe, mettez à jour ses informations
                 django_user.zkteco_user_id = zkteco_user_id
                 django_user.save()
+                pass
             except User.DoesNotExist:
                 # Si l'utilisateur n'existe pas, créez un nouvel utilisateur Django
-                django_user = User.objects.create_user(username=zkteco_username,password=pw,email=email_zk)
+                django_user = User.objects.create_user(username=zkteco_user_id,password=pw)
                 django_user.zkteco_user_id = zkteco_user_id
                 django_user.save()
-                print('///////////////////////////')
-                return render(request,"profil/valide.html")
-            #conn.test_voice()
-            print ('Enabling device ...')
-            conn.enable_device()
-            # return redirect("appzk:liste")
+                if user.privilege == const.USER_ADMIN:  # Assurez-vous que votre appareil ZKTeco fournit cette information
+                    django_user.is_superuser = True
+                    django_user.save()
+               
+    
+            
+            # Vérifier le statut de l'utilisateur dans le lecteur
+            
+                
+        print('Enabling device ...')
+        conn.enable_device()
+            
     except Exception as e:
-        print ("Process terminate : {}".format(e))
+        print("Process terminate : {}".format(e))
     finally:
-        if conn != None and conn.is_connect:
+        if conn is not None and conn.is_connect:
             conn.disconnect()
             
-    return redirect("profil:valide")
-
-@login_required(login_url="/account/login_admin/")
-def data(request):
-    today=datetime.today()
-    # attendance=Horaire.objects.filter(date_d__startswith=today)
-    attendance=Attendance.objects.all()
-
-    return render(request,'profil/data.html',{"attendance":attendance})
-
-@login_required(login_url="/account/login_admin/")
-def data_brute(request):
-    today=datetime.today()
-    # attendance=Horaire.objects.filter(date_d__startswith=today)
-    attendance=Attendance.objects.all()
-
-    return render(request,'profil/a_valide.html',{"attendance":attendance})
-
+    return render(request, "profil/liste_user.html", {'statut':statut})
 
 
 @login_required(login_url="/account/login_admin/")
-def liste_u(request):
-    users=User.objects.all()
-    return render(request,'profil/liste.html',{"users":users})
-
-
-@login_required(login_url="/account/login_admin/")
-# def add_attendance(request):
-#     # lecteurs = Zklecteur.objects.get(pk=lecteur_id)
-#     # zk = ZK(lecteurs.ip_adresse, lecteurs.n_port)
-#     conn = None
-#     zk = ZK('192.168.1.206',timeout=5)
-#     try:
-#         conn = zk.connect()
-#         print ('Disabling device ...')
-#         conn.disable_device()
-#         print ('--- Get User ---')
-#         attendance = conn.get_attendance()
-#         print(type(attendance))
-#         print(attendance)
-#         for user in attendance:
-                      
-#             id_a=user.uid
-#             maintenant = datetime.now()
-#             # Afficher la date et l'heure du jour avec les secondes
-#             # maintenant.strftime("%Y-%m-%d %H:%M:%S")
-#             date_a =user.timestamp
-#             if user.status == 1:
-#                 status = 'enpreinte digital'
-#             elif user.status ==3:
-#                 status = 'pass word'
-#             elif user.status == 4:
-#                 status='card'
-#             status_a=status
-#             user_id =user.user_id
-#             user_c= Personnel.objects.get(pk=user_id)
-#             try:
-#                 horaire_instance=Horaire.objects.filter(personnel=user_c).first()
+def raw_data(request):
+    attendance_list=Attendance.objects.order_by('-date','-heure_punch')
+    if request.method == "GET":
+        
+        # date_search=request.GET.get('date_search')
+        personnel_search=request.GET.get('user_search')
+        if personnel_search is not None: 
+            
+            attendance_list = Attendance.objects.filter(personnel_a=personnel_search)
+          
+    paginator = Paginator(attendance_list, 10)  # Paginer la liste avec 10 employés par page
+    
+    page_number = request.GET.get('page')  # Récupérer le numéro de page depuis les paramètres GET
+    page_obj = paginator.get_page(page_number)  # Obtenir l'objet Page pour la page demandée
+    context = {'page_obj': page_obj,
                
-#             except Horaire.DoesNotExist:
-                
-#                 # if user_c:
-#                 # django_user = Attendance.objects.create(id_att=id_a,user=user_c,date=date_a,status=status_a,punch=punch_a,heure_entree = c)
-#                 #     # django_user.pk=id_a
-#                 date_s=datetime.now()
-#                 if user.punch == 0:
-#                     horaire_instance=Horaire(personnel=user_c)
-#                     check_in = user.timestamp
-#                     horaire_instance.arrival_time  = check_in
-#                     horaire_instance.id_att=id_a
-#                     horaire_instance.date_d=date_s
-#                     horaire_instance.status=status_a
-#                     # horaire_instance.save()
-#                     # horaire_instance.punch=punch
-#                 elif user.punch == 1:
-#                     check_out = user.timestamp
-#                     horaire_instance.departure_time=check_out
-#                     horaire_instance.save()
-#                 elif user.punch == 4:
-#                     pass
-#                 elif user.punch == 5:
-#                     pass
-#                 elif user.punch == 255:
-#                     pass
-#                 print('///////////////////////////')
-#                 horaire_instance.save()
-                    
-#                 #conn.test_voice()
-#             print ('Enabling device ...')
-#             conn.enable_device()
-#     except Exception as e:
-#         print ("Process terminate : {}".format(e))
-#     finally:
-#         if conn != None and conn.is_connect:
-#             conn.disconnect()
-           
-#     return render(request,"profil/a_valide.html")
-def add_attendance(request):
-    # lecteurs = Zklecteur.objects.get(pk=lecteur_id)
-    # zk = ZK(lecteurs.ip_adresse, lecteurs.n_port)
-    conn = None
-    zk = ZK('192.168.1.206')
+               
+               }
+    return render(request,'profil/logs.html',context)
+
+
+
+@login_required(login_url="/account/login_admin/")
+def user_list(request):
+    users=User.objects.all()
+    return render(request,'profil/liste_user.html',{"users":users})
+
+
+
+@login_required(login_url="/account/login_admin/")
+def get_log_data(request, lecteur_id):
+    lecteurs = Zklecteur.objects.get(pk=lecteur_id)
+    zk = ZK(lecteurs.ip_adresse, lecteurs.n_port, timeout=2)
     try:
         conn = zk.connect()
-        print ('Disabling device ...')
+        print('Disabling device ...')
         conn.disable_device()
-        print ('--- Get User ---')
+        print('--- Get Attendance ---')
         attendance = conn.get_attendance()
         print(type(attendance))
         print(attendance)
+
         for user in attendance:
-                      
-            id_a=user.uid
-            # Afficher la date et l'heure du jour avec les seconde
-            date_a =user.timestamp
-            if user.status == 1:
-                status = 'enpreinte digital'
-            elif user.status ==3:
-                status = 'pass word'
-            elif user.status == 4:
-                status='card'
-            status_a=status
-            user_id =user.user_id
-            # user_c= Personnel.objects.get(pk=user_id)
+            id_atendance = user.uid
+            check_heure = user.timestamp
+            status_a = user.status
+            user_id = user.user_id
+            punch_attendance = user.punch
             try:
-                django_user=Horaire.objects.get(id_att=id_a)
-                pass
-            except Horaire.DoesNotExist:
-
-
-                user_c= Personnel.objects.get(pk=user_id)
-                # if user_c:
-                # django_user = Attendance.objects.create(id_att=id_a,user=user_c,date=date_a,status=status_a,punch=punch_a,heure_entree = c)
-                #     # django_user.pk=id_a
-                if user.punch == 0:
-                   
-                    punch = 'check in'
-                    check_in = user.timestamp
-                    date_s=datetime.now()
-                   
-                    django_user = Attendance.objects.create(personnel_a=user_c,date=date_s,heure_punch=check_in,punch=punch,status=status_a)
+                existing_attendance = Attendance.objects.filter(id_att=id_atendance).first()
+                if existing_attendance:
+                    Attendance.objects.get(id_att=id_atendance)
+                    # Check if the model of the device matches
+                    if existing_attendance.lecteur.model_drive == lecteurs.model_drive:
+                        print("Matching model, passing.")
+                        continue
+                    else:
+                        user_id_zk =User.objects.get(username=user_id)
+                        pk_user=user_id_zk.pk
+                        user_c = Personnel.objects.get(user=pk_user)
+                        # Si le Personnel existe, crée une nouvelle instance du modèle Attendance
+                        django_user = Attendance.objects.create(id_att=id_atendance, personnel_a=user_c, date=check_heure.date(), status=status_a, punch=punch_attendance, heure_punch=check_heure,lecteur=lecteurs.pk)
+                        django_user.save()
+                else:
+                    user_id_zk =User.objects.get(username=user_id)
+                    pk_user=user_id_zk.pk
+                    user_c = Personnel.objects.get(user=pk_user)
+                    # Si le Personnel existe, crée une nouvelle instance du modèle Attendance
+                    django_user = Attendance.objects.create(id_att=id_atendance, personnel_a=user_c, date=check_heure.date(), status=status_a, punch=punch_attendance, heure_punch=check_heure,lecteur=lecteurs.pk)
                     django_user.save()
-                    print('1111111111111111111111111111111')
-                elif user.punch == 1:
-                    date_s=datetime.now()
-                    check_out = user.timestamp
-                    # Horaire.objects.filter(personnel=user_c,arrival_time  = check_in).update(check_out=check_out)
-                    django_user = Attendance.objects.create(personnel_a=user_c,date=date_s,heure_punch=check_out,punch=punch,status=status_a)
-                    django_user.save()
-                    print('222222222222222222222222222222222')
-                elif user.punch == 4:
-                   
-                    print(10*'4')
+
+                # try:
+                #     # Tentative de récupération de l'objet Attendance avec l'identifiant spécifié
+                #     django_user = Attendance.objects.get(id_att=id_atendance)
+                #     pass
+                # except Attendance.DoesNotExist:
                     
-                elif user.punch == 5:
-                    # punch = 'overtime out'
-                    # check_in = user.timestamp
-                    # date_s=datetime.now()
-                   
-                    # django_user = Attendance.objects.create(personnel_a=user_c,date=date_s,heure_punch=check_in,punch=punch,status=status_a)
-                    # django_user.save()
-                    print(10*'5')
-                
-                elif user.punch == 255:
-                    # punch = 'pause'
-                    # check_in = user.timestamp
-                    # date_s=datetime.now()
-                   
-                    # django_user = Attendance.objects.create(personnel_a=user_c,date=date_s,heure_punch=check_in,punch=punch,status=status_a)
-                    # django_user.save()
-                    print(10*'255')
-                print('///////////////////////////')
-                
-                #conn.test_voice()
-            print ('Enabling device ...')
-            conn.enable_device()
-            # r
+                #         # Tentative de récupération de l'objet Personnel associé à l'identifiant
+                #     user_id_zk =User.objects.get(username=user_id)
+                #     pk_user=user_id_zk.pk
+                #     user_c = Personnel.objects.get(user=pk_user)
+                # # Si le Personnel existe, crée une nouvelle instance du modèle Attendance
+                #     django_user = Attendance.objects.create(id_att=id_atendance, personnel_a=user_c, date=check_heure.date(), status=status_a, punch=punch_attendance, heure_punch=check_heure)
+                #     django_user.save()
+                    
+            except:
+                pass
+            
+    
+        print('Enabling device ...')
+        conn.enable_device()
     except Exception as e:
-        print ("Process terminate : {}".format(e))
+        print("Processus interrompu :", e)
     finally:
-        if conn != None and conn.is_connect:
+        if conn is not None and conn.is_connect:
             conn.disconnect()
-           
-    return redirect("profil:a_valide")
- 
 
 
 
 
-
-#----------------------------------------------------------------------------------------------------#
-# def data(request,):
-#             CWD = os.path.dirname(os.path.realpath(__file__))
-            
-            
-#             zk = ZK('192.168.1.206' ,timeout=5)
-#             conn =None
-#             # print(lecteurs.ip_adresse,'',lecteurs.n_port)
-#             try:
-#                 conn = zk.connect()
-#                 print ('Disabling device ...')
-#                 conn.disable_device()
-#                 print ('--- Get User ---')
-#                 users = conn.get_attendance()
-                
-#                 st=conn.is_connect
-#                 print(st)
-
-#                 conn.enable_device()
-#                 today=datetime.today()
-#                 return render(request, 'profil/data.html',{'users':Horaire.objects.filter(date_d__with=today),'st':st})
-
-#             except Exception as e:
-#                 print ("Process terminate : {}".format(e))
-#             finally:
-#                 if conn != None and conn.is_connect:
-#                     conn.disconnect()
-#             return render(request, 'profil/data.html',)
-
-
-
-
-
+    message = "Données téléchargées avec succès"
+    return redirect('profil:liste_drive')
 
 @login_required(login_url="/account/login_admin/")  
-def del_lecteur(request,lecteur_id):
+def delete_drive(request,lecteur_id):
     lecteur = Zklecteur.objects.get(pk=lecteur_id)
     lecteur.delete()
-    return redirect("profil:liste_t")
+    return redirect("profil:liste_drive")
 
 
 
 @login_required(login_url="/account/login_admin/")
-def edit_lecteur(request,lecteur_id):
+def edit_drive(request,lecteur_id):
     lecteur = Zklecteur.objects.get(pk=lecteur_id)
     if request.method == 'POST':
         form = ZKTecoForm(request.POST,instance=lecteur)
         if form.is_valid():
             form.save()
-            return redirect("profil:liste_t")
+            return redirect("profil:liste_drive")
     else:
         form = ZKTecoForm(instance=lecteur)
     
-    return render(request,"profil/machine.html",{"form": form})
+    return render(request,"profil/modife_drive.html",{"form": form})
 
 
 
-
-
-@login_required(login_url="/account/login_admin")
-def acceuil(request):
+@login_required(login_url="/account/login_admin/")
+def dashboard(request):
+    # maintenant=datetime.now()
     maintenant=datetime.now()
 
     annee = maintenant.year
@@ -342,17 +259,18 @@ def acceuil(request):
     dates_du_jour = []
 
     # Récupération des dates du jour
-    aujourd_hui = datetime.now().date()
+    # aujourd_hui = datetime.now().date()
+    aujourd_hui = date(annee, mois, 1)
     for i in range(nombre_jours):
-        date = aujourd_hui + timedelta(days=i)
-        dates_du_jour.append(date)
+        date_day = aujourd_hui + timedelta(days=i)
+        dates_du_jour.append(date_day)
 
     # Affichage des dates
-    for date in dates_du_jour:
-         print(date)
+    # for date in dates_du_jour:
+    #      print(date)
 
     date_j = date.today()
-    attendance_dates = Horaire.objects.values_list('date_d', flat=True).distinct()
+    attendance_dates = Horaire.objects.values_list('date_check', flat=True).distinct()
     # Séparer les dates et les nombres d'employés en deux listes distinctes
     dates_list = []
     counts_list = []
@@ -361,14 +279,14 @@ def acceuil(request):
     # while i == 30:
     for entry in  dates_du_jour:
             dates_list.append(str(entry.strftime("%d-%m-%Y")))
-            present = Horaire.objects.filter(date_d__startswith=entry).count()
+            present = Horaire.objects.filter(start_time__startswith=entry).count()
             counts_list.append(int(present))
 
     # i +=1
     total_employees = Personnel.objects.count()
     
     # Compter le nombre d'employés présents à la date donnée
-    employees_present = Horaire.objects.filter(date_d=date_j).count()
+    employees_present = Horaire.objects.filter(start_time__startswith=date_j).count()
     # Calculer le nombre d'employés absents
     employees_absent = total_employees - employees_present
 
@@ -385,31 +303,56 @@ def acceuil(request):
 
 
 
-    return render(request,"profil/acceuil.html",context)
-    # return render(request, 'profil/liste_t.html')
+    return render(request,"profil/dashboard.html",context)
+    # return render(request, 'profil/liste_drive.html')
 
 
 def index(request):
    
     return render(request,"profil/index.html")
 
+
+def first_time_user(request):
+    # Vérifier si un utilisateur existe déjà dans la base de données
+    existing_users = User.objects.all()
+    
+    if existing_users:
+        # Si des utilisateurs existent, rediriger vers une autre vue ou effectuer toute autre action
+        return render(request,"profil/index.html")
+    else:
+        if request.method == 'POST':
+            # Récupérer les données du formulaire
+            username = request.POST['username']
+            password = request.POST['password']
+            
+            # Créer un nouvel utilisateur
+            User.objects.create_user(username=username, password=password)
+            
+            # Rediriger vers une autre vue ou effectuer toute autre action
+            return render(request,"profil/index.html")
+    
+    # Afficher le formulaire d'inscription pour le premier utilisateur
+    return render(request, 'accounts/register.html')
+
 # Poste
-@login_required(login_url="/account/login_admin")
-def part1(request):
+@login_required(login_url="/account/login_admin/")
+def add_poste(request):
    if request.method == 'POST':
        as_poste = request.POST.get('as_poste')
        poste = request.POST.get('poste')
        salary = request.POST.get('salary')
        debut = request.POST.get('debut')
+       tolerance_time = request.POST.get('tolerance_time')
        fin = request.POST.get('fin')
+       time_work = request.POST.get('time_work')
 
-       poste = Poste(as_poste = as_poste, nom_poste = poste, somme = salary, heure_debut = debut, heure_fin = fin)
+       poste = Poste(as_poste = as_poste, name_poste = poste, salary = salary, start_time = debut,  tolerance_time = tolerance_time,end_time = fin, time_work = time_work)
        poste.save()
-       return redirect('profil:poste')
-   return render(request, 'profil/part1.html')
+       return redirect('profil:liste_poste')
+   return render(request, 'profil/save_poste.html')
 
-@login_required(login_url="/account/login_admin")
-def part2(request):
+@login_required(login_url="/account/login_admin/")
+def add_personnel(request):
         if request.method == 'POST':
                 nom = request.POST.get('nom')
                 email = request.POST.get('email')
@@ -419,6 +362,10 @@ def part2(request):
                 salary = request.POST.get('salary')
                 poste_id = request.POST.get('poste')
                 user_id = request.POST.get('user_id')
+                time_a = request.POST.get('time_a')
+                tolerance_time = request.POST.get('tolerance_time')
+                time_s = request.POST.get('time_s')
+                photo = request.FILES.get('photo')
                 # Récupérer le poste sélectionné à partir de son ID
                 if poste_id or user_id:
                     try:
@@ -428,79 +375,111 @@ def part2(request):
                         # Gérer l'erreur si le poste n'existe pas
                         return redirect('error')
 
-                personnel = Personnel(name=nom,email=email,prenom=prenom, gender=gender,
-                                      heure_fixe=heure_fixe,salary=salary,poste=poste,user=users)
+                personnel = Personnel(name=nom,email=email,first_name=prenom, gender=gender,
+                                      time_works=heure_fixe,salary=salary, start_time = time_a, tolerance_time = tolerance_time, end_time = time_s,poste=poste,user=users, photo = photo)
                 personnel.save()
-                return redirect('profil:liste_e')
+                return redirect('profil:liste_employe')
+        else:
+            users_not_linked = User.objects.exclude(personnel__isnull=False)
 
-        return render(request, 'profil/part2.html', {"postes":Poste.objects.all(),"users":User.objects.all()} )
+        return render(request, 'profil/save_employe.html', {"postes":Poste.objects.all(),"users":users_not_linked} )
 
-def partm1(request, poste_id):
+def edit_poste(request, poste_id):
     try:
         poste = Poste.objects.get(pk=poste_id)  # Get the position to modify
     except Poste.DoesNotExist:
         # Handle the case where the position is not found
-        return redirect('profil:liste_postes')  # Redirect to list view on error
+        return redirect('profil:liste_poste')  # Redirect to list view on error
 
     if request.method == 'POST':
         as_poste = request.POST['as_poste']
-        nom_poste = request.POST['poste']
+        name_poste = request.POST['poste']
         salary = request.POST['salary']  # Assuming this is the intended field name
         debut = request.POST['debut']
+        tolerance_time = request.POST['tolerance_time']
         fin = request.POST['fin']
+        time_work = request.POST['time_work']
 
         poste.as_poste = as_poste
-        poste.nom_poste = nom_poste
-        poste.somme = salary
-        poste.heure_debut = debut
-        poste.heure_fin = fin
+        poste.name_poste = name_poste
+        poste.salary= salary
+        poste.start_time = debut
+        poste.tolerance_time = tolerance_time
+        poste.end_time = fin
+        poste.time_work = time_work
         poste.save()
 
-        return redirect('profil:poste')  # Redirect to list view on successful update
+        return redirect('profil:liste_poste')  # Redirect to list view on successful update
 
     context = {'poste': poste}
-    return render(request, 'profil/partm1.html', context)
+    return render(request, 'profil/modife_employe.html', context)
 
-@login_required
-def part2m(request, personnel_id):
+@login_required(login_url="/account/login_admin/")
+def edit_personnel(request, personnel_id):
     try:
         personnel = Personnel.objects.get(id=personnel_id)
     except Personnel.DoesNotExist:
-        return redirect('profil:liste_e')
+        return redirect('profil:liste_employe')
     
     if request.method == 'POST':
-        nom = request.POST['nom']
-        email = request.POST['email']
-        prenom = request.POST['prenom']
-        gender = request.POST['gender']
-        heure_fixe = request.POST['heure_fixe']
-        salary = request.POST['salary']
-        poste_id = request.POST['poste']
+        # Récupérer les données du formulaire
+        nom = request.POST.get('nom')
+        email = request.POST.get('email')
+        prenom = request.POST.get('prenom')
+        gender = request.POST.get('gender')
+        heure_fixe = request.POST.get('heure_fixe')
+        salary = request.POST.get('salary')
+        poste_id = request.POST.get('poste')
+        time_a = request.POST.get('time_a')
+        tolerance_time = request.POST.get('tolerance_time')
+        time_s = request.POST.get('time_s')
+        user_id = request.POST.get('user_id')
+        photo = request.FILES.get('photo')  # Utiliser request.FILES pour récupérer le fichier téléchargé
+
         if poste_id:
             try:
                 poste = Poste.objects.get(pk=poste_id)
             except Poste.DoesNotExist:
-                        # Gérer l'erreur si le poste n'existe pas
                 return redirect('error')
-            
+        
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return redirect('error')
+
+        # Mettre à jour les données du personnel
         personnel.name = nom
         personnel.email = email
-        personnel.prenom = prenom
+        personnel.first_name = prenom
         personnel.gender = gender
-        personnel.heure_fixe = heure_fixe
-        personnel.salary = salary
+        personnel.time_works = heure_fixe
+        if salary:
+            personnel.salary = salary
         personnel.poste = poste
+        personnel.start_time = time_a
+        personnel.tolerance_time = tolerance_time
+        personnel.end_time = time_s
+        personnel.user = user
+        if photo:  # Vérifier si une nouvelle photo a été téléchargée
+            personnel.photo = photo  # Mettre à jour la photo uniquement si un fichier a été téléchargé
         personnel.save()
 
-        return redirect('profil:liste_e')
-    postes = Poste.objects.all()
-    context = {'personnel' : personnel,
-               'postes':postes}
-    return render(request, 'profil/part2m.html', context)
+        return redirect('profil:liste_employe')
+    
+    # Filtrer les utilisateurs pour exclure ceux qui sont déjà liés à l'employé
+    users = User.objects.filter(Q(personnel__isnull=True) | Q(personnel=personnel))
+
+    context = {
+        'personnel': personnel,
+        'postes': Poste.objects.all(),
+        'users': users
+    }
+    return render(request, 'profil/modife_employe.html', context)
 
 
-@login_required(login_url="/account/login_admin")
-def liste_e(request):
+
+@login_required(login_url="/account/login_admin/")
+def personnel_list(request):
     employee_list = Personnel.objects.all()
     if request.method == "GET":
         
@@ -519,68 +498,58 @@ def liste_e(request):
                
                
                }
-    return render(request,"profil/liste_e.html",context)
+    return render(request,"profil/liste_employe.html",context)
 
 
 
-@login_required(login_url="/account/login_admin")
+@login_required(login_url="/account/login_admin/")
 def attendance(request):
-    context={'postes':Poste.objects.all(),
-           'horaires':Horaire.objects.all(),
-           'personnels':Personnel.objects.all(),
-           #'attendances':Attendance.objects.all(),
-      
+    # date_filter=datetime.date()
+
+    # attendance=Horaire.objects.filter(date_d__startswith=date_filter)
+    attendance=Horaire.objects.all()
+    context={
+           'horaires':Horaire.objects.order_by('-date_check','-start_time'),
            }
     return render(request,"profil/attendance.html",context)
     
 
-@login_required(login_url="/account/login_admin")
+@login_required(login_url="/account/login_admin/")
 def historique(request):
-    return render(request,"profil/historique.html")
+    context={
+           'horaires':Horaire.objects.order_by('-date_check','-start_time'),
+           }
+    return render(request,"profil/historique.html",context)
 
-@login_required(login_url="/account/login_admin")
-def profil_e(request,Personnel_id): 
+@login_required(login_url="/account/login_admin/")
+def personnel_profil(request,Personnel_id): 
     context = {"Personnels": get_list_or_404(Personnel,pk=Personnel_id),
                
             }
-    return render(request, "profil/profil_e.html", context)
+    return render(request, "profil/profil_employe.html", context)
   
 
-
-
-
-#-----#
-# def labels_date(date_planing):
-#     horaires = Horaire.objects.filter(date_d=date_planing)
-#     lab_date=[]
-#     for horaire in horaires:
-#         lab_date.append(horaire)
-
-#     return lab_date
-
-
-
-@login_required(login_url="/account/login_admin")
+@login_required(login_url="/account/login_admin/")
 def help(request):
    
     
     return render(request,"Profil/help.html")
 
-@login_required(login_url="/account/login_admin")
-def del_user(request,Personnel_id):
+@login_required(login_url="/account/login_admin/")
+def delete_personnel(request,Personnel_id):
     Personne = Personnel.objects.get(pk=Personnel_id)
     Personne.delete()
-    return redirect("profil:liste_e")
+    return redirect("profil:liste_employe")
 
-@login_required(login_url="/account/login_admin")
-def del_poste(request,Poste_id):
+@login_required(login_url="/account/login_admin/")
+def delete_poste(request,Poste_id):
     poste = Poste.objects.get(pk=Poste_id)
     poste.delete()
-    return redirect("profil:poste")
+    return redirect("profil:liste_poste")
 
 
 
-
+@login_required(login_url="/account/login_admin/")
 def delete_employees(request):
     if request.method == 'POST':
         selected_employees = request.POST.getlist('selected_employees')
@@ -589,320 +558,438 @@ def delete_employees(request):
         Personnel.objects.filter(id__in=selected_employees).delete()
         
     
-    return redirect('profil:liste_e')
+    return redirect('profil:liste_employe')
 
 
-
-# 
-@login_required(login_url="/account/login_admin")
-def del_poste(request,Poste_id):
+@login_required(login_url="/account/login_admin/")
+def delete_poste(request,Poste_id):
     poste = Poste.objects.get(pk=Poste_id)
     poste.delete()
-    return redirect("profil:poste")
+    return redirect("profil:liste_poste")
 
-def profil_u(request):
-    return render(request, 'profil/profil_u.html')
+def user_profil(request):
+    return render(request, 'profil/profil_user.html')
 
 
-@login_required(login_url="/account/login_admin")
-def edit_Poste(request,Poste_id):
-    poste = Poste.objects.get(pk=Poste_id)
-    if request.method == 'POST':
-        form = Part1Form(request.POST,instance=poste)
-        if form.is_valid():
-            form.save()
-            return redirect("profil:poste")
-    else:
-        form = Part1Form(instance=poste)
+#@login_required(login_url="/account/login_admin/")
+# def edit_Poste(request,Poste_id):
+#     poste = Poste.objects.get(pk=Poste_id)
+#     if request.method == 'POST':
+#         form = PosteForm(request.POST,instance=poste)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("profil:poste")
+#     else:
+#         form = PosteForm(instance=poste)
     
-    return render(request,"profil/partm1.html",{"form": form})
+#     return render(request,"profil/partm1.html",{"form": form})
    
 
-@login_required(login_url="/account/login_admin")
-def edit_Personnel(request,Personnel_id):
-    Personnels = Personnel.objects.get(pk=Personnel_id)
-    if request.method == 'POST':
-        form = Part2Form(request.POST,instance=Personnels)
-        if form.is_valid():
-            form.save()
-            return redirect("profil:liste_e")
-    else:
-        form = Part2Form(instance=Personnels)
+#@login_required(login_url="/account/login_admin/")
+# def edit_Personnel(request,Personnel_id):
+#     Personnels = Personnel.objects.get(pk=Personnel_id)
+#     if request.method == 'POST':
+#         form = PersonnelForm(request.POST,instance=Personnels)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("profil:liste_e")
+#     else:
+#         form = PersonnelForm(instance=Personnels)
     
-    return render(request,"profil/part2.html",{"form": form})
+#     return render(request,"profil/part2.html",{"form": form})
    
 
-
-
-@login_required(login_url="/account/login_admin")
-def edit_Horaire(request,Horaire_id):
+@login_required(login_url="/account/login_admin/")
+def edit_attendance(request,Horaire_id):
     Personnels = Personnel.objects.get(pk=Horaire_id)
     if request.method == 'POST':
-        form = Part3Form(request.POST,instance=Personnels)
+        form = HoraireForm(request.POST,instance=Personnels)
         if form.is_valid():
             form.save()
             return redirect("profil:attendance")
     else:
-        form = Part3Form(instance=Personnels)
+        form = HoraireForm(instance=Personnels)
    
-    return render(request,"profil/part3.html",{"form": form})
+    return render(request,"profil/save_attendance.html",{"form": form})
     
 
-
-
-def calculate_daily_work_hours(personnel):
+def calculate_daily_work_hours(personnel, annee, mois):
     # Récupérer toutes les présences de l'employé pour la journée spécifiée
-    horaires = Horaire.objects.filter(personnel=personnel)
-    total_work_hours = timedelta()
+    # horaires = Horaire.objects.filter(personnel=personnel, date_check__startswith=date_month)
+    horaires = Horaire.objects.filter(
+        personnel=personnel,
+        date_check__year=annee,
+        date_check__month=mois
+    )
+    total_work_hours = timedelta()  # Initialiser la durée totale à zéro
+    total_work_hours_time = timedelta()  # Initialiser la durée totale à zéro
+    total_work_hours_all= timedelta()  # Initialiser la durée totale à zéro
+    
     for horaire in horaires:
-        total_work_hours += horaire.calculate_duration()
+        if isinstance(horaire, datetime):  # Vérifier si horaire est un objet datetime
+            duration_timedelta = timedelta(hours=horaire.calculate_duration().hour, minutes=horaire.calculate_duration().minute, seconds=horaire.calculate_duration().second)
+            total_work_hours += duration_timedelta
+        elif isinstance(horaire, time):  # Vérifier si horaire est un objet time
+            total_work_hours_time += horaire.calculate_duration()
+    total_work_hours_all += total_work_hours+total_work_hours_time
+    return total_work_hours_all
 
-    return total_work_hours
 
-def calculate_daily_salary(personnel):
-    total_work_hours = calculate_daily_work_hours(personnel)
-    daily_salary = total_work_hours.total_seconds() / 3600 * (personnel.poste.somme+personnel.salary)
-    daily_salary = (total_work_hours.total_seconds() / 3600 * (personnel.poste.somme + personnel.salary))/personnel.heure_fixe #n
+def calculate_daily_salary(personnel, annee, mois):
+    total_work_hours = calculate_daily_work_hours(personnel, annee, mois)
+    daily_salary = (total_work_hours.total_seconds() / 3600 *  personnel.salary)/personnel.time_works #n
 
     return daily_salary
 
-@login_required(login_url="/account/login_admin")
+@login_required(login_url="/account/login_admin/")
 def personnel_salary(request, Personnel_id):
-    personnel = Personnel.objects.get(id=Personnel_id)
-    daily_work_hours = calculate_daily_work_hours(personnel)
-    daily_salary = calculate_daily_salary(personnel)
-
-    context = {
-        'personnel': personnel,
-        'daily_work_hours': daily_work_hours,
-        'daily_salary': daily_salary,
-    }
-
-    return render(request, 'profil/salaire.html', context)
+    # Récupérer la date actuelle
+    current_date = datetime.now()
+    # Formater la date selon le format Année-Mois
+    date_month_actuel = current_date.strftime("%Y-%m")
+    # Déterminez le premier jour du mois actuel
+    first_day_of_month = current_date.replace(day=1)
+    # Déterminez le dernier jour du mois actuel
+    last_day_of_month = first_day_of_month + relativedelta(months=1) - relativedelta(days=1)
+    date_actuelle = datetime.now()
+    annee = date_actuelle.year
+    mois = date_actuelle.month
     
-
-@login_required(login_url="/account/login_admin")
-def fiche(request,personnel_id):
-    personnel = Personnel.objects.get(id=personnel_id)
-  
-    daily_work_hours = calculate_daily_work_hours(personnel)
-    daily_salary = calculate_daily_salary(personnel)
-
+    
+    personnel = Personnel.objects.get(id=Personnel_id)
+    
+    daily_work_hours = calculate_daily_work_hours(personnel, annee, mois)
+    daily_salary = calculate_daily_salary(personnel, date_month_actuel)
+    
+    today = datetime.today()
+    today = today.strftime("%Y-%m-%d")
+    
+    if today == first_day_of_month.strftime("%Y-%m-%d"):
+        salaire_month = Salaire(date_month=date_month_actuel, personnel=personnel, montant=daily_salary)
+        salaire_month.save()
+    else:
+        pass
+    
     context = {
         'personnel': personnel,
         'daily_work_hours': daily_work_hours,
         'daily_salary': daily_salary,
+        'first_month': first_day_of_month,
+        'last_month': last_day_of_month
     }
 
-    return render(request, 'profil/salary.html', context)
-
-
-
-
-@login_required(login_url="/account/login_admin")
-def fiche(request,personnel_id):
-    personnel = Personnel.objects.get(id=personnel_id)
-  
-    daily_work_hours = calculate_daily_work_hours(personnel)
-    daily_salary = calculate_daily_salary(personnel)
-
-    context = {
-        'personnel': personnel,
-        'daily_work_hours': daily_work_hours,
-        'daily_salary': daily_salary,
-    }
     return render(request, 'profil/salaire.html', context)
- 
 
 
-@login_required(login_url="/account/login_admin")
-def post(request):
+@login_required(login_url="/account/login_admin/")
+def poste_list(request):
     context={'postes':Poste.objects.all(),}
-    return render(request, "profil/post.html",context)
+    return render(request, "profil/liste_poste.html",context)
+   
 
 
 
  # ajoute un lecteur   
+
 @login_required(login_url="/account/login_admin/")
-def machine(request):
+def add_drive(request):
     if request.method == 'POST':
        form = ZKTecoForm(request.POST)
        if form.is_valid():
            form.save()
-           return redirect("profil:liste_t")
+           return redirect("profil:liste_drive")
     else:
        form = ZKTecoForm()
     
-    return render(request, "profil/machine.html", {'form': form})
+    return render(request, "profil/add_drive.html", {'form': form})
+
+@login_required(login_url="/account/login_admin/")    
+def get_attendance_data(request):
+    # Récupérer tous les enregistrements de la table Attendance
+    attendances = Attendance.objects.all()
+
+    for attendance in attendances:
+        # Récupérer la date et le personnel de l'entrée d'assistance
+        date = attendance.date.date()  # Récupérer uniquement la date sans l'heure
+        personnel = attendance.personnel_a
+        punch = attendance.punch
+
+        # Récupérer tous les enregistrements pour ce personnel et cette date
+        attendance_records = Attendance.objects.filter(personnel_a=personnel, date__date=date)
+
+        # Si des enregistrements existent pour ce jour et ce personnel
+        if attendance_records.exists():
+            # Trier les enregistrements par heure_punch
+            sorted_records = attendance_records.order_by('heure_punch')
+
+            # Associer le premier heure_punch à arrival time et le dernier à end_time
+            first_punch = sorted_records.first()
+            last_punch = sorted_records.last()
+
+            # Si les heures de premier et dernier punch sont égales, 
+            # définir last_punch.heure_punch à None et last_punch.status à None
+            if first_punch.heure_punch == last_punch.heure_punch:
+                last_punch.heure_punch = None
+                last_punch.status = None
+
+            # Récupérer ou créer tous les objets Horaire correspondant à ces critères
+            horaires = Horaire.objects.filter(date_check=date, personnel=personnel)
+
+            if horaires.exists():
+                # Il existe déjà un ou plusieurs objets Horaire pour cette date et ce personnel
+                for horaire in horaires:
+                    # Mettre à jour les champs arrival time et end_time
+                    horaire.start_time = first_punch.heure_punch
+                    horaire.end_time = last_punch.heure_punch
+
+                    # Mettre à jour les champs status et statute
+                    if first_punch.status == "1":
+                        horaire.status = "fingerprint"
+                    elif first_punch.status == "3":
+                        horaire.status = "pass word"
+                    elif first_punch.status == "4":
+                        horaire.status = "card"
+                    
+                    if last_punch.status == "1":
+                        horaire.statute = "fingerprint"
+                    elif last_punch.status == "3":
+                        horaire.statute = "pass word"
+                    elif last_punch.status == "4":
+                        horaire.statute = "card"
+                    
+                    horaire.save()
+            else:
+                # Aucun objet Horaire trouvé, créer un nouvel objet Horaire
+                horaire = Horaire.objects.create(
+                    date_check=date,
+                    start_time=first_punch.heure_punch,
+                    end_time=last_punch.heure_punch,
+                    personnel=personnel
+                )
+
+                # Mettre à jour les champs status et statute
+                if first_punch.status == "1":
+                    horaire.status = "fingerprint"
+                elif first_punch.status == "3":
+                    horaire.status = "pass word"
+                elif first_punch.status == "4":
+                    horaire.status = "card"
+                
+                if last_punch.status == "1":
+                    horaire.statute = "fingerprint"
+                elif last_punch.status == "3":
+                    horaire.statute = "pass word"
+                elif last_punch.status == "4":
+                    horaire.statute = "card"
+                
+                horaire.save()
+
+    # Renvoyer tous les horaires pour affichage
+    return redirect("profil:attendance")
+
+@login_required(login_url="/account/login_admin/")
+def get_somme_for_poste(request):
+    if request.method == 'GET' and 'poste_id' in request.GET:
+        poste_id = request.GET.get('poste_id')
+        try:
+            poste = Poste.objects.get(pk=poste_id)
+            return JsonResponse({'somme': poste.salary})
+        except Poste.DoesNotExist:
+            return JsonResponse({'error': 'Le poste spécifié n\'existe pas'}, status=404)
+    else:
+        return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
+
+@login_required(login_url="/account/login_admin/")
+def get_start(request):
+  if request.method == 'GET' and 'poste_id' in request.GET:
+    poste_id = request.GET.get('poste_id')
+    try:
+      poste = Poste.objects.get(pk=poste_id)
+      return JsonResponse({'start': poste.start_time})
+    except Poste.DoesNotExist:
+      return JsonResponse({'error': 'Le poste spécifié n\'existe pas'}, status=404)
+  else:
+    return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
+
+
+@login_required(login_url="/account/login_admin/")    
+def get_end(request):
+    if request.method == 'GET' and 'poste_id' in request.GET:
+        poste_id = request.GET.get('poste_id')
+        try:
+            poste = Poste.objects.get(pk=poste_id)
+            return JsonResponse({'end': poste.end_time})
+        except Poste.DoesNotExist:
+            return JsonResponse({'error': 'Le poste spécifié n\'existe pas'}, status=404)
+    else:
+        return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
+
+@login_required(login_url="/account/login_admin/")    
+def get_time_work(request):
+    if request.method == 'GET' and 'poste_id' in request.GET:
+        poste_id = request.GET.get('poste_id')
+        try:
+            poste = Poste.objects.get(pk=poste_id)
+            return JsonResponse({'time_work': poste.time_work})
+        except Poste.DoesNotExist:
+            return JsonResponse({'error': 'Le poste spécifié n\'existe pas'}, status=404)
+    else:
+        return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
+
+@login_required(login_url="/account/login_admin/")    
+def get_tolerance_time(request):
+    if request.method == 'GET' and 'poste_id' in request.GET:
+        poste_id = request.GET.get('poste_id')
+        try:
+            poste = Poste.objects.get(pk=poste_id)
+            return JsonResponse({'tolerance_time': poste.tolerance_time})
+        except Poste.DoesNotExist:
+            return JsonResponse({'error': 'Le poste spécifié n\'existe pas'}, status=404)
+    else:
+        return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
+
+
+# from django.shortcuts import render
+# from .models import Employe, Attendance
+# from datetime import date, timedelta
+
+# def calculer_salaire(request):
+#     # Récupérer la date actuelle
+#     date_actuelle = date.today()
+
+#     # Récupérer tous les employés
+#     employes = Employe.objects.all()
+
+#     # Parcourir tous les employés
+#     for employe in employes:
+#         # Récupérer toutes les présences de l'employé pour le mois en cours
+#         presences = employe.attendance_set.filter(date__year=date_actuelle.year, date__month=date_actuelle.month)
+
+#         # Calculer le total des heures de travail pour le mois
+#         total_heures_travail = timedelta()
+
+#         for presence in presences:
+#             duree_travail = presence.heure_sortie - presence.heure_entree
+#             total_heures_travail += duree_travail
+
+#         # Calculer le salaire de l'employé en fonction du total des heures de travail
+#         salaire = total_heures_travail.total_seconds() / 3600 * employe.taux_horaire
+
+#         # ...
+#         # Suite du code pour enregistrer le salaire dans la table "Salaire" (comme expliqué dans la réponse précédente)
+
+#     return render(request, 'salaire.html')
+
+
+# def calculer_heures_travail_journalieres(personnel, date_mois):
+#     # Récupérer toutes les présences de l'employé pour le mois spécifié
+#     horaires = Horaire.objects.filter(personnel=personnel, date_check__startswith=date_mois)
     
+#     total_heures_travail = timedelta()  # Initialiser la durée totale à zéro
+    
+#     for horaire in horaires:
+#         duree = timedelta(hours=horaire.calculate_duration().hour, minutes=horaire.calculate_duration().minute, seconds=horaire.calculate_duration().second)
+#         total_heures_travail += duree
+    
+#     return total_heures_travail
 
-@login_required(login_url="/account/login_admin")
-def save_attendance(request):
-  
-    return render(request, "profil/attendance_saved.html")
-   
-   
+# def calculer_salaire_journalier(personnel, date_mois):
+#     total_heures_travail = calculer_heures_travail_journalieres(personnel, date_mois)
+#     salaire_journalier = (total_heures_travail.total_seconds() / 3600 * personnel.salary) / personnel.time_works
 
+#     return salaire_journalier
 
+# def calculer_et_afficher_salaire(request):
+#     mois_actuel = timezone.now().strftime("%Y-%m")
+#     personnels = Personnel.objects.all()
+#     infos_salaire = []
+    
+#     for personnel in personnels:
+#         salaire_journalier = calculer_salaire_journalier(personnel, mois_actuel)
+#         total_heures_mensuelles = calculer_heures_travail_journalieres(personnel, mois_actuel)
+#         salaire_mensuel = (total_heures_mensuelles.total_seconds() / 3600 * personnel.salary) / personnel.time_works
 
-def filter_and_save_attendance(request):
-    users = Personnel.objects.all()
-    # user_c= Personnel.objects.get(pk=user_id)
-    # print(users)
+#         # Enregistrer le salaire mensuel à la fin du mois
+#         if timezone.now().day == timezone.now().days_in_month:
+#             personnel.salaire_mensuel = salaire_mensuel
+#             personnel.save()
 
-    for user in users:
-        # Récupération des enregistrements de présence de l'utilisateur
-        user_logs =Attendance.objects.filter(personnel_a=user.pk)
-        
-        # print(user.pk)
+#         infos_salaire.append({
+#             'personnel': personnel,
+#             'salaire_journalier': salaire_journalier,
+#             'salaire_mensuel': salaire_mensuel,
+#         })
 
-        # Filtrage des enregistrements par jour
-        attendance_data = {}
-        for log in user_logs:
-            date_key = log.heure_punch.date()
-            print( 4*"-",date_key)
-
-            if date_key not in attendance_data:
-                attendance_data[date_key] = {'check_in': None, 'check_out': None}
-
-            if log.punch == '0':
-                if attendance_data[date_key]['check_in'] is None or log.heure_punch < attendance_data[date_key]['check_in']:
-                    attendance_data[date_key]['check_in'] = log.heure_punch
-            elif log.punch == '1':
-                if attendance_data[date_key]['check_out'] is None or log.heure_punch > attendance_data[date_key]['check_out']:
-                    attendance_data[date_key]['check_out'] = log.heure_punch
-
-        # Enregistrement des enregistrements de présence filtrés dans la table Attendance
-        for date_key, attendance in attendance_data.items():
-            if attendance['check_in'] and attendance['check_out']:
-                # Vérification si un enregistrement de présence existe déjà pour cette journée
-                existing_attendance = Horaire.objects.filter(date_d=date_key, personnel=user.pk).first()
-
-                if not existing_attendance:
-                    # Enregistrement de la présence dans la table Attendance
-                    user_c= Personnel.objects.get(pk=user.pk)
-                    attendance_entry = Horaire(date_d=date_key, personnel=user_c, arrival_time=attendance['check_in'], departure_time=attendance['check_out'])
-                    attendance_entry.save()
-                    print(10*"x")
-                else:
-                    pass
-            print(attendance_data)
-    return redirect('profil:attendance_saved.html')
+#     return render(request, 'infos_salaire.html', {'infos_salaire': infos_salaire})
 
 
 
+def get_all_log_data(request):
+    lecteurs = Zklecteur.objects.all()  # Récupérer tous les lecteurs
+    for lecteur in lecteurs:
+        zk = ZK(lecteur.ip_adresse, lecteur.n_port, timeout=2)
+        try:
+            conn = zk.connect()
+            print(f'Disabling device {lecteur.ip_adresse} ...')
+            conn.disable_device()
+            print(f'--- Get Attendance from {lecteur.ip_adresse} ---')
+            attendance = conn.get_attendance()
+            print(type(attendance))
+            print(attendance)
 
-
-#fin#
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def retrieve_users_data(zk):
-#     # attendances = zk.get_attendance()
-#     # users_data = []
-
-#     # for attendance in attendances:
-#     #     user_data = {
-#     #         'id': attendance.user_id,
-            
-#     #         'date_arrival': attendance.timestamp.strftime("%d-%m-%Y"),
-#     #         'time_arrival': attendance.timestamp.strftime("%H:%M:%S"),
-#     #         # 'date_departure': attendance.timestamp_out.strftime("%d-%m-%Y"),
-#     #         # 'time_departure': attendance.timestamp_out.strftime("%H:%M:%S"),
-#     #         # 'duration': attendance.duration
-#     #     }
-#     #     users_data.append(user_data)
-
-#     # return users_data
-
-
-# @login_required(login_url="/account/login_admin")
-# def data(request):
-#             CWD = os.path.dirname(os.path.realpath(__file__))
-#             ROOT_DIR = os.path.dirname(CWD)
-#             sys.path.append(ROOT_DIR)
-#             conn = None
-#             zk = ZK('192.168.1.206', port=4370)
-#             try:
-#                 conn = zk.connect()
-#                 print ('Disabling device ...')
-#                 conn.disable_device()
-#                 print ('--- Get User ---')
-#                 users = conn.get_users()
-#                 conn.enable_device()
-#             except Exception as e:
-#                 print ("Process terminate : {}".format(e))
-#             finally:
-#                 if conn:
-#                     conn.disconnect()
-#             return render(request, 'profil/data.html',{'users':users})
-
-
-
-# Personnel
-# @login_required(login_url="/account/login_admin")
-# def part2(request):
-#    if request.method == 'POST':
-#        form = Part2Form(request.POST)
-#        if form.is_valid():
-#            form.save()
-#         #    request.session['field2'] = form.cleaned_data['field2']
-#         #    request.session['field3'] = form.cleaned_data['field3']
-#            # Enregistrez les données dans la base de données ou effectuez toute autre action requise
-#            return redirect('profil:liste_e')
-#    else:
-#        form = Part2Form()
-#    return render(request, 'profil/part2.html', {'form': form})
-
-
-
-# Horaire
-# @login_required(login_url="/account/login_admin")
-# def part3(request):
-#    if request.method == 'POST':
-#        date_d = request.POST.get('date_d')
-#        arrive = request.POST.get('arrive')
-#        depart = request.POST.get('depart')
-#        person = request.POST.get('person')
-
-#        perso = Personnel.objects.get(id=person)
-        
-#                 # Gérer l'erreur si le poste n'existe pa
-       
-#        horaire = Horaire(date_d = date_d, arrival_time = arrive, departure_time = depart, personnel = perso)
-#        horaire.save()
-#        return redirect('profil:attendance')
-       
-#    return render(request, 'profil/part3.html', {'personne':Personnel.objects.all()})
-
-
-
-
-
-
+            for user in attendance:
+                id_attendance = user.uid
+                check_heure = user.timestamp
+                status_a = user.status
+                user_id = user.user_id
+                punch_attendance = user.punch
+                try:
+                    existing_attendance = Attendance.objects.filter(id_att=id_attendance).first()
+                    if existing_attendance:
+                        # Check if the model of the device matches
+                        if existing_attendance.lecteur.model_drive == lecteur.model_drive:
+                            print("Matching model, passing.")
+                            continue
+                        else:
+                            user_id_zk = User.objects.get(username=user_id)
+                            pk_user = user_id_zk.pk
+                            user_c = Personnel.objects.get(user=pk_user)
+                            # Si le Personnel existe, crée une nouvelle instance du modèle Attendance
+                            django_user = Attendance.objects.create(
+                                id_att=id_attendance, 
+                                personnel_a=user_c, 
+                                date=check_heure.date(), 
+                                status=status_a, 
+                                punch=punch_attendance, 
+                                heure_punch=check_heure, 
+                                lecteur=lecteur.pk
+                            )
+                            django_user.save()
+                    else:
+                        user_id_zk = User.objects.get(username=user_id)
+                        pk_user = user_id_zk.pk
+                        user_c = Personnel.objects.get(user=pk_user)
+                        # Si le Personnel existe, crée une nouvelle instance du modèle Attendance
+                        django_user = Attendance.objects.create(
+                            id_att=id_attendance, 
+                            personnel_a=user_c, 
+                            date=check_heure.date(), 
+                            status=status_a, 
+                            punch=punch_attendance, 
+                            heure_punch=check_heure, 
+                            lecteur=lecteur.pk
+                        )
+                        django_user.save()
+                except Exception as e:
+                    print(f"Error processing attendance for user ----------------------{user_id}: {str(e)}")
+            conn.enable_device()
+            if conn is not None and conn.is_connect:
+                conn.disconnect()
+        except Exception as e:
+            print(f"Connection error with lecteur ++++++++++++++++++++++++++++++++++++++ {lecteur.ip_adresse}: {str(e)}")
+            conn.enable_device()
+        finally:
+            if conn is not None and conn.is_connect:
+                conn.disconnect()
+    return render(request,'profil/get_all_log_data')
 

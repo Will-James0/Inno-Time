@@ -1,0 +1,14 @@
+asgiref==3.8.1
+Django==5.0.6
+future==1.0.0
+pillow==10.3.0
+psycopg==3.1.19
+psycopg2==2.9.9
+python-dateutil==2.9.0.post0
+pytz==2024.1
+pyzk==0.9
+six==1.16.0
+sqlparse==0.5.0
+typing_extensions==4.11.0
+tzdata==2024.1
+zklib==0.1.1
